@@ -7,7 +7,7 @@
     width: 100%;
 }
 
-#box {
+#box-header {
     float: left;
     height: 100px;
     margin: 0px;
@@ -17,6 +17,23 @@
     background-color: rgb(216, 216, 216);
     box-shadow: rgb(117, 117, 117) 0px 3px 50px 0px inset;
     min-width: 0px;
+}
+
+#box-content {
+    float: left;
+    height: 100px;
+    margin: 0px;
+    clear: none;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgb(142, 142, 142);
+    background-color: rgb(121, 121, 121);
+    <!--box-shadow: rgb(117, 117, 117) 0px 3px 50px 0px inset;-->
+    min-width: 0px;
+    position:absolute;
+    top: 100px;
+    left: 0px;
+    bottom: 0px;
 }
 
 #title-text {

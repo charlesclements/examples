@@ -1,4 +1,5 @@
 
+
 // Create Model.
 var MarketsModel = Backbone.Model.extend({
     initialize: function() {
@@ -21,40 +22,36 @@ var MarketsModel = Backbone.Model.extend({
 });
 
 
-var ContainerView = Backbone.View.extend({
-    initialize: function() {
-        console.log("ContainerView initialize()" );
-        this.updateValues();
-        this.on('change:start_at', this.updateValues, this);
-    },
-    updateValues: function() {
-        
-        
-        console.log("ContainerView : updateValues" );
-        
-        /*
-        this.set({
-            start_date: Utils.dateFromDate( this.get( "start_at" ) ),
-            start_time: Utils.timeFromDate( this.get( "start_at" ) ),
-            duration: Utils.youGetTheIdea()
-        }, {silent:true});
-        */
-        
-    }, {silent:false}););
 
-var MarketView = Backbone.View.extend({
-    initialize: function() {
-        console.log("MarketsView : initialize()" );
-        this.updateValues();
-        this.on('change:start_at', this.updateValues, this);
-    },
-    updateValues: function() {
-        
-        
-        console.log(" MarketsView : updateValues" );
-        
-    }
-}, {silent:false}););
+
+
+var ContainerView = Backbone.View.extend({
+
+    
+  tagName: "div",
+
+  className: "document-row",
+
+  events: {
+    //"click .icon":          "open",
+    //"click .button.edit":   "openEditDialog",
+    //"click .button.delete": "destroy"
+  },
+
+  initialize: function() {
+    this.listenTo(this.model, "change", this.render);
+  },
+
+  render: function() {
+   // ...
+  }
+
+
+
+
+
+});
+
 
 
 function onProjectReady()
@@ -62,13 +59,28 @@ function onProjectReady()
     
     console.log( "onProjectReady!" );
     //MyModel.initialize();
-    var model = new MarketsModel();
+    //var model = new MarketsModel();
     //model.initialize();
+    
+    
+    
+    //window.
+    // Title text.
+    var div = document.getElementById("title-text");
+    div.innerHTML = "Coin Advisor";
+    // Title Subtext.
+    var div = document.getElementById("subtitle-text");
+    div.innerHTML = "Make informed decisions before trading.";
     
     var container = new ContainerView();
     
+     /*
     
-    /*
+    
+    
+    
+    
+    
     var container = new ContainerView();
     container.initialize();
     

@@ -4,20 +4,21 @@
     <head>
 	<link rel="stylesheet" href="boilerplate.css" />
 	<link rel="stylesheet" href="index.css" />
+    <script src="js/underscore-min.js" ></script>
+    <script src="js/backbone-min.js" ></script>
+    <script src="js/index.js" ></script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0" />
     </head>
-    <body>
-
-    <div id="primaryContainer" class="primaryContainer clearfix">
-        <div id="box" class="clearfix">
-            <h1 id="title-text">
-            Coin Advisor
-            </h1>
-            <h2 id="subtitle-text">
-            Make brilliant choices when trading Alt-Coins
-            </h2>
+    <body onload="onProjectReady()">
+        <div id="primaryContainer" class="primaryContainer clearfix">
+            <div id="box-header" class="clearfix">
+                <h1 id="title-text" />
+                <h2 id="subtitle-text" />
+            </div>
+            <div id="box-content" class="clearfix">
+                
+            </div>
         </div>
-    </div>
     </body>
 </html>
