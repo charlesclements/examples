@@ -25,8 +25,8 @@ var Markets = Backbone.Model.extend({
 		var params = _.extend({
 		  type:         'GET',
 		  dataType:     'jsonp',
-		  url:			"http://pubapi.cryptsy.com/api.php?method=marketdatav2",//model.url(),
-		  jsonpCallback : 		"callback",   // the api requires the jsonp callback name to be this exact name
+		  url:			"http://pubapi.cryptsy.com/api.php?method=marketdatav2",
+		  jsonpCallback : 		"jsonpCallback",   // the api requires the jsonp callback name to be this exact name
 		  processData:  false
 		}, options);
  
@@ -34,13 +34,15 @@ var Markets = Backbone.Model.extend({
 		return $.ajax(params);
 	},
 	
-	callback: function(response) {
+	jsonpCallback: function(response, obj) {
+        console.log( "callback called" );
 		// parse can be invoked for fetch and save, in case of save it can be undefined so check before using 
 		if (response) {
 			if (response.success ) {
                 // here you write code to parse the model data returned and return it as a js object 
                 // of attributeName: attributeValue
                 console.log( "success" );
+                console.log( response.name );
 				return {name: response.name};      // just an example,                
 			} 
 		}
