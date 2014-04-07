@@ -4,21 +4,30 @@
     <head>
 	<link rel="stylesheet" href="boilerplate.css" />
 	<link rel="stylesheet" href="index.css" />
+    <script src="js/jquery-1.11.0.min.js" ></script>
     <script src="js/underscore-min.js" ></script>
     <script src="js/backbone-min.js" ></script>
     <script src="js/index.js" ></script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0" />
     </head>
-    <body onload="onProjectReady()">
+    <body onload="onProjectReady()"><!--onload="onProjectReady()"-->
         <div id="primaryContainer" class="primaryContainer clearfix">
-            <div id="box-header" class="clearfix">
-                <h1 id="title-text" />
-                <h2 id="subtitle-text" />
-            </div>
+            <header id="box-header" class="clearfix">
+                <h1 id="header-title-text" />
+                <h2 id="header-subtitle-text" />
+            </header>
             <div id="box-content" class="clearfix">
                 
             </div>
+            <div class="clear" />
+            <footer id=box-footer class="clearfix">
+            
+                <article id="footer-subtitle-text" ></article>
+                    
+                
+                </article>
+            </footer>
         </div>
     </body>
 </html>

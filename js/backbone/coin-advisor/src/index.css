@@ -19,6 +19,21 @@
     min-width: 0px;
 }
 
+
+#box-footer {
+    float: left;
+    height: 80px;
+    margin: 0px;
+    clear: none;
+    position: absolute; 
+    bottom: 0; 
+    width: 100%;
+    border: 1px solid rgb(174, 174, 174);
+    background-color: rgb(216, 216, 216);
+    box-shadow: rgb(117, 117, 117) 0px 3px 50px 0px inset;
+    min-width: 0px;
+}
+
 #box-content {
     float: left;
     height: 100px;
@@ -36,7 +51,7 @@
     bottom: 0px;
 }
 
-#title-text {
+#header-title-text {
     <1--padding:10px;-->
     float: left;
     font-size: 24px;
@@ -56,7 +71,7 @@
 }
 
 
-#subtitle-text {
+#header-subtitle-text {
     <1--padding:10px;-->
     float: left;
     font-size: 16px;
@@ -75,3 +90,29 @@
     left: 10px;
 }
 
+
+#footer-subtitle-text {
+    <1--padding:10px;-->
+    float: left;
+    font-size: 16px;
+    width: 400px;
+    height: auto;
+    text-align: left;
+    font-weight: normal;
+    line-height: 1em;
+    margin-left: 3.231939%;
+    <1--margin-top: 32px;-->
+    margin-left: auto;
+    margin-right: auto;
+    margin: 10px;
+    clear: none;
+    min-height: 56px;
+    font-family: tahoma;
+    position:absolute;
+    <1--top: 25px;-->
+    left: 10px;
+}
+
+.clear {
+    clear: both;
+}
