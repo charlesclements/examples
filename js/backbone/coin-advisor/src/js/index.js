@@ -125,7 +125,7 @@ function onProjectReady()
     console.log( "onProjectReady!.." );
     //MyModel.initialize();
     
-    
+    /*
     // Create a new script element
     var script_element = document.createElement('script');
     
@@ -134,12 +134,31 @@ function onProjectReady()
     
     // Stick the script element in the page <head>
     document.getElementsByTagName('head')[0].appendChild(script_element);
-        
+      */  
     
     
     
     //var model = new Markets();
     //model.initialize();
+    
+    
+    
+    $.ajax({
+        type: 'GET',
+        //url: 'http://jsonp.guffa.com/Proxy.ashx?url=pubapi.cryptsy.com%2fapi.php%3fmethod=marketdatav2',
+        //url: 'http://jsonp.guffa.com/Proxy.ashx?url=http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=20', 
+        url: 'http://jsonp.guffa.com/Proxy.ashx?url=pubapi.cryptsy.com%2fapi.php%3fmethod=singlemarketdata&marketid=40', 
+        
+        
+        //"http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=3"
+        dataType: 'jsonp',
+        success: function (data) {
+            console.log(data);
+        }
+    });
+    
+    
+    
     
     /*
     
