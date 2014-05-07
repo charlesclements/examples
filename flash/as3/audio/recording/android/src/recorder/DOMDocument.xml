@@ -1,0 +1,74 @@
+<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" width="480" height="800" currentTimeline="1" xflVersion="2.4" creatorInfo="Adobe Flash Professional CC" platform="Macintosh" versionInfo="Saved by Adobe Flash Macintosh 13.1 build 226" majorVersion="13" minorVersion="1" buildNumber="226" guidesSnapTo="false" snapAlign="false" snapAlignBorderSpacing="18" objectsSnapTo="false" vanishingPoint3DX="240" vanishingPoint3DY="400" nextSceneIdentifier="2" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false" filetypeGUID="DD0DDBBF-5BEF-45B2-9F24-A3048D2A676F">
+     <symbols>
+          <Include href="box.xml" loadImmediate="false" itemID="536a8eb8-00000027" lastModified="1399492280"/>
+          <Include href="levels.xml" loadImmediate="false" itemID="536a8f34-00000032" lastModified="1399492415"/>
+     </symbols>
+     <timelines>
+          <DOMTimeline name="Scene 1">
+               <layers>
+                    <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="box" name="startRecord">
+                                             <matrix>
+                                                  <Matrix a="1.85453796386719" tx="77" ty="582.95"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point x="27.45" y="27.5"/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                        <DOMSymbolInstance libraryItemName="box" name="stopRecord">
+                                             <matrix>
+                                                  <Matrix a="1.85453796386719" tx="194" ty="582.95"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point x="27.45" y="27.5"/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                        <DOMSymbolInstance libraryItemName="levels" name="levels">
+                                             <matrix>
+                                                  <Matrix tx="248" ty="496.95"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point y="-190.5"/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                        <DOMSymbolInstance libraryItemName="box" name="playSound">
+                                             <matrix>
+                                                  <Matrix a="1.85453796386719" tx="79" ty="653.95"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point x="27.45" y="27.5"/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                        <DOMSymbolInstance libraryItemName="box" name="stopSound">
+                                             <matrix>
+                                                  <Matrix a="1.85453796386719" tx="195" ty="653.95"/>
+                                             </matrix>
+                                             <transformationPoint>
+                                                  <Point x="27.45" y="27.5"/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+               </layers>
+          </DOMTimeline>
+     </timelines>
+     <persistentData>
+          <PD n="ane.tmp.unzipped.folder" v="/Users/clementsc/Library/Caches/TemporaryItems/Tmp_ANE_File_Unzipped_Packages"/>
+          <PD n="com.air.sdk.path"/>
+     </persistentData>
+     <PrinterSettings platform="macintosh"/>
+     <publishHistory>
+          <PublishItem publishSize="982" publishTime="1399495798"/>
+          <PublishItem publishSize="972" publishTime="1399495743"/>
+          <PublishItem publishSize="961" publishTime="1399495689"/>
+          <PublishItem publishSize="879" publishTime="1399495475"/>
+          <PublishItem publishSize="786" publishTime="1399495403"/>
+          <PublishItem publishSize="677" publishTime="1399495181"/>
+          <PublishItem publishSize="86" publishTime="1399492214"/>
+     </publishHistory>
+</DOMDocument>
