@@ -1,0 +1,23 @@
+<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" width="480" height="800" currentTimeline="1" xflVersion="2.4" creatorInfo="Adobe Flash Professional CC" platform="Macintosh" versionInfo="Saved by Adobe Flash Macintosh 13.1 build 226" majorVersion="13" minorVersion="1" buildNumber="226" guidesSnapTo="false" snapAlign="false" snapAlignBorderSpacing="18" objectsSnapTo="false" vanishingPoint3DX="240" vanishingPoint3DY="400" nextSceneIdentifier="2" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false" filetypeGUID="DD0DDBBF-5BEF-45B2-9F24-A3048D2A676F">
+     <timelines>
+          <DOMTimeline name="Scene 1">
+               <layers>
+                    <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+               </layers>
+          </DOMTimeline>
+     </timelines>
+     <persistentData>
+          <PD n="ane.tmp.unzipped.folder" v="/Users/clementsc/Library/Caches/TemporaryItems/Tmp_ANE_File_Unzipped_Packages"/>
+          <PD n="com.air.sdk.path"/>
+     </persistentData>
+     <PrinterSettings platform="macintosh"/>
+     <publishHistory>
+          <PublishItem publishSize="86" publishTime="1399571837"/>
+     </publishHistory>
+</DOMDocument>
