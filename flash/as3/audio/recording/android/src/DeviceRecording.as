@@ -10,8 +10,6 @@ package
 	import flash.net.FileReference;
 	import flash.text.TextField;
 	
-	//import net.charlesclements.gadgets.time.TimeGadget;
-	
 	import org.as3wavsound.WavSound;
 	import org.bytearray.micrecorder.MicRecorder;
 	import org.bytearray.micrecorder.encoder.WaveEncoder;
@@ -26,9 +24,10 @@ package
 		public var stopRecord:MovieClip;
 		public var playSound:MovieClip;
 		public var stopSound:MovieClip;
-		public var levels:MovieClip;
+		public var inputLevels:MovieClip;
+		public var outputLevels:MovieClip;
 		// volume in the final WAV file will be downsampled to 50%
-		private var volume:Number = 0.5;
+		private var volume:Number = 1;//0.5;
 		// we create the WAV encoder to be used by MicRecorder
 		private var wavEncoder:WaveEncoder;
 		// we create the MicRecorder object which does the job
@@ -62,7 +61,7 @@ package
 			wavEncoder = new WaveEncoder( volume );
 			recorder = new MicRecorder( wavEncoder );
 			
-			
+			inputLevels.scaleY = 1;
 			
 			Cc.startOnStage(this, "");
 			Cc.config.tracing = true; // also send traces to flash's normal trace()
@@ -87,8 +86,16 @@ package
 		{
 			
 			//trace ( "onRecording : " + event.time );
-			Cc.log( "onRecording : " + event.time );
-			timeTxt.text = String( event.time );
+			//Cc.log( "onRecording : " + event.time );
+			//timeTxt.text = String( event.time );
+			
+			
+			//Cc.log( "microphone.activityLevel : " + recorder.microphone.activityLevel * 0.01 );
+			
+			inputLevels.scaleY = recorder.microphone.activityLevel * 0.01;
+			
+			
+			
 			
 		}
 		
@@ -101,6 +108,13 @@ package
 			fileReference = new FileReference();
 			fileReference.save ( recorder.output, "recording.wav" );
 			timeTxt.text = "onRecordComplete";
+			
+			
+			//TweenMax.to( inputLevels, 1, { scaleY:0 } );
+			inputLevels.scaleY = 1;
+			
+			
+			
 		}
 		
 		private function showPlayerTime(event:Event):void
