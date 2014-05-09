@@ -22,4 +22,11 @@
 		<nature>com.adobe.flexbuilder.project.apollonature</nature>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] as3-tools</name>
+			<type>2</type>
+			<location>/Users/clementsc/Documents/PROJECTS/GIT/charlesclements/as3-tools</location>
+		</link>
+	</linkedResources>
 </projectDescription>
