@@ -9,6 +9,9 @@ package
 	import flash.events.MouseEvent;
 	import flash.net.FileReference;
 	import flash.text.TextField;
+	import flash.utils.ByteArray;
+	
+	import fr.kikko.lab.ShineMP3Encoder;
 	
 	import org.as3wavsound.WavSound;
 	import org.bytearray.micrecorder.MicRecorder;
@@ -46,7 +49,7 @@ package
 			super();
 			
 			
-			trace("DeviceRecording");
+			Cc.log("DeviceRecording");
 			
 			
 			
@@ -58,7 +61,14 @@ package
 			
 			
 			
+			
+			//mp3Encoder = new ShineMP3Encoder(
+			
+			
+			
+			
 			wavEncoder = new WaveEncoder( volume );
+			//recorder = new MicRecorder( ShineMP3Encoder );
 			recorder = new MicRecorder( wavEncoder );
 			
 			inputLevels.scaleY = 1;
@@ -105,9 +115,24 @@ package
 			
 			//trace ( "onRecordComplete" );
 			Cc.log( "onRecordComplete" );
+			
+			
+			
+			/*
+			
 			fileReference = new FileReference();
 			fileReference.save ( recorder.output, "recording.wav" );
-			timeTxt.text = "onRecordComplete";
+			//timeTxt.text = "onRecordComplete";
+			*/
+			
+			
+			
+			
+			var shine:ShineMP3Encoder = new ShineMP3Encoder( recorder.output as ByteArray );
+			
+			shine.start();
+			
+			shine.saveAs("ltg/recording1.mp3")
 			
 			
 			//TweenMax.to( inputLevels, 1, { scaleY:0 } );
@@ -122,8 +147,8 @@ package
 			
 			//Cc.log( "onRecordComplete" );
 			//trace ( "onRecordComplete" );
-			fileReference = new FileReference();
-			fileReference.save ( recorder.output, "recording.wav" );
+			//fileReference = new FileReference();
+			//fileReference.save ( recorder.output, "recording.wav" );
 			//timeTxt.text = String( player.
 			
 			
