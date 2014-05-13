@@ -5,8 +5,10 @@ package
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.events.ProgressEvent;
 	import flash.net.FileReference;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
@@ -40,7 +42,7 @@ package
 		private var playerTimerObj:TweenMax;
 		//private var timer:TimeGadget;
 		
-		
+		private var mp3Encoder:ShineMP3Encoder;
 		
 		
 		
@@ -128,19 +130,58 @@ package
 			
 			
 			
-			var shine:ShineMP3Encoder = new ShineMP3Encoder( recorder.output as ByteArray );
+			mp3Encoder = new ShineMP3Encoder( recorder.output as ByteArray );
 			
-			shine.start();
 			
-			shine.saveAs("ltg/recording1.mp3")
+			mp3Encoder.addEventListener(Event.COMPLETE, mp3EncodeComplete);
+			mp3Encoder.addEventListener(ProgressEvent.PROGRESS, mp3EncodeProgress);
+			mp3Encoder.addEventListener(ErrorEvent.ERROR, mp3EncodeError);
+			mp3Encoder.start();
+				
+				
+				
+				
+			//shine.start();
+			
+			//shine.saveAs("ltg/recording1.mp3")
 			
 			
 			//TweenMax.to( inputLevels, 1, { scaleY:0 } );
 			inputLevels.scaleY = 1;
 			
+				
+			
+		}
+		
+		private function mp3EncodeProgress(event : ProgressEvent) : void {
+			
+			Cc.log( event.bytesLoaded, event.bytesTotal);
+		}
+		private function mp3EncodeError(event : ErrorEvent) : void {
+			
+			Cc.error( event.text);
+		}
+		private var arr:ByteArray=new ByteArray()
+		
+		private function mp3EncodeComplete(event : Event) : void {
+			
+			Cc.log("Done !", mp3Encoder.mp3Data.length);
+			
+			//      trace(mp3Encoder.mp3Data)
+			/*
+			req.data = mp3Encoder.mp3Data
+			loaderjp.load(req);
+			*/
 			
 			
 		}
+		
+		
+		
+		
+		
+		
+		
 		
 		private function showPlayerTime(event:Event):void
 		{
@@ -201,7 +242,7 @@ package
 				case stopSound:
 					//trace( ( e.currentTarget as MovieClip ).name );
 					Cc.log( ( e.currentTarget as MovieClip ).name );
-					
+					//player.s
 					
 					break;
 				
