@@ -8,12 +8,11 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	
-	import feathers.examples.componentsExplorer.Main;
-	
 	import starling.core.Starling;
 	
+	
 	[SWF(width="960",height="640",frameRate="60",backgroundColor="#4a4137")]
-	public class R6jd267p extends Sprite
+	public class Feathers extends Sprite
 	{
 		
 		
@@ -22,16 +21,15 @@ package
 		private var _savedAutoOrients:Boolean;
 		
 		
-		public function R6jd267p()
+		
+		public function Feathers()
 		{
-			super();
-			
-			
-			
+			trace("Feathers");
 			
 			Cc.startOnStage(this, "");
-			Cc.width = 200;
-			Cc.logch("R6jd267p", "APP");
+			Cc.width = 300;
+			Cc.log("Hello world.");
+			Cc.log("Do something");
 			
 			
 			if(this.stage)
@@ -39,7 +37,6 @@ package
 				this.stage.scaleMode = StageScaleMode.NO_SCALE;
 				this.stage.align = StageAlign.TOP_LEFT;
 			}
-			
 			this.mouseEnabled = this.mouseChildren = false;
 			//this.showLaunchImage();
 			this.loaderInfo.addEventListener(Event.COMPLETE, loaderInfo_completeHandler);
@@ -72,15 +69,15 @@ package
 		private function starling_rootCreatedHandler(event:Object):void
 		{
 			
-			Cc.logch("R6jd267p", "rootCreated");
+			
 			/*
-	
+			
 			if(this._launchImage)
 			{
-				this.removeChild(this._launchImage);
-				this._launchImage.unloadAndStop(true);
-				this._launchImage = null;
-				this.stage.autoOrients = this._savedAutoOrients;
+			this.removeChild(this._launchImage);
+			this._launchImage.unloadAndStop(true);
+			this._launchImage = null;
+			this.stage.autoOrients = this._savedAutoOrients;
 			}
 			*/
 			
@@ -99,7 +96,6 @@ package
 			this.stage.removeEventListener(Event.ACTIVATE, stage_activateHandler);
 			this._starling.start();
 		}
-		
 		
 	}
 }

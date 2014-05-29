@@ -38,6 +38,7 @@ package feathers.examples.componentsExplorer.screens
 
 	public class MainMenuScreen extends PanelScreen
 	{
+		public static const SHOW_PROJECTS:String = "showProjects";
 		public static const SHOW_ALERT:String = "showAlert";
 		public static const SHOW_BUTTON:String = "showButton";
 		public static const SHOW_BUTTON_GROUP:String = "showButtonGroup";
@@ -75,6 +76,10 @@ package feathers.examples.componentsExplorer.screens
 			this._list = new List();
 			this._list.dataProvider = new ListCollection(
 			[
+				{ label: "Projects", event: SHOW_PROJECTS },
+				{ label: "List", event: SHOW_LIST }
+				/*
+				,
 				{ label: "Alert", event: SHOW_ALERT },
 				{ label: "Button", event: SHOW_BUTTON },
 				{ label: "Button Group", event: SHOW_BUTTON_GROUP },
@@ -82,7 +87,6 @@ package feathers.examples.componentsExplorer.screens
 				{ label: "Grouped List", event: SHOW_GROUPED_LIST },
 				{ label: "Item Renderer", event: SHOW_ITEM_RENDERER },
 				{ label: "Label", event: SHOW_LABEL },
-				{ label: "List", event: SHOW_LIST },
 				{ label: "Numeric Stepper", event: SHOW_NUMERIC_STEPPER },
 				{ label: "Page Indicator", event: SHOW_PAGE_INDICATOR },
 				{ label: "Picker List", event: SHOW_PICKER_LIST },
@@ -91,7 +95,9 @@ package feathers.examples.componentsExplorer.screens
 				{ label: "Slider", event: SHOW_SLIDER},
 				{ label: "Tab Bar", event: SHOW_TAB_BAR },
 				{ label: "Text Input", event: SHOW_TEXT_INPUT },
-				{ label: "Toggles", event: SHOW_TOGGLES },
+				{ label: "Toggles", event: SHOW_TOGGLES }
+				*/
+				
 			]);
 			this._list.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 			this._list.clipContent = false;
