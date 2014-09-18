@@ -1,8 +1,0 @@
-+ You need flash cs5 to open the fla file...
-
-+ This application uses a latest api added to microphone class...hence to use this application the user needs to have flash player minimum version of 10.1
-
-+Feel free to modify the script/fla as you wish
-
-+ in case of any issues or improvements needed contact me.
-+ contact: sathesh.fdd@gmail.com
