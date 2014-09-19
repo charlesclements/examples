@@ -21,6 +21,7 @@
 				
 				trace("initialize");
 				projectCreator.visible = false;
+				projectCreator.init();
 				projectsView.addEventListener( "onCreateProject", createProject );
 				projectCreator.addEventListener( "onCloseProject", closeProject );
 				

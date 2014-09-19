@@ -14,8 +14,26 @@
 		<![CDATA[
 			
 			
-			protected var currentXML:XML = new XML("<projects></projects>"); 
+			protected var currentProjectsXML:XML;
+			protected var currentProjectsFile:File;
+			protected var stream:FileStream
 			
+			
+			public function init():void
+			{
+				
+				trace("init");
+				currentProjectsFile = File.documentsDirectory;
+				currentProjectsFile = currentProjectsFile.resolvePath("LyricsToGo/currentProjects.xml");
+				trace(currentProjectsFile);
+				
+				stream = new FileStream();
+				stream.open(currentProjectsFile, FileMode.UPDATE);
+				currentProjectsXML = XML(stream.readUTFBytes(stream.bytesAvailable));
+				stream.close();
+				trace(currentProjectsXML);
+				
+			}
 			
 			protected function saveText():void
 			{
@@ -24,13 +42,36 @@
 				docTitle.text = ( docTitle.text != "" ) ? docTitle.text : "NewSong";
 				var newProject:XML = new XML();  
 				newProject = 
-					<newProject> 
+					<project> 
 						<docTitle>{ docTitle.text }</docTitle> 
 						<docContent>{ docContent.text }</docContent> 
-					</newProject>; 
-				currentXML = currentXML.appendChild( newProject ) 
-				trace(currentXML);
+					</project>; 
+				currentProjectsXML = currentProjectsXML.appendChild( newProject ) 
+				trace(currentProjectsXML);
 				//trace(currentXML[0]);
+				
+				
+				
+				var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
+				outputString += currentProjectsXML.toXMLString();
+				outputString = outputString.replace( /\n/g, File.lineEnding );
+				
+				stream = new FileStream();
+				stream.open( currentProjectsFile, FileMode.WRITE );
+				
+				stream.writeUTFBytes( outputString );
+				stream.close();
+				
+				trace( outputString );
+				
+				/*
+				var stream:FileStream = new FileStream();
+				stream.open(currentProjectsFile, FileMode.WRITE);
+				currentProjectsXML = XML(stream.readUTFBytes(stream.bytesAvailable));
+				stream.close();
+				trace(currentProjectsXML);
+				*/
+				
 				
 			}
 			
