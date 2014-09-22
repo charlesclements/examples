@@ -2,7 +2,7 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
 								  xmlns:s="library://ns.adobe.com/flex/spark" 
 								  applicationDPI="160" xmlns:components="components.*"
-								  activate="init()">
+								  creationComplete="init()">
 	
 
 	
@@ -14,50 +14,26 @@
 	<fx:Script>
 		<![CDATA[
 			
-			private static var app:LTG;
+			import net.fastindemand.dispatcher.Dispatcher;
+			import net.fastindemand.event.AppEvent;
 			
-			protected function init():void
+			//private static var app:LTG;
+			
+			
+			protected function init(e:Event=null):void
 			{
 				
-				trace("initialize");
-				projectCreator.visible = false;
-				projectCreator.init();
-				projectsView.addEventListener( "onCreateProject", createProject );
-				projectCreator.addEventListener( "onCloseProject", closeProject );
-				
+				trace("LTG - init");
+
 			}
 			
-			protected function createProject(e:Event=null):void
-			{
-				
-				trace("createProject");
-				projectCreator.visible = true;
-				tabNav.visible = false;
-				
-			}
-			
-			protected function closeProject(e:Event=null):void
-			{
-				
-				trace("closeProject");
-				projectCreator.visible = false;
-				projectCreator.clear();
-				tabNav.visible = true;
-				
-			}
 			
 		]]>
 	</fx:Script>
 	
-	
-	
-	<components:ProjectCreator id="projectCreator"/>
-	
+	<!--<components:ProjectCreator id="projectCreator"/>-->
 	<s:TabbedViewNavigator id="tabNav" width="100%" height="100%" >
 		<s:ViewNavigator label="Projects" id="projectsView" width="100%" height="100%" firstView="views.ProjectsView"/>
-		<!-- <s:ViewNavigator label="Create" width="100%" height="100%" firstView="views.CreateView"/>
-		<s:ViewNavigator label="Stream" width="100%" height="100%" firstView="views.StreamView"/>
-		<s:ViewNavigator label="Network" width="100%" height="100%" firstView="views.NetworkView"/> -->
 		<s:ViewNavigator label="Profile" width="100%" height="100%" firstView="views.ProfileView"/>
 	</s:TabbedViewNavigator>
 		

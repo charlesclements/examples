@@ -24,14 +24,60 @@
 				
 				trace("init");
 				currentProjectsFile = File.documentsDirectory;
-				currentProjectsFile = currentProjectsFile.resolvePath("LyricsToGo/currentProjects.xml");
+				currentProjectsFile = currentProjectsFile.resolvePath("LyricsToGo/projects.xml");
 				trace(currentProjectsFile);
+				trace("exists: "+currentProjectsFile.exists);
+				
+				
+				
+				if( !currentProjectsFile.exists ) 
+				{
+					
+					trace("File needs to be created.");
+					var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
+					outputString += '<project/>';
+					
+					
+					trace(outputString);
+					// Write to file.
+						
+					
+					stream = new FileStream();
+					stream.open(currentProjectsFile, FileMode.UPDATE);
+					
+					
+					
+						
+				}
+				else trace("File exisits!");
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				/*
 				
 				stream = new FileStream();
 				stream.open(currentProjectsFile, FileMode.UPDATE);
 				currentProjectsXML = XML(stream.readUTFBytes(stream.bytesAvailable));
 				stream.close();
+				trace("exists: "+currentProjectsFile.exists);
+				trace("currentProjectsXML:");
 				trace(currentProjectsXML);
+				
+				
+				*/
+				
 				
 			}
 			
@@ -43,10 +89,11 @@
 				var newProject:XML = new XML();  
 				newProject = 
 					<project> 
-						<docTitle>{ docTitle.text }</docTitle> 
-						<docContent>{ docContent.text }</docContent> 
+						<title>{ docTitle.text }</title> 
+						<content>{ docContent.text }</content> 
 					</project>; 
 				currentProjectsXML = currentProjectsXML.appendChild( newProject ) 
+				trace("currentProjectsXML:");
 				trace(currentProjectsXML);
 				//trace(currentXML[0]);
 				
@@ -61,7 +108,7 @@
 				
 				stream.writeUTFBytes( outputString );
 				stream.close();
-				
+				trace("outputString:");
 				trace( outputString );
 				
 				/*
@@ -76,10 +123,21 @@
 			}
 			
 			
+			
+			protected function saveXmlToProjectsFile($XML:XML):void
+			{
+				
+				
+				
+				
+				
+			}
+			
+			
 			protected function closeProject():void
 			{
 				
-				trace("closeProject");
+				//trace("closeProject");
 				dispatchEvent( new Event( "onCloseProject", true ) );
 				
 			}
