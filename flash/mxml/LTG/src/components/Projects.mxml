@@ -16,12 +16,16 @@
 			import mx.events.CollectionEvent;
 			import mx.managers.PopUpManager;
 			
+			import components.alerts.AlertPopUp_CreateFirstProject;
+			import components.alerts.AlertPopUp_RemoveProject;
+			
 			import net.fastindemand.data.AppData;
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
 			
 			// Alert window.
 			private var alertRemove:AlertPopUp_RemoveProject = new AlertPopUp_RemoveProject;
+			private var alertCreateFirst:AlertPopUp_CreateFirstProject = new AlertPopUp_CreateFirstProject;
 			
 			
 			public function init():void
@@ -36,33 +40,60 @@
 				{
 					
 					trace("File needs to be created.");
+					
+					// Create XML.
+					var xml:XML = new XML(<projects><project/></projects>);
+					xml.project.title = "Untitled Project";
+					xml.project.content = "";
+					xml.project.PID = String( ( new Date ).time );
+					
+					// Create string for saving.
 					var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
-					outputString += '<projects><projects/>';
+					outputString += xml;
 					outputString = outputString.replace( /\n/g, File.lineEnding );
 					trace(outputString);
+					
 					// Write to file.
 					AppData.stream = new FileStream();
 					AppData.stream.open( AppData.currentProjectsFile, FileMode.UPDATE );
-					
-					// Write to external file.
+					AppData.stream.writeUTFBytes( outputString );
+					AppData.stream.close();
 						
+					// Create new project popup?
+					alertCreateFirst.open( this, true );
+					alertCreateFirst.height = this.height
+					alertCreateFirst.width = this.width;
+					
+					// Center the pop-up in the parent container.
+					PopUpManager.centerPopUp( alertCreateFirst );
+					
 				}
-				else trace("File exists");
+				else 
+				{
+					
+					trace("File exists");
+					
+					
+					
+				}
 				
 				// Read XML info.
 				AppData.stream.open( AppData.currentProjectsFile, FileMode.READ);
 				AppData.projectsXML = XML( AppData.stream.readUTFBytes( AppData.stream.bytesAvailable ) );
 				AppData.stream.close();
-				var xmllist:XMLList = AppData.projectsXML..title;//new XMLList( projectsXML );
-				//trace(xmllist);
+				
+				
+				
+				
+				var xmllist:XMLList = AppData.projectsXML..title;
 				
 				AppData.projects = new XMLListCollection( xmllist );
 				
+				// Event listeners
 				dataList.addEventListener( CollectionEvent.COLLECTION_CHANGE, onCollectionEvent );
-				
-				//
 				Dispatcher.addEventListener( AppEvent.UPDATE_PROJECTS, onUpdateProjects );
 				alertRemove.addEventListener( AppEvent.REMOVE_PROJECT, onRemoveProject );
+				alertCreateFirst.addEventListener( AppEvent.OPEN_PROJECT, onOpenProject );
 				
 			}
 			
@@ -145,7 +176,7 @@
 				
 			}
 			
-			protected function openProject():void
+			protected function onOpenProject(e:Event=null):void
 			{
 				
 				trace("Projects : openProject");
@@ -157,8 +188,9 @@
 	</fx:Script>
 	
 	<s:HGroup horizontalAlign="right">
-		<s:Button id="openProjectButton" label="Open" click="openProject();"/>
+		<s:Button id="openProjectButton" label="Open" click="onOpenProject();"/>
 		<s:Button id="newProjectButton" label="New" click="createNewProject();"/>
+		<s:Button id="removeProjectButton" label="Remove" click="initRemoveProject();"/>
 	</s:HGroup>
 	
 	<s:List dataProvider="{AppData.projects}" requireSelection="true" id="dataList" labelField="title" width="100%" height="100%" change="selectionChangedHandler(event)" >
@@ -166,9 +198,5 @@
 			<s:VerticalLayout  />
 		</s:layout>
 	</s:List>
-	
-	<s:HGroup horizontalAlign="right">
-		<s:Button id="removeProjectButton" label="Remove" click="initRemoveProject();"/>
-	</s:HGroup>
 	
 </s:SkinnableContainer>
