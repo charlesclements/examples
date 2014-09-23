@@ -14,11 +14,14 @@
 		<![CDATA[
 			
 			import mx.managers.PopUpManager;
+			
 			import net.fastindemand.data.AppData;
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
 			
+			// Alert window.
 			private var alertClose:AlertPopUp_CloseProject = new AlertPopUp_CloseProject;
+			
 			
 			public function init():void
 			{
@@ -30,6 +33,7 @@
 
 			}
 			
+			
 			protected function onNewProject(e:Event):void
 			{
 				
@@ -39,10 +43,15 @@
 				docTitle.text = String( "Untitled " + AppData.projectsXML.children().length() );
 				docContent.text = "";
 				
+				// Createfolder.
+				var folder:File = File.documentsDirectory.resolvePath("LyricsToGo/" + AppData.PID );
+				folder.createDirectory();
+				
 				// Temporarily kill Save button.
 				saveButton.enabled = false;
 				
 			}
+			
 			
 			protected function onOpenProject(e:Event):void
 			{
@@ -57,6 +66,7 @@
 				saveButton.enabled = false;
 				
 			}
+			
 			
 			protected function saveText():void
 			{
