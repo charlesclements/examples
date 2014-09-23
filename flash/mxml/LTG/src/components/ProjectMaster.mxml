@@ -12,19 +12,12 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import mx.events.CloseEvent;
 			
+			import mx.managers.PopUpManager;
 			import net.fastindemand.data.AppData;
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
 			
-			/*
-			protected var currentProjectsXML:XML;
-			protected var currentProjectsFile:File;
-			protected var stream:FileStream
-			*/
-			
-			//private var alert:AlertPopUp = new AlertPopUp;
 			private var alertClose:AlertPopUp_CloseProject = new AlertPopUp_CloseProject;
 			
 			public function init():void
@@ -33,7 +26,6 @@
 				trace("ProjectMaster - init");
 				Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onNewProject );
 				Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onOpenProject );
-				
 				alertClose.addEventListener( AppEvent.CLOSE_PROJECT, closeProject );
 
 			}
@@ -47,6 +39,9 @@
 				docTitle.text = String( "Untitled " + AppData.projectsXML.children().length() );
 				docContent.text = "";
 				
+				// Temporarily kill Save button.
+				saveButton.enabled = false;
+				
 			}
 			
 			protected function onOpenProject(e:Event):void
@@ -57,6 +52,9 @@
 				AppData.PID = xml.PID;
 				docTitle.text = xml.title;
 				docContent.text = xml.content;
+				
+				// Temporarily kill Save button.
+				saveButton.enabled = false;
 				
 			}
 			
@@ -70,7 +68,7 @@
 				if( xmllist.( PID == AppData.PID ).toString().length > 0 )
 				{
 					
-					trace("Proj exists!");
+					//trace("Proj exists!");
 					xmllist.( PID == AppData.PID ).title = docTitle.text;
 					xmllist.( PID == AppData.PID ).content = docContent.text;
 					
@@ -78,7 +76,7 @@
 				else
 				{
 					
-					trace("Proj does not exists. Create.");
+					//trace("Proj does not exists. Create.");
 					// Create the XMLList to be added.
 					xmllist = new XMLList(<project></project>);
 					xmllist.title = docTitle.text;
@@ -87,7 +85,6 @@
 					AppData.projectsXML.prependChild( xmllist );
 					
 				}
-				
 				
 				// This is the Strign that will get saved to the File.
 				var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
@@ -103,16 +100,18 @@
 				// Alert everyone else that the XML has been saved and changed.
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.UPDATE_PROJECTS ) );
 				
+				// Temporarily kill Save button.
+				saveButton.enabled = false;
+				
 			}
 			
 			
-			
-			protected function saveXmlToProjectsFile($XML:XML):void
+			// Called when a textfield's content changes.
+			protected function onProjectChange(e:Event=null):void
 			{
 				
-				
-				
-				
+				//trace("ProjectMaster - onProjectChange");
+				saveButton.enabled = true;
 				
 			}
 			
@@ -120,9 +119,26 @@
 			protected function initCloseProject():void
 			{
 				
-				trace("ProjectMaster - initCloseProject");
-				alertClose.open( this );
+				//trace("ProjectMaster - initCloseProject");
 				
+				if( saveButton.enabled )
+				{
+					
+					alertClose.open( this, true );
+					alertClose.height = this.height
+					alertClose.width = this.width;
+					
+					// Center the pop-up in the parent container.
+					PopUpManager.centerPopUp(alertClose);
+					
+				}
+				else
+				{
+					
+					// project is already saved.
+					closeProject();
+					
+				}
 				
 				
 			}
@@ -131,33 +147,10 @@
 			protected function closeProject(e:Event=null):void
 			{
 				
-				trace("ProjectMaster - closeProject");
+				//trace("ProjectMaster - closeProject");
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.CLOSE_PROJECT, true ) );
 				
 			}
-			
-			
-			private function alertListener(e:CloseEvent):void 
-			{
-				
-				trace("ProjectMaster - alertListener");
-				// Check to see if the OK button was pressed.
-				
-				trace(e.detail);
-				
-				/*
-				if (e.detail == Alert.OK) 
-				{
-					//myText.text = myInput.text; 
-				}
-				
-				*/
-				
-			}
-			
-			
-			
-			
 			
 			
 			public function clear():void
@@ -175,7 +168,7 @@
 <!--	<components:AlertPopUp id="alert" width="100%" height="100%"/>-->
 	<s:HGroup verticalAlign="middle" horizontalAlign="right" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="100%">
 		<s:Label>Title</s:Label>
-		<s:TextInput id="docTitle" width="100%" height="40" needsSoftKeyboard="true" />
+		<s:TextInput id="docTitle" width="100%" height="40" needsSoftKeyboard="true" change="onProjectChange()" />
 		<s:Button
 			id="saveButton" label="Save"
 			click="saveText();"
@@ -186,7 +179,7 @@
 			/>
 	</s:HGroup>
 	
-	<s:TextArea id="docContent" width="100%" height="100%" needsSoftKeyboard="true" />
+	<s:TextArea id="docContent" width="100%" height="100%" needsSoftKeyboard="true" change="onProjectChange()" />
 	<s:Label id="myLabel" width="180" fontWeight="bold" fontSize="24"/>
 	
 	
