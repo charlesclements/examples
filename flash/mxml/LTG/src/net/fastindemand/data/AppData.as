@@ -8,6 +8,7 @@ package net.fastindemand.data
 	public class AppData extends Object
 	{
 		
+		public static var PID:String = "";
 		public static var projectsXML:XML = new XML();
 		public static var currentProjectsFile:File;
 		public static var stream:FileStream = new FileStream();

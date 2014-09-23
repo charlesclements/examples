@@ -14,7 +14,10 @@
 		<![CDATA[
 			import mx.collections.XMLListCollection;
 			import mx.events.CollectionEvent;
+			
 			import net.fastindemand.data.AppData;
+			import net.fastindemand.dispatcher.Dispatcher;
+			import net.fastindemand.event.AppEvent;
 			
 			/*
 			protected var projectsXML:XML;
@@ -62,6 +65,21 @@
 				
 				dataList.addEventListener( CollectionEvent.COLLECTION_CHANGE, onCollectionEvent );
 				
+				//
+				Dispatcher.addEventListener( AppEvent.UPDATE_PROJECTS, onUpdateProjects );
+				
+			}
+			
+			protected function onUpdateProjects(e:Event):void
+			{
+				
+				trace("Projects - onUpdateProjects");
+				
+				var xmllist:XMLList = AppData.projectsXML..title;
+				AppData.projects = new XMLListCollection( xmllist );
+				
+				
+				
 			}
 			
 			protected function onCollectionEvent(e:mx.events.CollectionEvent):void
@@ -84,71 +102,32 @@
 			}
 			
 			
-			protected function saveText():void
+			protected function createNewProject():void
 			{
-				
-				trace("saveText");
-				
-				/*
-				docTitle.text = ( docTitle.text != "" ) ? docTitle.text : "NewSong";
-				var newProject:XML = new XML();  
-				newProject = 
-					<project> 
-						<docTitle>{ docTitle.text }</docTitle> 
-						<docContent>{ docContent.text }</docContent> 
-					</project>; 
-				currentProjectsXML = currentProjectsXML.appendChild( newProject ) 
-				trace("currentProjectsXML:");
-				trace(currentProjectsXML);
-				//trace(currentXML[0]);
-				*/
-				
-				
-				var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
-				outputString += AppData.projectsXML.toXMLString();
-				outputString = outputString.replace( /\n/g, File.lineEnding );
-				
-				AppData.stream = new FileStream();
-				AppData.stream.open( AppData.currentProjectsFile, FileMode.WRITE );
-				
-				AppData.stream.writeUTFBytes( outputString );
-				AppData.stream.close();
-				trace("outputString:");
-				trace( outputString );
-				
-				/*
-				var stream:FileStream = new FileStream();
-				stream.open(currentProjectsFile, FileMode.WRITE);
-				currentProjectsXML = XML(stream.readUTFBytes(stream.bytesAvailable));
-				stream.close();
-				trace(currentProjectsXML);
-				*/
-				
+				trace("Projects : createNewProject");
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.NEW_PROJECT, true ) );
 				
 			}
 			
-			protected function createNewProject():void
+			protected function removeProject():void
 			{
-				trace(this + " : createNewProject");
-				dispatchEvent( new Event( "createNewProject", true ) );
+				trace("Projects : removeProject");
+				//Dispatcher.dispatchEvent( new AppEvent( AppEvent.NEW_PROJECT, true ) );
+				
+				// Show alert message here.
+				
+				// Remove node here.
+				//AppData.projectsXML.
 				
 			}
 			
 			protected function openProject():void
 			{
 				
-				trace(this + " : openProject");
-				dispatchEvent( new Event( "openProject", true ) );
+				trace("Projects : openProject");
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.OPEN_PROJECT, true ) );
 				
 			}
-			
-			/*
-			private function handleResults(evt:ResultEvent):void {
-				projects = new XMLListCollection(evt.result.product);
-			}
-			*/
-			
-			
 			
 		]]>
 	</fx:Script>
@@ -156,6 +135,7 @@
 	<s:HGroup horizontalAlign="right">
 		<s:Button id="openProjectButton" label="Open" click="openProject();"/>
 		<s:Button id="newProjectButton" label="New" click="createNewProject();"/>
+		<s:Button id="removeProjectButton" label="Remove" click="removeProject();"/>
 	</s:HGroup>
 	
 	

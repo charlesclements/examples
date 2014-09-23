@@ -7,6 +7,8 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import net.fastindemand.dispatcher.Dispatcher;
+			import net.fastindemand.event.AppEvent;
 			
 			public function init():void
 			{
@@ -14,23 +16,25 @@
 				trace("ProjectsView - init");
 				projects.visible = true;
 				projectMaster.visible = false;
-				projects.addEventListener( "createNewProject", createNewProject );
+				Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onProjectViewHandler );
+				Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onProjectViewHandler );
+				Dispatcher.addEventListener( AppEvent.CLOSE_PROJECT, onCloseProject );
 				
 			}
 			
-			protected function createNewProject(e:Event):void
+			protected function onProjectViewHandler(e:Event):void
 			{
 				
-				trace("createNewProject");
+				trace("ProjectsView - onProjectViewHandler");
 				projects.visible = false;
 				projectMaster.visible = true;
 				
 			}
 			
-			protected function closeProject():void
+			protected function onCloseProject(e:Event):void
 			{
 				
-				trace("closeProject");
+				trace("ProjectsView - closeProject");
 				projectMaster.visible = false;
 				projects.visible = true;
 				

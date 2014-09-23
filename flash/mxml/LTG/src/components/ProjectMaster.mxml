@@ -12,7 +12,9 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import net.fastindemand.data.AppData;
 			import net.fastindemand.dispatcher.Dispatcher;
+			import net.fastindemand.event.AppEvent;
 			
 			
 			protected var currentProjectsXML:XML;
@@ -24,73 +26,86 @@
 			{
 				
 				trace("ProjectMaster - init");
-				
-				Dispatcher.addEventListener( "onNewProject", onNewProject );
-				Dispatcher.addEventListener( "onOpenProject", onOpenProject );
+				Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onNewProject );
+				Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onOpenProject );
 
 			}
-			
-			
 			
 			protected function onNewProject(e:Event):void
 			{
 				
-				trace("onNewProject");
-				
-				
+				trace("ProjectMaster - onNewProject");
+				var d:Date = new Date;
+				AppData.PID = String( d.time );
+				docTitle.text = String( "Untitled " + AppData.projectsXML.children().length() );
+				docContent.text = "";
 				
 			}
-			
 			
 			protected function onOpenProject(e:Event):void
 			{
 				
-				trace("onOpenProject");
-				
-				
+				trace("ProjectMaster - onOpenProject");
+				var xml:XML = XML( AppData.projectsXML.children()[ AppData.projectIndex ] );
+				AppData.PID = xml.PID;
+				docTitle.text = xml.title;
+				docContent.text = xml.content;
 				
 			}
-			
-			
 			
 			protected function saveText():void
 			{
 				
-				trace("saveText");
-				docTitle.text = ( docTitle.text != "" ) ? docTitle.text : "NewSong";
-				var newProject:XML = new XML();  
-				newProject = 
-					<project> 
-						<title>{ docTitle.text }</title> 
-						<content>{ docContent.text }</content> 
-					</project>; 
-				currentProjectsXML = currentProjectsXML.appendChild( newProject ) 
-				trace("currentProjectsXML:");
-				trace(currentProjectsXML);
-				//trace(currentXML[0]);
+				trace("ProjectMaster - saveText");
 				
 				
 				
+				//trace( AppData.projectsXML..project );
+				trace( AppData.PID );
+				//trace( AppData.projectsXML..project.PID.( AppData.PID ) );
+				//trace( AppData.projectsXML..project.( PID == AppData.PID ) );
+				//trace( AppData.projectsXML..project.( PID == AppData.PID ).toString().length );
+				//trace( AppData.projectsXML.( "PID" == AppData.PID ) );
+				
+				var xmllist:XMLList = AppData.projectsXML..project;
+				
+				// Need to check if the PID exists.
+				//if( AppData.projectsXML..project.( PID == AppData.PID ).toString().length > 0 )
+				if( xmllist.( PID == AppData.PID ).toString().length > 0 )
+				{
+					
+					trace("Proj exists!");
+					xmllist.( PID == AppData.PID ).title = docTitle.text;
+					xmllist.( PID == AppData.PID ).content = docContent.text;
+					
+				}
+				else
+				{
+					
+					trace("Proj does not exists. Create.");
+					// Create the XMLList to be added.
+					xmllist = new XMLList(<project></project>);
+					xmllist.title = docTitle.text;
+					xmllist.content = docContent.text;
+					xmllist.PID = AppData.PID;
+					AppData.projectsXML.prependChild( xmllist );
+					
+				}
+				
+				
+				// This is the Strign that will get saved to the File.
 				var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
-				outputString += currentProjectsXML.toXMLString();
+				outputString += AppData.projectsXML.toXMLString();
 				outputString = outputString.replace( /\n/g, File.lineEnding );
 				
+				// Saving the actual file.
 				stream = new FileStream();
-				stream.open( currentProjectsFile, FileMode.WRITE );
-				
+				stream.open( AppData.currentProjectsFile, FileMode.WRITE );
 				stream.writeUTFBytes( outputString );
 				stream.close();
-				trace("outputString:");
-				trace( outputString );
 				
-				/*
-				var stream:FileStream = new FileStream();
-				stream.open(currentProjectsFile, FileMode.WRITE);
-				currentProjectsXML = XML(stream.readUTFBytes(stream.bytesAvailable));
-				stream.close();
-				trace(currentProjectsXML);
-				*/
-				
+				// Alert everyone else that the XML has been saved and changed.
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.UPDATE_PROJECTS ) );
 				
 			}
 			
@@ -109,15 +124,15 @@
 			protected function closeProject():void
 			{
 				
-				//trace("closeProject");
-				dispatchEvent( new Event( "onCloseProject", true ) );
+				trace("ProjectMaster - closeProject");
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.CLOSE_PROJECT, true ) );
 				
 			}
 			
 			public function clear():void
 			{
 				
-				trace("clear");
+				trace("ProjectMaster - clear");
 				docTitle.text = "";
 				docContent.text = "";
 				
