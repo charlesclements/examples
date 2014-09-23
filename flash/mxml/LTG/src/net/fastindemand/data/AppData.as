@@ -8,12 +8,10 @@ package net.fastindemand.data
 	public class AppData extends Object
 	{
 		
-		
-		
-		
-		public static var projectsXML:XML;
+		public static var projectsXML:XML = new XML();
 		public static var currentProjectsFile:File;
-		public static var stream:FileStream
+		public static var stream:FileStream = new FileStream();
+		public static var projectIndex:uint = 0;
 		
 		
 		[Bindable]

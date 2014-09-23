@@ -13,7 +13,7 @@
 				
 				trace("ProjectsView - init");
 				projects.visible = true;
-				projectCreator.visible = false;
+				projectMaster.visible = false;
 				projects.addEventListener( "createNewProject", createNewProject );
 				
 			}
@@ -23,7 +23,7 @@
 				
 				trace("createNewProject");
 				projects.visible = false;
-				projectCreator.visible = true;
+				projectMaster.visible = true;
 				
 			}
 			
@@ -31,7 +31,7 @@
 			{
 				
 				trace("closeProject");
-				projectCreator.visible = false;
+				projectMaster.visible = false;
 				projects.visible = true;
 				
 			}
@@ -41,6 +41,6 @@
 	</fx:Script>
 	
 	<components:Projects id="projects" width="100%" height="100%"/>
-	<components:ProjectCreator id="projectCreator" width="100%" height="100%"/>
+	<components:ProjectMaster id="projectMaster" width="100%" height="100%"/>
 	
 </s:View>

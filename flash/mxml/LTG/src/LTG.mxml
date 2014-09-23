@@ -14,12 +14,7 @@
 	<fx:Script>
 		<![CDATA[
 			
-			import net.fastindemand.dispatcher.Dispatcher;
-			import net.fastindemand.event.AppEvent;
-			
 			//private static var app:LTG;
-			
-			
 			protected function init(e:Event=null):void
 			{
 				

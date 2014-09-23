@@ -14,8 +14,6 @@
 		<![CDATA[
 			import mx.collections.XMLListCollection;
 			import mx.events.CollectionEvent;
-			import mx.rpc.events.ResultEvent;
-			
 			import net.fastindemand.data.AppData;
 			
 			/*
@@ -32,12 +30,9 @@
 			public function init():void
 			{
 				
-				trace(this + " init");
+				trace("Projects - init");
 				AppData.currentProjectsFile = File.documentsDirectory;
 				AppData.currentProjectsFile = AppData.currentProjectsFile.resolvePath("LyricsToGo/projects.xml");
-				//trace(currentProjectsFile);
-				//trace("exists: "+currentProjectsFile.exists);
-				
 				
 				// If it does not exist.
 				if( !AppData.currentProjectsFile.exists ) 
@@ -54,25 +49,18 @@
 					// Write to external file.
 						
 				}
+				else trace("File exists");
 				
 				// Read XML info.
-				AppData.stream = new FileStream();
 				AppData.stream.open( AppData.currentProjectsFile, FileMode.READ);
 				AppData.projectsXML = XML( AppData.stream.readUTFBytes( AppData.stream.bytesAvailable ) );
 				AppData.stream.close();
-				//trace("currentProjectsXML:");
-				//trace(projectsXML);
-
 				var xmllist:XMLList = AppData.projectsXML..title;//new XMLList( projectsXML );
-				trace(xmllist);
-				
+				//trace(xmllist);
 				
 				AppData.projects = new XMLListCollection( xmllist );
 				
 				dataList.addEventListener( CollectionEvent.COLLECTION_CHANGE, onCollectionEvent );
-				trace(AppData.projects);
-				
-				
 				
 			}
 			
@@ -90,8 +78,8 @@
 			{
 				
 				trace("selectionChangedHandler");
-				trace(dataList.selectedIndex);
-				
+				AppData.projectIndex = dataList.selectedIndex
+				trace(AppData.projectIndex);
 				
 			}
 			
