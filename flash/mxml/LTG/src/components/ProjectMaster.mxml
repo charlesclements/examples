@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					  xmlns:s="library://ns.adobe.com/flex/spark" width="100%" height="100%"
-					  backgroundColor="#ffffff" creationComplete="init()" >
+					  backgroundColor="#ffffff" creationComplete="init()" xmlns:components="components.*" >
 	<s:layout>
 		<s:VerticalLayout/>
 	</s:layout>
@@ -12,15 +12,20 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.events.CloseEvent;
+			
 			import net.fastindemand.data.AppData;
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
 			
-			
+			/*
 			protected var currentProjectsXML:XML;
 			protected var currentProjectsFile:File;
 			protected var stream:FileStream
+			*/
 			
+			//private var alert:AlertPopUp = new AlertPopUp;
+			private var alertClose:AlertPopUp_CloseProject = new AlertPopUp_CloseProject;
 			
 			public function init():void
 			{
@@ -28,6 +33,8 @@
 				trace("ProjectMaster - init");
 				Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onNewProject );
 				Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onOpenProject );
+				
+				alertClose.addEventListener( AppEvent.CLOSE_PROJECT, closeProject );
 
 			}
 			
@@ -57,20 +64,9 @@
 			{
 				
 				trace("ProjectMaster - saveText");
-				
-				
-				
-				//trace( AppData.projectsXML..project );
-				trace( AppData.PID );
-				//trace( AppData.projectsXML..project.PID.( AppData.PID ) );
-				//trace( AppData.projectsXML..project.( PID == AppData.PID ) );
-				//trace( AppData.projectsXML..project.( PID == AppData.PID ).toString().length );
-				//trace( AppData.projectsXML.( "PID" == AppData.PID ) );
-				
 				var xmllist:XMLList = AppData.projectsXML..project;
 				
 				// Need to check if the PID exists.
-				//if( AppData.projectsXML..project.( PID == AppData.PID ).toString().length > 0 )
 				if( xmllist.( PID == AppData.PID ).toString().length > 0 )
 				{
 					
@@ -99,10 +95,10 @@
 				outputString = outputString.replace( /\n/g, File.lineEnding );
 				
 				// Saving the actual file.
-				stream = new FileStream();
-				stream.open( AppData.currentProjectsFile, FileMode.WRITE );
-				stream.writeUTFBytes( outputString );
-				stream.close();
+				AppData.stream = new FileStream();
+				AppData.stream.open( AppData.currentProjectsFile, FileMode.WRITE );
+				AppData.stream.writeUTFBytes( outputString );
+				AppData.stream.close();
 				
 				// Alert everyone else that the XML has been saved and changed.
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.UPDATE_PROJECTS ) );
@@ -121,13 +117,48 @@
 			}
 			
 			
-			protected function closeProject():void
+			protected function initCloseProject():void
+			{
+				
+				trace("ProjectMaster - initCloseProject");
+				alertClose.open( this );
+				
+				
+				
+			}
+			
+			
+			protected function closeProject(e:Event=null):void
 			{
 				
 				trace("ProjectMaster - closeProject");
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.CLOSE_PROJECT, true ) );
 				
 			}
+			
+			
+			private function alertListener(e:CloseEvent):void 
+			{
+				
+				trace("ProjectMaster - alertListener");
+				// Check to see if the OK button was pressed.
+				
+				trace(e.detail);
+				
+				/*
+				if (e.detail == Alert.OK) 
+				{
+					//myText.text = myInput.text; 
+				}
+				
+				*/
+				
+			}
+			
+			
+			
+			
+			
 			
 			public function clear():void
 			{
@@ -141,7 +172,7 @@
 		]]>
 	</fx:Script>
 	
-	
+<!--	<components:AlertPopUp id="alert" width="100%" height="100%"/>-->
 	<s:HGroup verticalAlign="middle" horizontalAlign="right" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="100%">
 		<s:Label>Title</s:Label>
 		<s:TextInput id="docTitle" width="100%" height="40" needsSoftKeyboard="true" />
@@ -151,7 +182,7 @@
 			/>
 		<s:Button
 			id="closeButton" label="Close"
-			click="closeProject();"
+			click="initCloseProject()"
 			/>
 	</s:HGroup>
 	
