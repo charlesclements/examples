@@ -8,18 +8,38 @@
 	<fx:Script>
 		<![CDATA[
 			
+			import mx.events.FlexEvent;
+			
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
+			
+			public static var isCreated:Boolean = false;
 			
 			public function init():void
 			{
 				
-				trace("ProjectsView - init");
+				
+					trace(isCreated);
+				
+				if( !isCreated )
+				{
+					
+					trace("ProjectsView - init");
+					isCreated = true
+					//this.removeEventListener( FlexEvent.CREATION_COMPLETE, init );
+					
+					projects.init();
+					projectMaster.init();
+					Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onProjectViewHandler );
+					Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onProjectViewHandler );
+					Dispatcher.addEventListener( AppEvent.CLOSE_PROJECT, onCloseProject );
+					
+				}
+				
+				
 				projects.visible = true;
 				projectMaster.visible = false;
-				Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onProjectViewHandler );
-				Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onProjectViewHandler );
-				Dispatcher.addEventListener( AppEvent.CLOSE_PROJECT, onCloseProject );
+				
 				
 			}
 			

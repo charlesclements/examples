@@ -13,13 +13,56 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.junkbyte.console.Cc;
+			
+			import net.fastindemand.dispatcher.Dispatcher;
+			import net.fastindemand.event.AppEvent;
 			
 			//private static var app:LTG;
 			protected function init(e:Event=null):void
 			{
 				
 				trace("LTG - init");
+				
+				
+				//Cc.logch("LTG", "test");
+				
+				
+				/*
+				trace(debugPanel);
+				trace(width);
 
+				
+				
+				Dispatcher.addEventListener( AppEvent.SHOW_PROJECTS, onChangeView );
+				
+				tabNav.selectedIndex = 2; 
+				
+				*/
+				
+				
+			}
+			
+			
+			
+			protected function onChangeView(e:AppEvent=null):void
+			{
+				
+				trace("LTG - onChangeView")
+				trace(e.type)
+				
+				switch( e.type )
+				{
+					
+					case AppEvent.SHOW_PROJECTS:
+						tabNav.selectedIndex = 0; 
+						break;
+					
+					
+				}
+				//firstView="views.ProjectsView"
+				//firstView="views.ProfileView"
+				
 			}
 			
 			
@@ -27,9 +70,10 @@
 	</fx:Script>
 	
 	<!--<components:ProjectCreator id="projectCreator"/>-->
-	<s:TabbedViewNavigator id="tabNav" width="100%" height="100%" >
+	<s:TabbedViewNavigator id="tabNav" width="100%" height="100%">
 		<s:ViewNavigator label="Projects" id="projectsView" width="100%" height="100%" firstView="views.ProjectsView"/>
-		<s:ViewNavigator label="Profile" width="100%" height="100%" firstView="views.ProfileView"/>
+		<s:ViewNavigator label="Profile" id="profilePanel" width="100%" height="100%" firstView="views.ProfileView"/>
+		<!--<s:ViewNavigator label="Debug" id="debugPanel" width="100%" height="100%" firstView="views.DebugView"/>-->
 	</s:TabbedViewNavigator>
 		
 </s:Application>

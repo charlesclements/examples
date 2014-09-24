@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Debug Panel" creationComplete="init()" >
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.junkbyte.console.Cc;
+			
+			import net.fastindemand.dispatcher.Dispatcher;
+			import net.fastindemand.event.AppEvent;
+			
+			
+			
+			
+			
+			
+			protected function init():void
+			{
+				
+				trace("debugPanel - init");
+				
+				
+				/*
+				Cc.startOnStage(debugPanel);
+				
+				
+				
+				Cc.width = stage.width;
+				Cc.height = stage.height - 100;
+				Cc.logch("LyricsToGo", "APP");
+				*/
+				//Dispatcher.dispatchEvent( new AppEvent( AppEvent.SHOW_PROJECTS ) );
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+	<s:Panel id="debugPanel" title="Debug View" width="100%" height="100%" />
+</s:View>
