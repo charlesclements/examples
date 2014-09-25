@@ -38,7 +38,8 @@
 				
 				
 				trace("Projects - init");
-				AppData.currentProjectsFile = File.documentsDirectory;
+				//AppData.currentProjectsFile = File.documentsDirectory;
+				AppData.currentProjectsFile = File.applicationStorageDirectory;
 				AppData.currentProjectsFile = AppData.currentProjectsFile.resolvePath("LyricsToGo/projects.xml");
 				
 				// If it does not exist.
