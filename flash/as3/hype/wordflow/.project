@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>WordFlow</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.adobe.flexbuilder.flashbridge.flashprobuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.adobe.flexbuilder.flashbridge.flashpronature</nature>
+		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] as3-src</name>
+			<type>2</type>
+			<location>/Users/clementsc/Documents/PROJECTS/GIT/charlesclements/examples/flash/as3/src</location>
+		</link>
+		<link>
+			<name>[source path] hype-src</name>
+			<type>2</type>
+			<location>/Users/clementsc/Documents/PROJECTS/GIT/charlesclements/examples/flash/as3/hype/src</location>
+		</link>
+	</linkedResources>
+</projectDescription>
