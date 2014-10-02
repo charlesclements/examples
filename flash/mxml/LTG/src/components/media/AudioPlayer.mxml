@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  initialize="init()" xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	
+	<fx:Script>
+		<![CDATA[
+			
+			
+			public static var isCreated:Boolean = false;
+			
+			public function init():void
+			{
+				
+				
+				if( !isCreated )
+				{
+					
+					trace("AudioPlayer - init");
+					
+					update();
+				}
+				
+				
+				//trace(this.width);
+				
+			}
+			
+			
+			public function update():void
+			{
+				
+				trace("AudioPlayer : update");
+				rect.height = 40;
+				rect.width = this.parent.width;
+				//if( $obj.height != null ) rect.height = $obj.height;
+				//rect.height = this.height;
+				//trace(this.width);
+				
+			}
+			
+/*			
+			public function update($obj:Object):void
+			{
+				
+				trace("AudioPlayer : " + this.width);
+				
+				if( $obj.width != null ) rect.width = $obj.width;
+				if( $obj.height != null ) rect.height = $obj.height;
+				//rect.height = this.height;
+				//trace(this.width);
+				
+			}
+			*/
+			
+			
+			
+			
+			
+			
+			
+		]]>
+	</fx:Script>
+	
+	
+	<s:HGroup>
+		
+		<!-- Define the border around the RichEditableText subcomponent. --> 
+		<s:Rect id="rect" width="10" height="10">
+			<s:stroke>
+				<s:SolidColorStroke color="0x686868" weight="1"/>
+			</s:stroke>
+		</s:Rect>
+		
+	</s:HGroup>
+	
+</s:Group>

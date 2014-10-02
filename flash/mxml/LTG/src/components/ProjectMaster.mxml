@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					  xmlns:s="library://ns.adobe.com/flex/spark" width="100%" height="100%"
-					  backgroundColor="#ffffff" xmlns:components="components.*" >
+					  backgroundColor="#ffffff" xmlns:components="components.*" xmlns:media="components.media.*" >
 	<s:layout>
 		<s:VerticalLayout/>
 	</s:layout>
@@ -12,10 +12,10 @@
 	
 	<fx:Script>
 		<![CDATA[
+			
+			
 			import components.alerts.AlertPopUp_CloseProject;
-			
 			import mx.managers.PopUpManager;
-			
 			import net.fastindemand.data.AppData;
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
@@ -33,7 +33,12 @@
 				Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onNewProject );
 				Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onOpenProject );
 				alertClose.addEventListener( AppEvent.CLOSE_PROJECT, closeProject );
-
+				
+				// Audio player.
+				audioPlayer.update();
+				removeElement( audioPlayer );
+				instrumentalButton.enabled = true;
+				
 			}
 			
 			
@@ -144,6 +149,11 @@
 					// Center the pop-up in the parent container.
 					PopUpManager.centerPopUp(alertClose);
 					
+					
+					
+					
+					
+					
 				}
 				else
 				{
@@ -164,6 +174,44 @@
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.CLOSE_PROJECT, true ) );
 				
 			}
+
+			
+			protected function toggleViewAudio(e:Event=null):void
+			{
+				
+				trace("ProjectMaster - toggleViewAudio");
+				
+				
+				if( contains( audioPlayer ) ) removeElement( audioPlayer );
+				else 
+				{
+					
+					addElementAt( audioPlayer, getElementIndex( hControls ) + 1 );
+					audioPlayer.update();
+					
+				}
+				
+			}
+			
+			
+			protected function toggleViewRecord(e:Event=null):void
+			{
+				
+				trace("ProjectMaster - toggleViewRecord");
+				
+				/*
+				if( contains( audioPlayer ) ) removeElement( audioPlayer );
+				else 
+				{
+					
+					addElementAt( audioPlayer, getElementIndex( instrumentalButton ) + 1 );
+					audioPlayer.update();
+					
+				}
+				
+				*/
+				
+			}
 			
 			
 			public function clear():void
@@ -178,8 +226,7 @@
 		]]>
 	</fx:Script>
 	
-<!--	<components:AlertPopUp id="alert" width="100%" height="100%"/>-->
-	<s:HGroup verticalAlign="middle" horizontalAlign="right" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="100%">
+	<s:HGroup id="hgroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="100%">
 		
 		
 		
@@ -194,8 +241,25 @@
 			id="closeButton" label="Close"
 			click="initCloseProject()"
 			/>
+		
+		
+		
 	</s:HGroup>
 	
+	
+	<s:HGroup id="hControls">
+		<s:ToggleButton
+			id="instrumentalButton" label="Instrumental" height="20"
+			click="toggleViewAudio()"
+			/>
+		<s:ToggleButton
+			id="recordButton" label="Record" height="20"
+			click="toggleViewRecord()"
+			/>
+	</s:HGroup>
+	
+	
+	<media:AudioPlayer id="audioPlayer"/>
 	<s:TextArea id="docContent" width="100%" height="100%" needsSoftKeyboard="true" change="onProjectChange()" />
 	<s:Label id="myLabel" width="180" fontWeight="bold" fontSize="24"/>
 	
