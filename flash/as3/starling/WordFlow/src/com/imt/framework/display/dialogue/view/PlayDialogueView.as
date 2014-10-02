@@ -1,0 +1,1 @@
+﻿package com.imt.framework.display.dialogue.view{	import flash.display.Sprite;		public class PlayDialogueView extends GenericDialogueView	{		public function PlayDialogueView()		{			button1 = button1;			button2 = button2;			super();		}	}}

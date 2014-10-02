@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:26959a0c12d411066c5dc44108bf618e:35f50f3ce1f4c3e2eb0fa96ae8230496:276fa56afa1b7ed1d40a0751be7e7c77$ -->
+<TextureAtlas imagePath="Stage1_1.png">
+    <SubTexture name="cloud1" x="1" y="1785" width="880" height="246" frameX="-27" frameY="-25" frameWidth="934" frameHeight="298"/>
+    <SubTexture name="cloud5" x="883" y="1785" width="1164" height="160" frameX="-29" frameY="-26" frameWidth="1222" frameHeight="212"/>
+    <SubTexture name="mid-w1024" x="883" y="1947" width="1024" height="51"/>
+    <SubTexture name="sun" x="1" y="1" width="1784" height="1782" frameX="-8" frameY="-9" frameWidth="1800" frameHeight="1800"/>
+</TextureAtlas>
