@@ -9,7 +9,6 @@
 		<![CDATA[
 			
 			import mx.events.FlexEvent;
-			
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
 			
@@ -17,9 +16,6 @@
 			
 			public function init():void
 			{
-				
-				
-					trace(isCreated);
 				
 				if( !isCreated )
 				{
@@ -36,12 +32,11 @@
 					
 				}
 				
-				
 				projects.visible = true;
 				projectMaster.visible = false;
 				
-				
 			}
+			
 			
 			protected function onProjectViewHandler(e:Event):void
 			{
@@ -51,6 +46,7 @@
 				projectMaster.visible = true;
 				
 			}
+			
 			
 			protected function onCloseProject(e:Event):void
 			{
@@ -66,7 +62,7 @@
 	</fx:Script>
 	
 	
-	<components:Projects id="projects" width="100%" height="100%"/>
-	<components:ProjectMaster id="projectMaster" width="100%" height="100%"/>
+	<components:ProjectsList id="projects" width="100%" height="100%"/>
+	<components:ProjectCreator id="projectMaster" width="100%" height="100%"/>
 	
 </s:View>
