@@ -13,15 +13,31 @@
 	<fx:Script>
 		<![CDATA[
 			
+		]]>
+	</fx:Script>
+	
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import com.greensock.loading.LoaderMax;
+			import com.greensock.loading.MP3Loader;
+			
 			import mx.managers.PopUpManager;
+			
 			import components.alerts.AlertPopUp_CloseProject;
 			import components.media.AudioPlayer;
-			import net.fastindemand.data.AppData;
+			
+			import model.AppModel;
+			
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
 			
 			// Alert window.
 			private var alertClose:AlertPopUp_CloseProject = new AlertPopUp_CloseProject;
+			private var _sound:Sound;
+			private var _audioFile:File;
+			private var _loader:LoaderMax;
 			//private var audioPlayer:AudioPlayer = new AudioPlayer;
 			
 			public function init():void
@@ -37,7 +53,7 @@
 				// Audio player.
 				audioPlayer.update();
 				removeElement( audioPlayer );
-				instrumentalButton.enabled = true;
+				showMediaButton.enabled = true;
 				
 			}
 			
@@ -45,15 +61,81 @@
 			protected function onNewProject(e:Event):void
 			{
 				
-				trace("ProjectMaster - onNewProject");
+				trace("ProjectCreator - onNewProject");
 				var d:Date = new Date;
-				AppData.PID = String( d.time );
-				docTitle.text = String( "Untitled " + AppData.projectsXML.children().length() );
+				AppModel.PID = String( d.time );
+				docTitle.text = String( "Untitled " + AppModel.PROJECTS_XML.children().length() );
 				docContent.text = "";
 				
 				// Createfolder.
-				var folder:File = File.documentsDirectory.resolvePath("LyricsToGo/" + AppData.PID );
+				var folder:File = File.documentsDirectory.resolvePath("LyricsToGo/" + AppModel.PID );
 				folder.createDirectory();
+				
+				
+				
+				
+				trace("");
+				/*trace( AppModel.PROJECTS_XML.children().length() );
+				trace( AppModel.PROJECTS_XML );*/
+				//AppModel.PROJECTS_XML.appendChild( new XML("<project id=" + AppModel.PID + " title=" + docTitle.text + " />"  ) );
+				//AppModel.PROJECTS_XML.appendChild( new XMLList(<project id="" title=""></project>) );
+				AppModel.PROJECTS_XML.prependChild( new XMLList(<project id="" title=""></project>) );
+				AppModel.PROJECTS_XML..project[ 0 ].@id = AppModel.PID;
+				AppModel.PROJECTS_XML..project[ 0 ].@title = docTitle.text;
+				
+				trace( AppModel.PROJECTS_XML );
+				/*
+				trace( AppModel.PROJECTS_XML.children().length() );
+					
+					*/
+					
+					
+					
+				// Create XML here
+				
+				
+				
+				//trace("Proj does not exists. Create.");
+				// Create the XMLList to be added.
+				
+				var xmllist:XMLList = new XMLList(<project id=""></project>);
+				
+				xmllist.@id = AppModel.PID;
+				
+				xmllist.title = docTitle.text;
+				xmllist.content = docContent.text;
+				xmllist.audio.@name = "";
+				xmllist.audio.@start = "0";
+				xmllist.audio.@end = "-1";
+				//xmllist.PID = AppModel.PID;
+				
+				
+				// Save XML in folder;
+				
+				trace(xmllist);
+				
+				
+				
+				//AppModel.CURRENT_XML = new XML( xmllist );
+				
+				/*
+				trace(AppModel.CURRENT_XML);
+				trace(AppModel.CURRENT_XML.toXMLString());
+				*/
+				
+				
+				
+				
+				AppModel.saveXML( AppModel.PID, xmllist );
+				
+				
+				/*
+				trace("+++");
+				trace(AppModel.CURRENT_XML);
+				*/
+				
+				
+				
 				
 				// Temporarily kill Save button.
 				saveButton.enabled = false;
@@ -65,13 +147,37 @@
 			{
 				
 				trace("ProjectMaster - onOpenProject");
-				var xml:XML = XML( AppData.projectsXML.children()[ AppData.projectIndex ] );
-				AppData.PID = xml.PID;
+				
+				var xml:XML = XML( AppModel.PROJECTS_XML.children()[ AppModel.PROJECT_INDEX ] );
+				
+				trace( xml );
+				
+				//AppModel.PID = xml.PID;
+				AppModel.PID = xml.PID;
 				docTitle.text = xml.title;
 				docContent.text = xml.content;
 				
 				// Temporarily kill Save button.
 				saveButton.enabled = false;
+				trace(xml);
+				trace(String( xml.audio ).length);
+				trace("-");
+				
+				
+				
+				if( String( xml.audio ).length == 0 )
+				{
+					
+					if( hControls.containsElement( showMediaButton ) ) hControls.removeElement( showMediaButton );
+					
+					
+					
+				}
+				
+				
+				
+				
+				
 				
 			}
 			
@@ -79,41 +185,131 @@
 			protected function saveText():void
 			{
 				
-				trace("ProjectMaster - saveText");
-				var xmllist:XMLList = AppData.projectsXML..project;
+				trace("ProjectCreator - saveText");
+				//var xmllist:XMLList = AppModel.PROJECTS_XML..project;
+				//var xmllist:XMLList = AppModel.CURRENT_XML..project;
+				
+				
+				
+				trace("");
+				trace(AppModel.CURRENT_XML);
+				trace("");
+				
+				
+				
+				
+				
+				var xmllist:XMLList = AppModel.CURRENT_XML.project;
+				
+				
+				trace(xmllist);
+				/*
+				trace(xmllist);
+				trace("");
+				trace(AppModel.PROJECTS_XML);
+				trace("");
+				*/
+				
+				//trace(xmllist);
+				//trace(xmllist.( @id == AppModel.PID ));
+				//trace(xmllist[1].@id);
+				
+				
+				trace("-");
+				
+				
+				
+				
+				
+				xmllist.title = docTitle.text;
+				xmllist.content = docContent.text;
+				
+				
+				
+				
+				
+				/*
 				
 				// Need to check if the PID exists.
-				if( xmllist.( PID == AppData.PID ).toString().length > 0 )
+				//if( xmllist.( PID == AppModel.PID ).toString().length > 0 )
+				//if( xmllist.( @id == AppModel.PID ).toString().length > 0 )
+				if( AppModel.PROJECTS_XML.( @id == AppModel.PID ).toString().length > 0 )
 				{
 					
-					//trace("Proj exists!");
-					xmllist.( PID == AppData.PID ).title = docTitle.text;
-					xmllist.( PID == AppData.PID ).content = docContent.text;
+					trace("Proj exists!");
+				trace("-");
+				
+					//xmllist.( PID == AppModel.PID ).title = docTitle.text;
+					//xmllist.( PID == AppModel.PID ).content = docContent.text;
+					xmllist.title = docTitle.text;
+					xmllist.content = docContent.text;
 					
 				}
 				else
 				{
 					
-					//trace("Proj does not exists. Create.");
+					trace("Proj does not exists. Create.");
+				trace("-");
+				
 					// Create the XMLList to be added.
-					xmllist = new XMLList(<project></project>);
+					xmllist = new XMLList(<project id=""></project>);
+					
+					xmllist.@id = AppModel.PID;
+					
 					xmllist.title = docTitle.text;
 					xmllist.content = docContent.text;
-					xmllist.PID = AppData.PID;
-					AppData.projectsXML.prependChild( xmllist );
+					//xmllist.PID = AppModel.PID;
+					
+					
+					// Save XML in folder;
+					
+					trace(xmllist);
+					
+					
+					
+					AppModel.saveXML( AppModel.PID, xmllist );
+					
+					//AppModel.projectsXML.prependChild( xmllist );
 					
 				}
 				
+				*/
+				
+				
+				
+				// This is where the new XML file will be saved in their own directories.
+				
+				// need to create folders and subfolders.
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				/*
+				
+				
 				// This is the Strign that will get saved to the File.
 				var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
-				outputString += AppData.projectsXML.toXMLString();
+				outputString += AppModel.PROJECTS_XML.toXMLString();
 				outputString = outputString.replace( /\n/g, File.lineEnding );
 				
 				// Saving the actual file.
-				AppData.stream = new FileStream();
-				AppData.stream.open( AppData.currentProjectsFile, FileMode.WRITE );
-				AppData.stream.writeUTFBytes( outputString );
-				AppData.stream.close();
+				AppModel.STREAM = new FileStream();
+				AppModel.STREAM.open( AppModel.PROJECTS_FILE, FileMode.WRITE );
+				AppModel.STREAM.writeUTFBytes( outputString );
+				AppModel.STREAM.close();
+				*/
+				
+				
+				AppModel.saveXML( AppModel.PID, xmllist );
+				
+				
+				
+				
 				
 				// Alert everyone else that the XML has been saved and changed.
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.UPDATE_PROJECTS ) );
@@ -173,6 +369,120 @@
 				//trace("ProjectMaster - closeProject");
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.CLOSE_PROJECT, true ) );
 				
+			}
+
+			
+			
+			protected function _onSelected(e:Event=null):void
+			{
+				
+				
+				trace( "ProjectCreator - _onSelected()" );
+				//trace( e );
+				trace( e.currentTarget );
+				
+				var f:File = e.currentTarget as File;
+				
+				
+				AppModel.copyMusic( AppModel.PID, f );
+				
+				
+				
+				return;
+				
+				
+				
+				f.load();
+				
+				f.addEventListener(Event.COMPLETE, _onFileLoaded );
+				
+				
+				//new URLRequest( ( e.currentTarget as File ).nativePath );
+				/*
+				var s:Sound = new Sound( new URLRequest( ( e.currentTarget as File ).nativePath ) );
+				
+				trace(s);
+				
+				*/
+				_loader = new LoaderMax( { onComplete:_onSoundLoaded } );
+				_loader.append( new MP3Loader( new URLRequest( ( e.currentTarget as File ).nativePath ) ) );
+				_loader.load();
+				
+				
+				
+				// OK, we can grab the native path to the file here.
+				
+				// Do we need to load it? Does it contain the file already?
+				
+				// Save it to the model.
+				
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+			protected function _onFileLoaded(e:Event):void
+			{
+				
+				trace("ProjectMaster - _onFileLoaded");
+				
+				trace( ( e.currentTarget as File ).nativePath );
+				trace( ( e.currentTarget as File ).data.length );
+				
+				
+				// Save reference in the XML doc.
+				
+				// Save loaded file in project directory in audio folder.
+				
+				// Reload as sound to play.
+				
+				// Always check to see if it exists.
+				
+				// Make sure there is a way to delete file if no longer needed or new sound is loaded.
+				
+				
+			}
+			
+			
+			protected function _onSoundLoaded(e:Event):void
+			{
+				
+				trace("ProjectMaster - _onSoundLoaded");
+				
+				
+				
+			}
+			
+			
+			protected function _loadMusic(e:Event=null):void
+			{
+				
+				trace("ProjectMaster - _loadMusic");
+				
+				
+				
+				_audioFile = new File;
+				_audioFile.addEventListener( Event.SELECT, _onSelected );
+				_audioFile.browse(  );//[ ".mp3" ]
+				
+				
+				
+				
+				
+				/*
+				if( contains( audioPlayer ) ) removeElement( audioPlayer );
+				else 
+				{
+					
+					addElementAt( audioPlayer, getElementIndex( hControls ) + 1 );
+					audioPlayer.update();
+					
+				}
+				*/
 			}
 
 			
@@ -241,9 +551,13 @@
 	
 	<s:HGroup id="hControls" verticalAlign="middle" horizontalAlign="center" paddingBottom="0" paddingLeft="5" paddingRight="5" paddingTop="0" width="100%">
 		<s:ToggleButton width="100%" height="30"
-			id="instrumentalButton" label="SHOW MEDIA"
-			click="toggleViewAudio()"
-			/>
+						id="showMediaButton" label="SHOW MEDIA"
+						click="toggleViewAudio()"
+						/>
+		<s:ToggleButton width="100%" height="30"
+						id="loadAudioButton" label="LOAD MUSIC"
+						click="_loadMusic()"
+						/>
 	</s:HGroup>
 	
 	<media:AudioPlayer id="audioPlayer" />

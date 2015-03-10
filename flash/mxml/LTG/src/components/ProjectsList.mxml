@@ -21,7 +21,8 @@
 			import components.alerts.AlertPopUp_CreateFirstProject;
 			import components.alerts.AlertPopUp_RemoveProject;
 			
-			import net.fastindemand.data.AppData;
+			import model.AppModel;
+			
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
 			
@@ -41,20 +42,66 @@
 				
 				trace("Projects - init ++++++++");
 				//AppData.currentProjectsFile = File.documentsDirectory;
-				AppData.currentProjectsFile = File.applicationStorageDirectory;
-				AppData.currentProjectsFile = AppData.currentProjectsFile.resolvePath("LyricsToGo/projects.xml");
+				//AppModel.currentProjectsFile = File.applicationStorageDirectory;
+				//AppModel.currentProjectsFile = AppModel.currentProjectsFile.resolvePath("LyricsToGo/projects.xml");
+				AppModel.PROJECTS_FILE = AppModel.STORAGE;
+				AppModel.PROJECTS_FILE = AppModel.STORAGE.resolvePath("LyricsToGo/projects.xml");
+				
+				
+				// May need to use showall in finder via Terminal to view contents.
+				
+				
+				trace( File.applicationStorageDirectory.nativePath );
+				//trace( File.applicationDirectory.nativePath );
+				
+				
+				
+				
+				trace( AppModel.PROJECTS_FILE.url );
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				
 				// If it does not exist.
-				if( !AppData.currentProjectsFile.exists ) 
+				if( !AppModel.PROJECTS_FILE.exists ) 
 				{
 					
 					trace("File needs to be created.");
 					
+					
+					
+					
+					
+					
+					
+					
+					
+					// This is where you create your XML File structure.
+					
+					
+					
 					// Create XML.
-					var xml:XML = new XML(<projects><project/></projects>);
+					var xml:XML = new XML(<projects><project id=""/></projects>);
 					xml.project.title = "Untitled Project";
 					xml.project.content = "";
 					xml.project.PID = String( ( new Date ).time );
+					//xml.project. = String( ( new Date ).time );
+					
+					//xml.project.attribute( "id" );
+					xml.project.@id = String( ( new Date ).time );
+					
+					trace( xml );
+					
+					// Set last updated?
+					
+					
 					
 					// Create string for saving.
 					var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
@@ -63,10 +110,10 @@
 					trace(outputString);
 					
 					// Write to file.
-					AppData.stream = new FileStream();
-					AppData.stream.open( AppData.currentProjectsFile, FileMode.UPDATE );
-					AppData.stream.writeUTFBytes( outputString );
-					AppData.stream.close();
+					AppModel.STREAM = new FileStream();
+					AppModel.STREAM.open( AppModel.PROJECTS_FILE, FileMode.UPDATE );
+					AppModel.STREAM.writeUTFBytes( outputString );
+					AppModel.STREAM.close();
 						
 					// Create new project popup?
 					alertCreateFirst.open( this, true );
@@ -86,17 +133,39 @@
 					
 				}
 				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				// Read XML info.
-				AppData.stream.open( AppData.currentProjectsFile, FileMode.READ);
-				AppData.projectsXML = XML( AppData.stream.readUTFBytes( AppData.stream.bytesAvailable ) );
-				AppData.stream.close();
+				AppModel.STREAM.open( AppModel.PROJECTS_FILE, FileMode.READ);
+				AppModel.PROJECTS_XML = XML( AppModel.STREAM.readUTFBytes( AppModel.STREAM.bytesAvailable ) );
+				AppModel.STREAM.close();
 				
 				
 				
 				
-				var xmllist:XMLList = AppData.projectsXML..title;
+				var xmllist:XMLList = AppModel.PROJECTS_XML..title;
 				
-				AppData.projects = new XMLListCollection( xmllist );
+				
+				trace( "+" );
+				trace( "+" );
+				
+				trace( xmllist );
+				
+				
+				
+				
+				
+				AppModel.PROJECTS_LIST = new XMLListCollection( xmllist );
 				
 				// Event listeners
 				dataList.addEventListener( CollectionEvent.COLLECTION_CHANGE, onCollectionEvent );
@@ -111,8 +180,8 @@
 				
 				trace("Projects - onUpdateProjects");
 				
-				var xmllist:XMLList = AppData.projectsXML..title;
-				AppData.projects = new XMLListCollection( xmllist );
+				var xmllist:XMLList = AppModel.PROJECTS_XML..title;
+				AppModel.PROJECTS_LIST = new XMLListCollection( xmllist );
 				
 				
 				
@@ -132,8 +201,8 @@
 			{
 				
 				trace("selectionChangedHandler");
-				AppData.projectIndex = dataList.selectedIndex
-				trace(AppData.projectIndex);
+				AppModel.PROJECT_INDEX = dataList.selectedIndex
+				trace(AppModel.PROJECT_INDEX);
 				
 			}
 			
@@ -152,18 +221,18 @@
 				trace("Projects : onRemoveProject");
 				
 				// Remove XML child node.
-				delete AppData.projectsXML.children()[ AppData.projectIndex ];
+				delete AppModel.PROJECTS_XML.children()[ AppModel.PROJECT_INDEX ];
 				
 				// This is the Strign that will get saved to the File.
 				var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
-				outputString += AppData.projectsXML.toXMLString();
+				outputString += AppModel.PROJECTS_XML.toXMLString();
 				outputString = outputString.replace( /\n/g, File.lineEnding );
 				
 				// Saving the actual file.
-				AppData.stream = new FileStream();
-				AppData.stream.open( AppData.currentProjectsFile, FileMode.WRITE );
-				AppData.stream.writeUTFBytes( outputString );
-				AppData.stream.close();
+				AppModel.STREAM = new FileStream();
+				AppModel.STREAM.open( AppModel.PROJECTS_FILE, FileMode.WRITE );
+				AppModel.STREAM.writeUTFBytes( outputString );
+				AppModel.STREAM.close();
 				
 				// Alert everyone else that the XML has been saved and changed.
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.UPDATE_PROJECTS ) );
@@ -202,7 +271,7 @@
 		<s:Button id="removeProjectButton" label="Remove" click="initRemoveProject();"/>
 	</s:HGroup>
 	
-	<s:List dataProvider="{AppData.projects}" requireSelection="true" id="dataList" labelField="title" width="100%" height="100%" change="selectionChangedHandler(event)" >
+	<s:List dataProvider="{AppModel.PROJECTS_LIST}" requireSelection="true" id="dataList" labelField="title" width="100%" height="100%" change="selectionChangedHandler(event)" >
 		<s:layout>
 			<s:VerticalLayout  />
 		</s:layout>
