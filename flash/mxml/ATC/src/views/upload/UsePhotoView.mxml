@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Take pic with Camera">
+	
+	
+	
+		<fx:Script>
+			<![CDATA[
+				
+				
+				
+				
+				private var _file:File;
+				private var _cameraRoll:CameraRoll;
+				
+				
+				private function _doPhoto():void
+				{
+					
+					trace("UsePhotoView - _doPhoto()");
+					
+					/*
+					var s:Sprite = new Sprite;
+					s.graphics.beginFill( 0xff0000 );
+					s.graphics.drawRect( 0, 0, 100, 100 );
+					s.graphics.endFill();
+					
+					vid.addChild( s );
+					
+					*/
+					
+					_cameraRoll = new CameraRoll;
+					
+					if( CameraRoll.supportsBrowseForImage )
+					{
+						
+						trace( "UsePhotoView - supportsBrowseForImage - true");
+						_cameraRoll.addEventListener(MediaEvent.SELECT, _onSelected );
+						_cameraRoll.addEventListener(Event.CANCEL, _onCancel );
+						_cameraRoll.addEventListener(ErrorEvent.ERROR, _onError );
+						
+						_cameraRoll.browseForImage();
+						
+					}
+					else 
+					{
+						
+						trace( "UsePhotoView - _doPhoto() - No Image support. Use regular browse." );
+						
+						
+						_file = new File;
+						_file.addEventListener( Event.SELECT, _onFileSelected );
+						_file.browseForOpen( "Select an image", [ new FileFilter("Images", "*.jpg;*.gif;*.png") ] );
+						
+						
+					}
+					
+					
+					
+					
+					
+					
+				}
+				
+				
+				private function _onFileSelected(e:Event):void
+				{
+					
+					trace("UsePhotoView - _onFileSelected()");
+					trace(e.currentTarget);
+					
+					//_file = e.currentTarget;
+					_file.removeEventListener( Event.SELECT, _onFileSelected );
+					_file.addEventListener( Event.COMPLETE, _onFileComplete );
+					//_file.addEventListener( Event.COMPLETE, _onFileComplete );
+					//_file.addEventListener( Event.COMPLETE, _onFileComplete );
+					_file.load();
+					
+				}
+				
+				private function _onFileComplete(e:Event):void
+				{
+					
+					trace("UsePhotoView - _onFileComplete() : " + e.type);
+					trace(e.currentTarget);
+					
+					
+					//trace( ( e.currentTarget as File ).data );
+					
+					
+					
+					
+					
+					var bm:BitmapData = ( e.currentTarget as File ).data as BitmapData;
+					
+					trace( bm );
+					
+					
+					// Need to convert ByteArray into BitmapData.
+					
+					
+					// Could possibly use Loader class for simpler conversion.
+					
+					
+					
+					
+					
+					
+					
+					/*
+					_file = e.currentTarget;
+					_file.removeEventListener( Event.SELECT, _onFileSelected );
+					_file.addEventListener( Event.COMPLETE, _onFileSelected );
+					*/
+					
+				}
+				
+				
+				private function _onError(e:Event):void
+				{
+					
+					trace("UsePhotoView - _onError");
+					
+					
+				}
+				
+				private function _onCancel(e:Event):void
+				{
+					
+					trace("UsePhotoView - _onCancel");
+					
+					
+				}
+				
+				private function _onSelected(e:MediaEvent):void
+				{
+					
+					trace("UsePhotoView - _onSelected");
+					
+					
+				}
+				
+
+				//init();
+				
+			]]>
+		</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+		
+		
+		
+		
+		
+	</fx:Declarations>
+	
+	
+	<s:navigationContent>
+		<s:Button label="Back" click="navigator.popToFirstView();"/>
+	</s:navigationContent>
+	
+	
+	<s:VGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+		<s:Button label="Get Photo" click="_doPhoto()">
+			
+		</s:Button>
+		<s:SpriteVisualElement id="vid"/>
+	</s:VGroup>
+	
+	
+	
+</s:View>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Upload Photo">
+	
+	
+	
+		<fx:Script>
+			<![CDATA[
+				
+				
+				private function doCamera():void
+				{
+					
+					trace("UploadView - doCamera");
+					navigator.pushView( UseCameraView );
+					
+				}
+				
+				private function doUpload():void
+				{
+					
+					trace("UploadView - doUpload");
+					navigator.pushView( UsePhotoView );
+					
+					
+				}
+				
+				
+			]]>
+		</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:VGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+		
+		
+			<s:Button label="Use Camera" click="doCamera()" />
+			<s:Button label="Upload from Device" click="doUpload()" />
+<!--		
+		<s:HGroup>
+		</s:HGroup>
+		<s:HGroup>
+		</s:HGroup>
+-->			
+		
+		
+	</s:VGroup>
+	
+	
+	
+	
+</s:View>

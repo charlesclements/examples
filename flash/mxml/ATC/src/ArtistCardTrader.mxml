@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TabbedViewNavigatorApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+								  xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160" >
+	<s:ViewNavigator label="Home" width="100%" height="100%" firstView="views.home.HomeView" />
+	<s:ViewNavigator label="Upload" width="100%" height="100%" firstView="views.upload.UploadView"/>
+	<s:ViewNavigator label="News" width="100%" height="100%" firstView="views.NewsView"/>
+	<s:ViewNavigator label="Profile" width="100%" height="100%" firstView="views.ProfileView"/>
+	<s:ViewNavigator label="Merch" width="100%" height="100%" firstView="views.MerchView"/>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+</s:TabbedViewNavigatorApplication>

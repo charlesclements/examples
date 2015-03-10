@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Take pic with Camera" initialize="init()">
+	
+	
+	
+		<fx:Script>
+			<![CDATA[
+				import mx.core.IVisualElement;
+				
+				import spark.components.View;
+				
+				private var _cam:Camera;
+				private var _vid:Video;
+				private var _uploadFromDeviceButton:Button;
+				private var _launchCameraButton:Button;
+				
+				private function init():void
+				{
+					
+					trace("UseCameraView - init()");
+					
+					
+				
+					trace("-");
+					
+					trace(Camera.isSupported);
+					trace(Camera.getCamera());
+					trace(Camera.names.length > 0);
+					
+					trace("-");
+					
+					
+					
+					if( Camera.isSupported && Camera.getCamera() != null && Camera.names.length > 0 )
+					{
+						
+						
+						
+						
+						
+						trace("-");
+						trace( "running" );
+						
+						
+						//new cam
+						_cam = Camera.getCamera();
+						//_cam.setMode( 1000, 1000, 24, false );
+						
+						trace( _cam );
+						
+						return;
+						
+						
+						_vid = new Video;
+						_vid.attachCamera( _cam );
+						
+						vd.addChild( _vid );
+						
+						
+						_launchCameraButton = new Button;
+						( body as View ).addElement( _launchCameraButton );
+						
+						//uploadFromDeviceButton.visible = false;
+						
+					}
+					else
+					{
+						
+						
+						trace( "remove it" );
+						
+						
+						/*
+						
+						trace(status);
+						
+						( body as View ).removeElement( launchButton );
+						*/
+						//( body as View ).removeChild( launchButton );
+						
+						( status as Label ).text = "You have no Camera";
+						//launchButton.visible = false;
+						
+						
+						
+						
+						_uploadFromDeviceButton = new Button;
+						
+						trace(_uploadFromDeviceButton);
+						trace(body);
+						( body as View ).contentGroup.addElement( _uploadFromDeviceButton as IVisualElement );
+						
+					}
+					
+					
+				}
+				
+				private var _cameraRoll:CameraRoll;
+				private function _uploadPhotoFromDevice():void
+				{
+					
+					trace("UsePhotoView - _uploadPhotoFromDevice()");
+					navigator.pushView( UsePhotoView );
+					/*
+					var s:Sprite = new Sprite;
+					s.graphics.beginFill( 0xff0000 );
+					s.graphics.drawRect( 0, 0, 100, 100 );
+					s.graphics.endFill();
+					
+					vid.addChild( s );
+					
+					
+					_cameraRoll = new CameraRoll;
+					
+					if( CameraRoll.supportsBrowseForImage )
+					{
+						
+						trace( "supportsBrowseForImage - true");
+						_cameraRoll.addEventListener(MediaEvent.SELECT, _onSelected );
+						_cameraRoll.addEventListener(Event.CANCEL, _onCancel );
+						_cameraRoll.addEventListener(ErrorEvent.ERROR, _onError );
+						
+						_cameraRoll.browseForImage();
+						
+					}
+					else trace( "No Image support" );
+					
+					
+					*/
+					
+					
+					
+					
+				}
+				
+				private function _doCamera():void
+				{
+					
+					trace("UseCameraView - _doCamera");
+					
+					var s:Sprite = new Sprite;
+					s.graphics.beginFill( 0xff0000 );
+					s.graphics.drawRect( 0, 0, 100, 100 );
+					s.graphics.endFill();
+					
+					vid.addChild( s );
+					
+				}
+				/*
+				
+				private function doUpload():void
+				{
+					
+					trace("doUpload");
+					
+					
+				}
+				*/
+				
+			]]>
+		</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+		
+		
+		
+		
+		
+	</fx:Declarations>
+	
+	
+	<s:navigationContent>
+		<s:Button label="Back" click="navigator.popToFirstView();"/>
+	</s:navigationContent>
+	
+	
+	<s:VGroup id="body" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+		<!--<s:HGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">-->
+		
+			<s:Label id="status" text="Awesome, there's a Camera." />
+			<!--
+			<s:Button id="launchButton" label="Launch Camera" click="_doCamera()"/>
+			<s:Button id="uploadFromDeviceButton" label="Upload from Device" click="_uploadPhotoFromDevice()"/>
+				-->
+			<s:SpriteVisualElement id="vid"/>
+			<s:VideoDisplay id="vd" width="100%" height="100%" />
+		<!--</s:HGroup>-->
+	
+	</s:VGroup>
+	
+	
+	
+</s:View>

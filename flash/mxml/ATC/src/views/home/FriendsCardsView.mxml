@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark">
+	
+	
+	
+		<fx:Script>
+			<![CDATA[
+				import spark.components.ViewNavigatorApplication;
+				
+				/*
+				private function doCamera():void
+				{
+					
+					trace("doCamera");
+					
+					var v:ViewNavigatorApplication = new ViewNavigatorApplication;
+					v.navigator.pushView( UseCameraView );
+					
+					
+				}
+				
+				private function doUpload():void
+				{
+					
+					trace("doUpload");
+					
+					
+				}
+				*/
+				
+			]]>
+		</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+		
+		
+		
+		
+		
+	</fx:Declarations>
+	
+	<s:VGroup verticalAlign="middle" horizontalAlign="center">
+			<s:Label text="Following Cards"/>
+	</s:VGroup>
+	
+	
+	
+	
+</s:View>

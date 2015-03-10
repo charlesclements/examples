@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="News">
+	
+	
+	
+		<fx:Script>
+			<![CDATA[
+				import views.upload.UseCameraView;
+				import spark.components.ViewNavigatorApplication;
+				
+				
+				private function doCamera():void
+				{
+					
+					trace("doCamera");
+					
+					var v:ViewNavigatorApplication = new ViewNavigatorApplication;
+					v.navigator.pushView( UseCameraView );
+					
+					
+				}
+				
+				private function doUpload():void
+				{
+					
+					trace("doUpload");
+					
+					
+				}
+				
+				
+			]]>
+		</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+		
+		
+		
+		
+		
+	</fx:Declarations>
+	
+	<s:VGroup width="100%" height="100%" verticalAlign="top" horizontalAlign="center" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+		<s:HGroup verticalAlign="middle" paddingLeft="5" paddingRight="5" >
+			<s:CheckBox />
+			<s:Label text="10 prestamped envelopes" />
+			<s:Label text="X" />
+			<s:TextInput text="1" width="40" />
+			
+		</s:HGroup>
+			
+		
+		
+	</s:VGroup>
+	
+	<s:VGroup width="100%" height="100%" verticalAlign="bottom" horizontalAlign="center" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+		<s:HGroup  width="100%">
+			<s:Button label="ORDER" width="100%"/>
+		</s:HGroup>
+	</s:VGroup>
+	
+	
+	
+	
+</s:View>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Home" activate="init()">
+	
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			public var myDP:ArrayCollection = new ArrayCollection(
+				[ 	{product:"Friends", value:"friends"},
+					{product:"Following", value:"following"},
+					{product:"Recently Recieved", value:"recently_recieved"},
+					{product:"Recently Uploaded", value:"recently_uploaded"} ]);
+			
+			protected function init():void
+			{
+				
+				
+				trace( "Home - init()" );
+				
+				//( _dp as datap
+				
+				
+				
+				
+			}
+			
+			private function updateSelection(e:IndexChangeEvent):void
+			{
+				
+				trace("updateSelection");
+				//currSel.text = "Current Product = " + myDDL.selectedItem.product;
+				//currPrc.text = "Price = $" + myDDL.selectedItem.price;
+				
+				
+				myDDL.prompt = myDDL.selectedItem[ "product" ];
+				
+			}
+			
+			protected function refresh(e:Event):void
+			{
+				
+				trace("refresh");
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	
+	
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	
+	
+	
+	<s:actionContent>
+		
+		
+		<s:Button label="Refresh" click="refresh(event);"/>
+	</s:actionContent>  
+	
+	
+	
+	
+	
+	
+	<s:HGroup width="100%" paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5">
+		
+		
+		<s:DropDownList id="myDDL" prompt="Select One"
+						width="100%" height="30" dataProvider="{myDP}"
+						labelField="product"
+						change="updateSelection(event);"/>
+		
+		
+	</s:HGroup>
+	
+	<s:VGroup width="100%" height="100%" verticalAlign="bottom" horizontalAlign="center" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+		
+		
+		
+		<s:HGroup width="100%">
+			<s:Button label="Prev" width="100%" height="30"/>
+			<s:Button label="Next" width="100%" height="30"/>
+		</s:HGroup>
+		
+		<!--
+		<s:ButtonBar width="100%" >
+			<s:dataProvider>
+				<s:ArrayCollection>
+					<fx:String>Prev</fx:String>
+					<fx:String>Next</fx:String>
+				</s:ArrayCollection>
+			</s:dataProvider>
+		</s:ButtonBar>
+		-->
+	</s:VGroup>
+</s:View>
