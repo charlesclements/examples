@@ -6,10 +6,14 @@
 	
 		<fx:Script>
 			<![CDATA[
+				import com.greensock.loading.ImageLoader;
+				import com.greensock.loading.LoaderMax;
 				
 				
 				
 				
+				private var _loader:Loader;
+				//private var _loader:LoaderMax;
 				private var _file:File;
 				private var _cameraRoll:CameraRoll;
 				
@@ -47,76 +51,155 @@
 						
 						trace( "UsePhotoView - _doPhoto() - No Image support. Use regular browse." );
 						
-						
+						// Fire up File stuff here.
 						_file = new File;
-						_file.addEventListener( Event.SELECT, _onFileSelected );
+						_file.addEventListener( Event.SELECT, _onFileEvent );
 						_file.browseForOpen( "Select an image", [ new FileFilter("Images", "*.jpg;*.gif;*.png") ] );
-						
 						
 					}
 					
-					
-					
-					
-					
-					
 				}
 				
-				
+				/*
 				private function _onFileSelected(e:Event):void
 				{
 					
 					trace("UsePhotoView - _onFileSelected()");
 					trace(e.currentTarget);
-					
-					//_file = e.currentTarget;
 					_file.removeEventListener( Event.SELECT, _onFileSelected );
-					_file.addEventListener( Event.COMPLETE, _onFileComplete );
-					//_file.addEventListener( Event.COMPLETE, _onFileComplete );
-					//_file.addEventListener( Event.COMPLETE, _onFileComplete );
+					_file.addEventListener( Event.COMPLETE, _onFileEvent );
 					_file.load();
 					
 				}
+				*/
+				private function _onError():void
+				{
+					
+					trace("UsePhotoView - _onError() : ");
+					
+					
+					
+				}
 				
+				
+				private function _loaded():void
+				{
+					
+					trace("UsePhotoView - _loaded() : ");
+					
+					
+					
+				}
+				
+				
+				private function _onLoaderEvent(e:Event):void
+				{
+					
+					//trace("UsePhotoView - _onLoaderEvent() : " + e.type);
+					
+					switch( e.type )
+					{
+						
+						case Event.OPEN:
+							trace( "UsePhotoView - _onLoaderEvent() : Event.OPEN" );
+							
+							break;
+						
+						case Event.CANCEL:
+							trace( "UsePhotoView - _onLoaderEvent() : Event.CANCEL" );
+							
+							break;
+						
+						case Event.COMPLETE:
+							trace( "UsePhotoView - _onLoaderEvent() : Event.COMPLETE" );
+							
+							// REmove listeners.
+							_loader.contentLoaderInfo.removeEventListener( Event.OPEN, _onLoaderEvent );
+							_loader.contentLoaderInfo.removeEventListener( ErrorEvent.ERROR, _onLoaderEvent );
+							_loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, _onLoaderEvent );
+							_loader.contentLoaderInfo.removeEventListener( Event.CANCEL, _onLoaderEvent );
+							
+							// Do something with the Bitmap.
+							trace( e.currentTarget );
+							trace( ( e.currentTarget as LoaderInfo ).content );
+							
+							break;
+						
+						case ErrorEvent.ERROR:
+							trace( "UsePhotoView - _onLoaderEvent() : ErrorEvent.ERROR" );
+							
+							break;
+						
+						default:
+							trace( "UsePhotoView - _onLoaderEvent() : Event not handled" );
+						
+					}
+					
+				}
+				
+				
+				private function _onFileEvent(e:Event):void
+				{
+					
+					//trace("UsePhotoView - _onFileEvent() : " + e.type);
+					
+					switch( e.type )
+					{
+						
+						case Event.SELECT:
+							trace( "UsePhotoView - _onFileEvent() : Event.OPEN" );
+							_file.removeEventListener( Event.SELECT, _onFileEvent );
+							_file.addEventListener( Event.COMPLETE, _onFileEvent );
+							_file.load();
+							break;
+						
+						case Event.CANCEL:
+							trace( "UsePhotoView - _onFileEvent() : Event.CANCEL" );
+							
+							break;
+						
+						case Event.COMPLETE:
+							trace( "UsePhotoView - _onFileEvent() : Event.COMPLETE" );
+							_loader = new Loader;
+							_loader.contentLoaderInfo.addEventListener( Event.OPEN, _onLoaderEvent );
+							_loader.contentLoaderInfo.addEventListener( ErrorEvent.ERROR, _onLoaderEvent );
+							_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onLoaderEvent );
+							_loader.contentLoaderInfo.addEventListener( Event.CANCEL, _onLoaderEvent );
+							// Load bytes from the File.
+							_loader.loadBytes( ( e.currentTarget as File ).data as ByteArray )
+							break;
+						
+						case ErrorEvent.ERROR:
+							trace( "UsePhotoView - _onFileEvent() : ErrorEvent.ERROR" );
+							
+							break;
+						
+						default:
+							trace( "UsePhotoView - _onFileEvent() : Event not handled" );
+						
+					}
+					
+				}
+				
+				/*
 				private function _onFileComplete(e:Event):void
 				{
 					
 					trace("UsePhotoView - _onFileComplete() : " + e.type);
-					trace(e.currentTarget);
 					
+					_loader = new Loader;
+					_loader.contentLoaderInfo.addEventListener( Event.OPEN, _onLoaderEvent );
+					_loader.contentLoaderInfo.addEventListener( ErrorEvent.ERROR, _onLoaderEvent );
+					_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onLoaderEvent );
+					_loader.contentLoaderInfo.addEventListener( Event.CANCEL, _onLoaderEvent );
 					
-					//trace( ( e.currentTarget as File ).data );
-					
-					
-					
-					
-					
-					var bm:BitmapData = ( e.currentTarget as File ).data as BitmapData;
-					
-					trace( bm );
-					
-					
-					// Need to convert ByteArray into BitmapData.
-					
-					
-					// Could possibly use Loader class for simpler conversion.
-					
-					
-					
-					
-					
-					
-					
-					/*
-					_file = e.currentTarget;
-					_file.removeEventListener( Event.SELECT, _onFileSelected );
-					_file.addEventListener( Event.COMPLETE, _onFileSelected );
-					*/
+					// Load bytes from the File.
+					_loader.loadBytes( ( e.currentTarget as File ).data as ByteArray )
 					
 				}
+				*/
 				
-				
-				private function _onError(e:Event):void
+				private function _onError1(e:Event):void
 				{
 					
 					trace("UsePhotoView - _onError");
