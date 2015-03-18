@@ -1,277 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="Take pic with Camera">
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Upload picture" activate="_doPhoto(event)">
 	
 	
 	
 		<fx:Script>
 			<![CDATA[
-				import com.greensock.loading.ImageLoader;
-				import com.greensock.loading.LoaderMax;
 				
 				import net.charlesclements.gadgets.display.LoadLocalBitmap;
 				
-				
-				
-				/*
-				private var _loader:Loader;
-				//private var _loader:LoaderMax;
-				private var _file:File;
-				private var _cameraRoll:CameraRoll;
-				*/
-				
-				private function _doPhoto():void
+				private function _doPhoto(e:Event=null):void
 				{
 					
 					trace("UsePhotoView - _doPhoto()");
 					
+					mainGroup.removeElement( getPhotoBtn );
 					
-					//var localBitmap:LoadLocalBitmap = new LoadLocalBitmap( stage.stageWidth, stage.stageWidth );
-					//var localBitmap:LoadLocalBitmap = new LoadLocalBitmap( 320, 320 );
-					var localBitmap:LoadLocalBitmap = new LoadLocalBitmap( area.width, area.height );
-					
+					var newW:uint = area.width;
+					var newH:uint = newW;
+					var localBitmap:LoadLocalBitmap = new LoadLocalBitmap( newW, newH );
 					
 					area.addChild( localBitmap );
 					localBitmap.load();
 					
-					/*
 					var s:Sprite = new Sprite;
-					s.graphics.beginFill( 0xff0000 );
-					s.graphics.drawRect( 0, 0, 100, 100 );
+					s.graphics.beginFill( 0xffff00 );
+					s.graphics.drawRect( 0, 0, newW, 1000 );
 					s.graphics.endFill();
+					s.y = 320;
 					
-					vid.addChild( s );
+					area.addChild( s );
+					//vidOverGr.addChild( s );
+					//vidOverGr.y = 320;
 					
-					*/
-					/*
-					_cameraRoll = new CameraRoll;
-					
-					if( CameraRoll.supportsBrowseForImage )
-					{
-						
-						trace( "UsePhotoView - supportsBrowseForImage - true");
-						_cameraRoll.addEventListener(MediaEvent.SELECT, _onSelected );
-						_cameraRoll.addEventListener(Event.CANCEL, _onCancel );
-						_cameraRoll.addEventListener(ErrorEvent.ERROR, _onError );
-						
-						_cameraRoll.browseForImage();
-						
-					}
-					else 
-					{
-						
-						trace( "UsePhotoView - _doPhoto() - No Image support. Use regular browse." );
-						
-						// Fire up File stuff here.
-						_file = new File;
-						_file.addEventListener( Event.SELECT, _onFileEvent );
-						_file.browseForOpen( "Select an image", [ new FileFilter("Images", "*.jpg;*.gif;*.png") ] );
-						
-					}
-					*/
-				}
-				
-				/*
-				private function _onFileSelected(e:Event):void
-				{
-					
-					trace("UsePhotoView - _onFileSelected()");
-					trace(e.currentTarget);
-					_file.removeEventListener( Event.SELECT, _onFileSelected );
-					_file.addEventListener( Event.COMPLETE, _onFileEvent );
-					_file.load();
-					
-				}
-				*//*
-				private function _onError():void
-				{
-					
-					trace("UsePhotoView - _onError() : ");
-					
-					
-					
-				}
-				
-				
-				private function _loaded():void
-				{
-					
-					trace("UsePhotoView - _loaded() : ");
-					
-					
-					
-				}
-				*/
-				/*
-				private function _onLoaderEvent(e:Event):void
-				{
-					
-					//trace("UsePhotoView - _onLoaderEvent() : " + e.type);
-					
-					switch( e.type )
-					{
-						
-						case Event.OPEN:
-							trace( "UsePhotoView - _onLoaderEvent() : Event.OPEN" );
-							
-							break;
-						
-						case Event.CANCEL:
-							trace( "UsePhotoView - _onLoaderEvent() : Event.CANCEL" );
-							
-							break;
-						
-						case Event.COMPLETE:
-							trace( "UsePhotoView - _onLoaderEvent() : Event.COMPLETE" );
-							
-							// REmove listeners.
-							_loader.contentLoaderInfo.removeEventListener( Event.OPEN, _onLoaderEvent );
-							_loader.contentLoaderInfo.removeEventListener( ErrorEvent.ERROR, _onLoaderEvent );
-							_loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, _onLoaderEvent );
-							_loader.contentLoaderInfo.removeEventListener( Event.CANCEL, _onLoaderEvent );
-							
-							// Do something with the Bitmap.
-							trace( e.currentTarget );
-							trace( ( e.currentTarget as LoaderInfo ).content );
-							
-							var b:Bitmap = ( e.currentTarget as LoaderInfo ).content as Bitmap;
-							
-							
-							trace( stage.stageWidth );
-							trace( stage.stageHeight );
-							trace( b.width );
-							trace( b.height );
-							
-							trace( area.width );
-							
-							area.addChild( b );
-							
-							trace( area.width );
-							
-							
-							break;
-						
-						case ErrorEvent.ERROR:
-							trace( "UsePhotoView - _onLoaderEvent() : ErrorEvent.ERROR" );
-							
-							break;
-						
-						default:
-							trace( "UsePhotoView - _onLoaderEvent() : Event not handled" );
-						
-					}
-					
-				}
-				*/
-				/*
-				private function _onFileEvent(e:Event):void
-				{
-					
-					//trace("UsePhotoView - _onFileEvent() : " + e.type);
-					
-					switch( e.type )
-					{
-						
-						case Event.SELECT:
-							trace( "UsePhotoView - _onFileEvent() : Event.OPEN" );
-							_file.removeEventListener( Event.SELECT, _onFileEvent );
-							_file.addEventListener( Event.COMPLETE, _onFileEvent );
-							_file.load();
-							break;
-						
-						case Event.CANCEL:
-							trace( "UsePhotoView - _onFileEvent() : Event.CANCEL" );
-							
-							break;
-						
-						case Event.COMPLETE:
-							trace( "UsePhotoView - _onFileEvent() : Event.COMPLETE" );
-							_loader = new Loader;
-							_loader.contentLoaderInfo.addEventListener( Event.OPEN, _onLoaderEvent );
-							_loader.contentLoaderInfo.addEventListener( ErrorEvent.ERROR, _onLoaderEvent );
-							_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onLoaderEvent );
-							_loader.contentLoaderInfo.addEventListener( Event.CANCEL, _onLoaderEvent );
-							// Load bytes from the File.
-							_loader.loadBytes( ( e.currentTarget as File ).data as ByteArray )
-							break;
-						
-						case ErrorEvent.ERROR:
-							trace( "UsePhotoView - _onFileEvent() : ErrorEvent.ERROR" );
-							
-							break;
-						
-						default:
-							trace( "UsePhotoView - _onFileEvent() : Event not handled" );
-						
-					}
-					
-				}
-				*/
-				/*
-				private function _onFileComplete(e:Event):void
-				{
-					
-					trace("UsePhotoView - _onFileComplete() : " + e.type);
-					
-					_loader = new Loader;
-					_loader.contentLoaderInfo.addEventListener( Event.OPEN, _onLoaderEvent );
-					_loader.contentLoaderInfo.addEventListener( ErrorEvent.ERROR, _onLoaderEvent );
-					_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onLoaderEvent );
-					_loader.contentLoaderInfo.addEventListener( Event.CANCEL, _onLoaderEvent );
-					
-					// Load bytes from the File.
-					_loader.loadBytes( ( e.currentTarget as File ).data as ByteArray )
-					
-				}
-				*/
-				/*
-				private function _onError1(e:Event):void
-				{
-					
-					trace("UsePhotoView - _onError");
-					
-					
-				}
-				
-				private function _onCancel(e:Event):void
-				{
-					
-					trace("UsePhotoView - _onCancel");
-					
-					
-				}
-				
-				private function _onSelected(e:MediaEvent):void
-				{
-					
-					trace("UsePhotoView - _onSelected");
-					
-					
-				}
-				
-				
-				
-				private function _onError():void
-				{
-					
-					trace("UsePhotoView - _onError() : ");
-					
-					
-					
-				}
-				
-				
-				private function _loaded():void
-				{
-					
-					trace("UsePhotoView - _loaded() : ");
-					
-					
-					
-				}
-				*/
 
-				//init();
+				}
+				
+				
+				protected function vid_gestureZoomHandler(event:TransformGestureEvent):void
+				{
+					// TODO Auto-generated method stub
+					
+					trace( "UsePhotoView - vid_gestureZoomHandler" );
+					trace( event.scaleX );
+					trace( event.localX );
+					trace( event.offsetX );
+					
+					
+					
+					
+				}
 				
 			]]>
 		</fx:Script>
@@ -290,14 +68,25 @@
 		<s:Button label="Back" click="navigator.popToFirstView();"/>
 	</s:navigationContent>
 	
-	<s:SpriteVisualElement id="area" width="100%" height="100%"/>
-	<s:VGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+	
+	<s:VGroup id="mainGroup" width="100%" height="100%" verticalAlign="bottom" horizontalAlign="center">
+		
+		<s:SpriteVisualElement id="area" width="100%" height="100%" />
+		<s:Button id="getPhotoBtn" label="Get Photo" click="_doPhoto()" />
+		<s:SpriteVisualElement id="vidOverGr" width="100%"/>
 		
 		
-		<s:Button label="Get Photo" click="_doPhoto()">
+		<s:HGroup verticalAlign="bottom" paddingBottom="10">
 			
-		</s:Button>
-		<s:SpriteVisualElement id="vid"/>
+			<s:Button id="plusBtn" label="+"/>
+			<s:Button id="minusBtn" label="-"/>
+			<s:Button id="cancelBtn" label="CANCEL" />
+			<s:Button id="saveBtn" label="SAVE" />
+			
+			
+		</s:HGroup>
+		
+		
 	</s:VGroup>
 	
 	

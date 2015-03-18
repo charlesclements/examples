@@ -6,15 +6,23 @@ package net.charlesclements.gadgets.display
 	import flash.display.Sprite;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.filesystem.File;
+	import flash.geom.Rectangle;
 	import flash.media.CameraRoll;
 	import flash.net.FileFilter;
 	import flash.utils.ByteArray;
+	
+	import spark.primitives.Rect;
 	
 	public class LoadLocalBitmap extends Sprite
 	{
 		
 		
+		private var _maxX:int = 0;;
+		private var _maxY:int = 0;;
+		private var _maxW:int = 100;;
+		private var _maxH:int = 100;;
 		private var _w:uint;
 		private var _h:uint;
 		private var _cameraRoll:CameraRoll;
@@ -34,12 +42,15 @@ package net.charlesclements.gadgets.display
 			_w = w;
 			_h = h;
 			
+			//_w = 100;//w;
+			//_h = 100;//h;
+			
 			graphics.beginFill( 0xfff );;
 			graphics.drawRect( 0, 0, _w, _h );
 			graphics.endFill();
 			
-			
-			
+			_holder = new Sprite;
+			addChild( _holder );
 			
 		}
 		
@@ -112,13 +123,39 @@ package net.charlesclements.gadgets.display
 					trace( e.currentTarget );
 					trace( ( e.currentTarget as LoaderInfo ).content );
 					
-					var b:Bitmap = ( e.currentTarget as LoaderInfo ).content as Bitmap;
+					_b = ( e.currentTarget as LoaderInfo ).content as Bitmap;
 					
 
-					addChild( b );
+					_b.smoothing = true;
 					
 					
+					if( _b.width < _b.height )
+					{
+						
+							
+						_b.width = _w;
+						_b.scaleY = _b.scaleX;
+						
+					}
+					else
+					{
+						
+						_b.height = _h;
+						_b.scaleX = _b.scaleY
+						
+					}
 					
+					
+					_holder.removeChildren();
+					_holder.x = -1 * _b.width * 0.25;
+					_holder.y = -1 * _b.height * 0.25;
+					_holder.addChild( _b );
+					
+					_holder.buttonMode = true;
+					
+					
+					_holder.addEventListener( MouseEvent.MOUSE_DOWN, _doDrag );
+					_holder.addEventListener( MouseEvent.MOUSE_UP, _stopDrag );
 					
 					
 					
@@ -136,6 +173,27 @@ package net.charlesclements.gadgets.display
 			
 		}
 
+		
+		
+		private function _doDrag(e:Event):void
+		{
+			
+			trace( "LoadLocalBitmap - _doDrag()" );
+			_holder.startDrag( false, new Rectangle( ( -1 * _holder.width ) + ( _holder.width - _w ), ( -1 * _holder.height ) + ( _holder.height - _h ), _w + ( _holder.width - _w ), _h + ( _holder.height - _h ) ) );
+			
+		}
+		
+		
+		private function _stopDrag(e:Event):void
+		{
+			
+			trace( "LoadLocalBitmap - _stopDrag()" );
+			_holder.stopDrag();
+		}
+		
+		
+		
+		
 		private function _onFileEvent(e:Event):void
 		{
 			
