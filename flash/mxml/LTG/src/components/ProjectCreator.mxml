@@ -45,7 +45,7 @@
 				
 				//creationComplete="init()" 
 				
-				trace("ProjectMaster - init");
+				trace("ProjectCreator - init");
 				Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onNewProject );
 				Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onOpenProject );
 				alertClose.addEventListener( AppEvent.CLOSE_PROJECT, closeProject );
