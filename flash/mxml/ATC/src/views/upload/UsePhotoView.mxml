@@ -9,6 +9,12 @@
 				
 				import net.charlesclements.gadgets.display.LoadLocalBitmap;
 				
+				
+				private var localBitmap:LoadLocalBitmap;
+				private var w:uint = 100;
+				private var h:uint = 100;
+				
+				
 				private function _doPhoto(e:Event=null):void
 				{
 					
@@ -16,18 +22,19 @@
 					
 					mainGroup.removeElement( getPhotoBtn );
 					
-					var newW:uint = area.width;
-					var newH:uint = newW;
-					var localBitmap:LoadLocalBitmap = new LoadLocalBitmap( newW, newH );
+					w = area.width;
+					h = w;
+					localBitmap = new LoadLocalBitmap( w, h );
+					LoadLocalBitmap.STORAGE = File.applicationStorageDirectory.nativePath + "/atc/";
 					
 					area.addChild( localBitmap );
 					localBitmap.load();
 					
 					var s:Sprite = new Sprite;
 					s.graphics.beginFill( 0xffff00 );
-					s.graphics.drawRect( 0, 0, newW, 1000 );
+					s.graphics.drawRect( 0, 0, w, 1000 );
 					s.graphics.endFill();
-					s.y = 320;
+					s.y = h;
 					
 					area.addChild( s );
 					//vidOverGr.addChild( s );
@@ -50,6 +57,26 @@
 					
 					
 				}
+				
+				
+				protected function save(event:Event=null):void
+				{
+					
+					// TODO Auto-generated method stub
+					trace( "UsePhotoView - save" );
+					
+					
+					
+					var b:Bitmap = new Bitmap( new BitmapData( w, h ) );
+					b.bitmapData.draw( area );
+					
+					localBitmap.save( b );
+					
+				}
+				
+				
+				
+				
 				
 			]]>
 		</fx:Script>
@@ -78,10 +105,10 @@
 		
 		<s:HGroup verticalAlign="bottom" paddingBottom="10">
 			
-			<s:Button id="plusBtn" label="+"/>
-			<s:Button id="minusBtn" label="-"/>
+			<s:Button id="plusBtn" label="+" click="localBitmap.scaleUp()"/>
+			<s:Button id="minusBtn" label="-" click="localBitmap.scaleDown()"/>
 			<s:Button id="cancelBtn" label="CANCEL" />
-			<s:Button id="saveBtn" label="SAVE" />
+			<s:Button id="saveBtn" label="SAVE" click="save()" />
 			
 			
 		</s:HGroup>

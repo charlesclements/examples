@@ -41,8 +41,9 @@
 		
 		
 	</fx:Declarations>
-	
-	<s:VGroup width="100%" height="100%" verticalAlign="top" horizontalAlign="left" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+	<s:Scroller height="100%" width="100%" >
+		
+	<s:VGroup width="100%" height="100%"  verticalAlign="top" horizontalAlign="left" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
 		
 		<s:HGroup width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
 			<s:Label text="Purchases support future updates."/>
@@ -72,14 +73,68 @@
 			<s:Label text="X" />
 			<s:NumericStepper maximum="10" minimum="1" stepSize="1" width="45"/>
 		</s:HGroup>
+		
+		<s:HGroup verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" >
+			<s:CheckBox />
+			<s:Label text="10 prestamped envelopes" />
+			<s:Label text="X" />
+			<s:NumericStepper maximum="10" minimum="1" stepSize="1" width="45"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" >
+			<s:CheckBox />
+			<s:Label text="Blank card packs (10 pack)" />
+			<s:Label text="X" />
+			<s:NumericStepper maximum="10" minimum="1" stepSize="1" width="45"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" >
+			<s:CheckBox />
+			<s:Label text="Card sleeves (10 pack)" />
+			<s:Label text="X" />
+			<s:NumericStepper maximum="10" minimum="1" stepSize="1" width="45"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" >
+			<s:CheckBox />
+			<s:Label text="$20 Grab Bag" />
+			<s:Label text="X" />
+			<s:NumericStepper maximum="10" minimum="1" stepSize="1" width="45"/>
+		</s:HGroup>
+		
+		<s:HGroup verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" >
+			<s:CheckBox />
+			<s:Label text="10 prestamped envelopes" />
+			<s:Label text="X" />
+			<s:NumericStepper maximum="10" minimum="1" stepSize="1" width="45"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" >
+			<s:CheckBox />
+			<s:Label text="Blank card packs (10 pack)" />
+			<s:Label text="X" />
+			<s:NumericStepper maximum="10" minimum="1" stepSize="1" width="45"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" >
+			<s:CheckBox />
+			<s:Label text="Card sleeves (10 pack)" />
+			<s:Label text="X" />
+			<s:NumericStepper maximum="10" minimum="1" stepSize="1" width="45"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" >
+			<s:CheckBox />
+			<s:Label text="$20 Grab Bag" />
+			<s:Label text="X" />
+			<s:NumericStepper maximum="10" minimum="1" stepSize="1" width="45"/>
+		</s:HGroup>
+		
+		<s:HGroup height="100" verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" />
 			
-		
-		
 	</s:VGroup>
+	
+		
+	</s:Scroller>
+	
 	
 	<s:VGroup width="100%" height="100%" verticalAlign="bottom" horizontalAlign="center" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
 		<s:HGroup  width="100%">
-			<s:Button label="ORDER" width="100%"/>
+			<s:Button label="ORDER" width="100%" height="40"/>
 		</s:HGroup>
 	</s:VGroup>
 	

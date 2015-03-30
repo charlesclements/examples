@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="Home" activate="init()">
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Home" activate="active()" initialize="init()" xmlns:dropDownList="com.flextras.mobile.dropDownList.*">
 	
 	
 	
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			
 			import spark.events.IndexChangeEvent;
+			
+			import model.AppModel;
 			
 			[Bindable]
 			public var myDP:ArrayCollection = new ArrayCollection(
@@ -16,11 +19,21 @@
 					{product:"Recently Recieved", value:"recently_recieved"},
 					{product:"Recently Uploaded", value:"recently_uploaded"} ]);
 			
+			
 			protected function init():void
 			{
 				
+				//trace( "Home - init()" );
+				//getFeed();
+				//trace( myDDL );
 				
-				trace( "Home - init()" );
+			}
+			
+			protected function active():void
+			{
+				
+				
+				//trace( "Home - active()" );
 				
 				//( _dp as datap
 				
@@ -29,22 +42,79 @@
 				
 			}
 			
-			private function updateSelection(e:IndexChangeEvent):void
+			private function myDDLClick(e:IndexChangeEvent=null):void
 			{
 				
-				trace("updateSelection");
+				trace("Home - myDDLClick()");
 				//currSel.text = "Current Product = " + myDDL.selectedItem.product;
 				//currPrc.text = "Price = $" + myDDL.selectedItem.price;
 				
+				//trace( myDDL.selectedItem );
+
+			}
+			
+			private function updateSelection(e:IndexChangeEvent):void
+			{
 				
-				myDDL.prompt = myDDL.selectedItem[ "product" ];
+				trace("Home - updateSelection");
+				//currSel.text = "Current Product = " + myDDL.selectedItem.product;
+				//currPrc.text = "Price = $" + myDDL.selectedItem.price;
+				
+				trace( myDDL.selectedItem.value );
+				//myDDL.prompt = myDDL.selectedItem;
+				
+				//myDDL.labelField( myDDL.selectedItem as String );
+				//myDDL.labelDisplay = myDDL.selectedItem.product;
 				
 			}
 			
 			protected function refresh(e:Event):void
 			{
 				
-				trace("refresh");
+				trace("Home - refresh");
+				getFeed();
+			}
+			
+			
+			private function getFeed():void
+			{
+				
+				trace("Home - getFeed");
+				// Craete Loader.
+				var ldr:URLLoader = new URLLoader();
+				ldr.dataFormat = URLLoaderDataFormat.BINARY;
+				ldr.addEventListener(Event.COMPLETE, onLoaded);
+				
+				// Create URLRequest.
+				var req:URLRequest = new URLRequest( AppModel.SERVER_PATH + "feed.php");
+				req.method = URLRequestMethod.POST;
+				
+				//Add the URL variables 
+				var variables:URLVariables = new URLVariables(); 
+				variables.method = "test.echo"; 
+				//variables.feed = ( myDDL as DropDownList ).selectedItem.value;
+				
+				variables.feed = ( myDDL as DropDownList ).selectedItem.value as String;
+				
+				trace("-");
+				trace(myDDL.selectedItem.value);
+				
+				//variables.api_key = "123456ABC"; 
+				variables.message = "This is a message!";             
+				variables.feed = myDDL.selectedItem as String; 
+				req.data = variables; 
+				
+				// Do load.
+				ldr.load(req);
+				
+			}
+			
+			
+			private function onLoaded(evt:Event):void
+			{
+				
+				trace("Home - " + "onLoaded");
+				trace(evt.target.data);
 				
 			}
 			
@@ -64,23 +134,16 @@
 	
 	
 	<s:actionContent>
-		
-		
 		<s:Button label="Refresh" click="refresh(event);"/>
 	</s:actionContent>  
 	
 	
-	
-	
-	
-	
 	<s:HGroup width="100%" paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5">
 		
-		
-		<s:DropDownList id="myDDL" prompt="Select One"
-						width="100%" height="30" dataProvider="{myDP}"
-						labelField="product"
-						change="updateSelection(event);"/>
+		<dropDownList:DropDownList id="myDDL" prompt="Select One" width="100%" height="30" dataProvider="{myDP}" labelField="product" selectedIndex="2" change="updateSelection(event)" />
+		<!--<s:DropDownList id="myDDL" prompt="Select One"-->
+						<!--change="updateSelection(event);"/>-->
+						<!--chang ="updateSelection(event);"/>-->
 		
 		
 	</s:HGroup>

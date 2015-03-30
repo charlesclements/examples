@@ -1,6 +1,9 @@
 package net.charlesclements.gadgets.display
 {
+	import com.adobe.images.JPGEncoder;
+	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.display.Sprite;
@@ -8,12 +11,13 @@ package net.charlesclements.gadgets.display
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
 	import flash.geom.Rectangle;
 	import flash.media.CameraRoll;
 	import flash.net.FileFilter;
 	import flash.utils.ByteArray;
 	
-	import spark.primitives.Rect;
 	
 	public class LoadLocalBitmap extends Sprite
 	{
@@ -30,7 +34,7 @@ package net.charlesclements.gadgets.display
 		private var _loader:Loader;
 		private var _b:Bitmap;
 		private var _holder:Sprite;
-		
+		public static var STORAGE:String;
 		
 		
 		public function LoadLocalBitmap(w:uint=100, h:uint=100)
@@ -55,6 +59,56 @@ package net.charlesclements.gadgets.display
 		}
 		
 		
+		
+		public function scaleUp(e:Event=null):void
+		{
+			
+			trace("LoadLocalBitmap - scaleUp()");
+			_holder.scaleX *= 1.05;
+			_holder.scaleY *= 1.05;
+			
+		}
+			
+		
+		public function scaleDown(e:Event=null):void
+		{
+			
+			trace("LoadLocalBitmap - scaleDown()");
+			_holder.scaleX *= 0.95;
+			_holder.scaleY *= 0.95;
+			
+		}
+		
+		public function save(b:Bitmap):void
+		{
+			
+			trace("LoadLocalBitmap - save()");
+			
+			if( STORAGE == null ) { trace( "LoadLocalBitmap - save() - Need to define LoadLocalBitmap.STORAGE" ); return; }
+			
+			// Add directory to be saved here.
+			var _f:File = new File( STORAGE + "images/pic.jpg" );
+			
+			
+			
+			
+			var jpg:JPGEncoder = new JPGEncoder(100);
+			var bd:BitmapData = b.bitmapData;
+			//bd.draw(_smallLogo);
+			var ba:ByteArray  = jpg.encode(bd);
+			
+			var _fs:FileStream = new FileStream();
+			_fs.open(_f, FileMode.WRITE);
+			_fs.writeBytes( ba, 0, ba.length );         
+			_fs.close();
+			/*
+			*/
+			
+			// Update XML.
+
+			
+		}
+
 		
 		public function load():void
 		{
@@ -124,32 +178,48 @@ package net.charlesclements.gadgets.display
 					trace( ( e.currentTarget as LoaderInfo ).content );
 					
 					_b = ( e.currentTarget as LoaderInfo ).content as Bitmap;
-					
-
 					_b.smoothing = true;
 					
 					
-					if( _b.width < _b.height )
+					// Create a loop here to dispose of any children?
+					
+					
+					_holder.removeChildren();
+					_holder.addChild( _b );
+					
+					
+					
+					
+					if( _holder.width < _holder.height )
 					{
 						
 							
-						_b.width = _w;
-						_b.scaleY = _b.scaleX;
+						_holder.width = _w;
+						_holder.scaleY = _holder.scaleX;
 						
 					}
 					else
 					{
 						
-						_b.height = _h;
-						_b.scaleX = _b.scaleY
+						_holder.height = _h;
+						_holder.scaleX = _holder.scaleY
 						
 					}
 					
-					
-					_holder.removeChildren();
+					/*
 					_holder.x = -1 * _b.width * 0.25;
 					_holder.y = -1 * _b.height * 0.25;
-					_holder.addChild( _b );
+					*/
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 					
 					_holder.buttonMode = true;
 					
@@ -201,38 +271,41 @@ package net.charlesclements.gadgets.display
 			
 			switch( e.type )
 			{
-			
-			case Event.SELECT:
-			trace( "LoadLocalBitmap - _onFileEvent() : Event.OPEN" );
-			_file.removeEventListener( Event.SELECT, _onFileEvent );
-			_file.addEventListener( Event.COMPLETE, _onFileEvent );
-			_file.load();
-			break;
-			
-			case Event.CANCEL:
-			trace( "LoadLocalBitmap - _onFileEvent() : Event.CANCEL" );
-			
-			break;
-			
-			case Event.COMPLETE:
-			trace( "LoadLocalBitmap - _onFileEvent() : Event.COMPLETE" );
-			_loader = new Loader;
-			_loader.contentLoaderInfo.addEventListener( Event.OPEN, _onLoaderEvent );
-			_loader.contentLoaderInfo.addEventListener( ErrorEvent.ERROR, _onLoaderEvent );
-			_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onLoaderEvent );
-			_loader.contentLoaderInfo.addEventListener( Event.CANCEL, _onLoaderEvent );
-			// Load bytes from the File.
-			_loader.loadBytes( ( e.currentTarget as File ).data as ByteArray )
-			break;
-			
-			case ErrorEvent.ERROR:
-			trace( "LoadLocalBitmap - _onFileEvent() : ErrorEvent.ERROR" );
-			
-			break;
-			
-			default:
-			trace( "LoadLocalBitmap - _onFileEvent() : Event not handled" );
-			
+				
+				case Event.SELECT:
+					trace( "LoadLocalBitmap - _onFileEvent() : Event.OPEN" );
+					_file.removeEventListener( Event.SELECT, _onFileEvent );
+					_file.addEventListener( Event.COMPLETE, _onFileEvent );
+					_file.load();
+					break;
+				
+				case Event.CANCEL:
+					trace( "LoadLocalBitmap - _onFileEvent() : Event.CANCEL" );
+					
+					break;
+				
+				case Event.COMPLETE:
+					
+					trace( "LoadLocalBitmap - _onFileEvent() : Event.COMPLETE" );
+					_loader = new Loader;
+					_loader.contentLoaderInfo.addEventListener( Event.OPEN, _onLoaderEvent );
+					_loader.contentLoaderInfo.addEventListener( ErrorEvent.ERROR, _onLoaderEvent );
+					_loader.contentLoaderInfo.addEventListener( Event.COMPLETE, _onLoaderEvent );
+					_loader.contentLoaderInfo.addEventListener( Event.CANCEL, _onLoaderEvent );
+					
+					// Load bytes from the File.
+					_loader.loadBytes( ( e.currentTarget as File ).data as ByteArray );
+					
+					break;
+				
+				case ErrorEvent.ERROR:
+					trace( "LoadLocalBitmap - _onFileEvent() : ErrorEvent.ERROR" );
+					
+					break;
+				
+				default:
+					trace( "LoadLocalBitmap - _onFileEvent() : Event not handled" );
+						
 			}
 			
 		}

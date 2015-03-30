@@ -12,9 +12,9 @@
 	
 	<s:TabbedViewNavigator>
 		
-		<s:ViewNavigator label="Your Cards" width="100%" height="100%" firstView="views.ProfileView"/>
-		<s:ViewNavigator label="Following" width="100%" height="100%" firstView="views.ProfileView"/>
-		<s:ViewNavigator label="Community" width="100%" height="100%" firstView="views.ProfileView"/>
+		<s:ViewNavigator label="Your Cards" width="100%" height="100%" firstView="views.profile.ProfileView"/>
+		<s:ViewNavigator label="Following" width="100%" height="100%" firstView="views.profile.ProfileView"/>
+		<s:ViewNavigator label="Community" width="100%" height="100%" firstView="views.profile.ProfileView"/>
 		
 		
 	</s:TabbedViewNavigator>

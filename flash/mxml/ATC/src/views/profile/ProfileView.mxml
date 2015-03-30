@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Profile">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import model.AppModel;
+			
+			
+			private function save():void
+			{
+					
+				var ldr:URLLoader = new URLLoader()
+				ldr.dataFormat = URLLoaderDataFormat.BINARY;
+				ldr.addEventListener(Event.COMPLETE, onLoaded);
+				var req:URLRequest = new URLRequest( AppModel.SERVER_PATH + "login.php");
+				req.method = URLRequestMethod.POST;
+				ldr.load(req);
+				
+			}
+			
+			
+			private function onLoaded(evt:Event):void
+			{
+				
+				trace(evt.target.data);
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	<s:Scroller width="100%" height="100%">
+		<s:VGroup paddingLeft="10" paddingRight="5" paddingBottom="5" paddingTop="10">
+			<s:HGroup>
+				<s:VGroup>
+					<s:Label text="User Name" />
+					<s:TextInput id="userName" text="" />
+				</s:VGroup>
+			</s:HGroup>
+			<s:HGroup>
+				<s:VGroup>
+					<s:Label text="Password" />
+					<s:TextInput id="password" text="" />
+				</s:VGroup>
+			</s:HGroup>
+			<s:HGroup>
+				<s:VGroup>
+					<s:Label text="First Name" />
+					<s:TextInput id="firstName" text="" />
+				</s:VGroup>
+			</s:HGroup>
+			<s:HGroup>
+				<s:VGroup>
+					<s:Label text="Last Name" />
+					<s:TextInput id="lastName" text="" />
+				</s:VGroup>
+			</s:HGroup>
+			<s:HGroup>
+				<s:VGroup>
+					<s:Label text="Email" />
+					<s:TextInput id="email" text="" />
+				</s:VGroup>
+			</s:HGroup>
+			<s:HGroup>
+				<s:VGroup>
+					<s:Label text="Mailing Address" />
+					<s:TextInput id="mail1" text="" />
+					<s:TextInput id="mail2" text="" />
+					<s:TextInput id="mail3" text="" />
+				</s:VGroup>
+			</s:HGroup>
+			<s:HGroup  width="100%">
+				<s:Button id="closeBtn" label="CLOSE" width="100%" height="40"/>
+				<s:Button id="saveBtn" label="SAVE" click="save()" width="100%" height="40"/>
+			</s:HGroup>
+		</s:VGroup>
+	</s:Scroller>
+</s:View>
