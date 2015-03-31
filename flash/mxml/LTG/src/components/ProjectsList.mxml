@@ -45,7 +45,8 @@
 					trace("ProjectsList - init() - _isInitialized : " + _isInitialized);
 					
 					// If it does not exist.
-					if( !AppModel.PROJECTS_FILE.exists ) 
+					//if( !AppModel.PROJECTS_FILE.exists ) 
+					if( AppModel.PROJECTS_XML.text().length() <= 0 ) 
 					{
 							
 							
@@ -60,9 +61,8 @@
 						// Create XML.
 						var xml:XML = new XML(<projects><project id=""/></projects>);
 						xml.project.title = "Untitled Project";
-						xml.project.content = "";
 						xml.project.PID = String( ( new Date ).time );
-						xml.project.@id = String( ( new Date ).time );
+						//xml.project.@id = String( ( new Date ).time );
 						
 						trace( xml );
 						

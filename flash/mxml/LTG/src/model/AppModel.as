@@ -1,5 +1,7 @@
 package model
 {
+	import com.demonsters.debugger.MonsterDebugger;
+	
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
@@ -28,6 +30,53 @@ package model
 		public function AppModel()
 		{
 			super();
+		}
+		
+		
+		public static function init():void
+		{
+			
+			trace( "AppModel - init");
+			
+			//MonsterDebugger.initialize( AppModel );
+			
+			
+			trace( PROJECTS_FILE );
+			
+			PROJECTS_FILE = STORAGE.resolvePath("LyricsToGo/projects.xml");
+			
+			
+			
+			
+			
+			// Read XML info.
+			AppModel.STREAM.open( AppModel.PROJECTS_FILE, FileMode.READ);
+			AppModel.PROJECTS_XML = XML( AppModel.STREAM.readUTFBytes( AppModel.STREAM.bytesAvailable ) );
+			AppModel.STREAM.close();
+			
+			
+			//MonsterDebugger.trace( "AppModel", PROJECTS_FILE );
+			
+			
+			
+			trace( PROJECTS_FILE );
+			trace( PROJECTS_XML );
+			trace( PROJECTS_XML.text().length() );
+			
+			
+			// Saving the actual file.
+			STREAM = new FileStream();
+			STREAM.open( PROJECTS_FILE, FileMode.WRITE );
+			//STREAM.writeUTFBytes( outputString );
+			//STREAM.readUTFBytes(
+			STREAM.close();
+			
+			
+			
+			
+			
+			
+			
 		}
 		
 		
