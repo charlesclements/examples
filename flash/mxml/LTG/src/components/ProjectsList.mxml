@@ -81,6 +81,8 @@
 						AppModel.STREAM.open( AppModel.PROJECTS_FILE, FileMode.UPDATE );
 						AppModel.STREAM.writeUTFBytes( outputString );
 						AppModel.STREAM.close();
+						
+						// XML has now been added.
 							
 						// Create new project popup?
 						alertCreateFirst.open( this, true );

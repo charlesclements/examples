@@ -17,7 +17,7 @@
 				var ldr:URLLoader = new URLLoader()
 				ldr.dataFormat = URLLoaderDataFormat.BINARY;
 				ldr.addEventListener(Event.COMPLETE, onLoaded);
-				var req:URLRequest = new URLRequest( AppModel.SERVER_PATH + "login.php");
+				var req:URLRequest = new URLRequest( AppModel.SERVER_PATH + "profile.php");
 				req.method = URLRequestMethod.POST;
 				ldr.load(req);
 				

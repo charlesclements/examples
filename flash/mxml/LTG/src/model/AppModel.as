@@ -1,17 +1,18 @@
 package model
 {
-	import com.demonsters.debugger.MonsterDebugger;
+
 	
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
-	
 	import mx.collections.XMLListCollection;
 
 	public class AppModel extends Object
 	{
 		
+		public static const SERVER_PATH:String = "http://localhost:8888/";
 		public static const STORAGE:File = File.applicationStorageDirectory;
+		public static var USER:String = "";
 		public static var PID:String = "";
 		public static var PROJECTS_XML:XML = new XML();
 		public static var PROJECTS_FILE:File;

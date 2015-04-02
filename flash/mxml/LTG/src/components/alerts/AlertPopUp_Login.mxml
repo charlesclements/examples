@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- containers\spark\myComponents\MyAlertPopUp.mxml -->
+<s:SkinnablePopUpContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+						   xmlns:s="library://ns.adobe.com/flex/spark" 
+						   xmlns:mx="library://ns.adobe.com/flex/mx" 
+						   width="100%" height="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.serialization.json.JSON;
+			import com.demonsters.debugger.MonsterDebugger;
+			
+			import model.AppModel;
+			
+			//import net.fastindemand.event.AppEvent;
+			
+			
+			protected function onLogin():void
+			{
+				
+				trace("AlertPopUp_Login - onLogin");
+				getLogin();
+				//close();
+				
+			}
+			
+			
+			protected function onCreateNew():void
+			{
+				
+				trace("AlertPopUp_Login - onCreateNew");
+				//dispatchEvent( new AppEvent( AppEvent.OPEN_PROJECT, {}, true ) );
+				//close();
+				
+			}
+			
+			
+			private function getLogin():void
+			{
+				
+				trace("AlertPopUp_Login - getLogin");
+				
+				
+				
+				
+				
+				if( username.text.length <= 0 || password.text.length <= 0 ){ trace("AlertPopUp_Login - Enter valid email and password"); return; }
+				
+				
+				// Craete Loader.
+				var ldr:URLLoader = new URLLoader();
+				ldr.dataFormat = URLLoaderDataFormat.BINARY;
+				ldr.addEventListener(Event.COMPLETE, onLoginLoad);
+				
+				// Create URLRequest.
+				var req:URLRequest = new URLRequest( AppModel.SERVER_PATH + "login.php");
+				req.method = URLRequestMethod.POST;
+				
+				//Add the URL variables 
+				var variables:URLVariables = new URLVariables(); 
+				//variables.method = "test.echo"; 
+				//variables.feed = ( myDDL as DropDownList ).selectedItem.value;
+				
+				//variables.feed = ( myDDL as DropDownList ).selectedItem.value as String;
+				
+				trace("AlertPopUp_Login - username - " + username.text);
+				trace("AlertPopUp_Login - password - " + password.text);
+				
+				
+				variables.user = username.text;
+				variables.password = password.text;
+				req.data = variables; 
+				
+				// Do load.
+				ldr.load(req);
+				
+			}
+			
+			
+			private function onLoginLoad(e:Event):void
+			{
+				
+				trace("AlertPopUp_Login - onLoginLoad");
+				//MonsterDebugger.trace( this, e );
+				trace(e.target.data);
+				
+				//var loader:URLLoader = URLLoader( e.target );
+				
+				
+				
+				var some_result:Object = com.adobe.serialization.json.JSON.decode( e.target.data );
+/*				var some_result:Object = com.adobe.serialization.json.JSON.decode( e.target.data );*/
+/*				var some_result:Object = JSON.parse( e.target.data );*/
+/*				var some_result:Object = JSON.decode(loader.data);*/
+					
+				MonsterDebugger.trace( this, some_result );
+				
+				
+				if ( e.target.data != "null" && String( e.target.data ).length > 0 )
+				{
+					
+					AppModel.USER = e.target.data;
+					txtWarning.text = "";
+					
+				}
+				else
+				{
+					
+					txtWarning.text = "Please enter correct user and password.";
+					
+				}
+				
+			}
+			
+		]]>
+	</fx:Script>
+	<s:Panel title="Please signin." width="100%" height="100%" backgroundColor="0xdddddd">
+		<s:VGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+			<s:HGroup  paddingBottom="20" paddingLeft="10" paddingRight="10" horizontalAlign="left">
+				<s:Label id="txtWarning" text=""/>
+			</s:HGroup>
+			<s:HGroup>
+				<s:VGroup>
+					<s:Label text="Username"/>
+					<s:TextInput id="username" width="100%"/>
+				</s:VGroup>
+			</s:HGroup>
+			<s:HGroup>
+				<s:VGroup>
+					<s:Label text="Password"/>
+					<s:TextInput id="password" width="100%" displayAsPassword="true" />
+				</s:VGroup>
+			</s:HGroup>
+			<s:HGroup horizontalAlign="left" verticalAlign="middle" width="100%" paddingLeft="10" paddingRight="10">
+				<s:CheckBox id="rememberMe"/>
+				<s:Label text="Remember me"/>
+			</s:HGroup>
+			<s:VGroup verticalAlign="bottom">
+				<s:HGroup verticalAlign="middle" width="100%" paddingLeft="10" paddingRight="10">
+					<s:Button id="btnNewUser" label="New User" height="50" width="100%" click="onLogin();"/>
+					<s:Button id="btnLogin" label="Login" height="50" width="100%" click="onLogin();"/>
+				</s:HGroup>
+			</s:VGroup>
+		</s:VGroup>
+	</s:Panel>
+	
+</s:SkinnablePopUpContainer>

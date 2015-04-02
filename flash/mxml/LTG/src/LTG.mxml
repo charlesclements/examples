@@ -13,10 +13,20 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.demonsters.debugger.MonsterDebugger;
+			
+			import mx.managers.PopUpManager;
+			
+			import components.alerts.AlertPopUp_Login;
+			
 			import model.AppModel;
 			
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
+			
+			
+			private var alertLogin:AlertPopUp_Login = new AlertPopUp_Login;
+			
 			
 			//private static var app:LTG;
 			protected function init(e:Event=null):void
@@ -24,34 +34,38 @@
 				
 				trace("LTG - init");
 				
+				MonsterDebugger.initialize(this );
+				Dispatcher.addEventListener( AppEvent.LOGIN_SUCCESS, onLoginSuccess );
 				
-				AppModel.init();
+				// Login stuff.
+				alertLogin.open( this, true );
+				alertLogin.width = this.width;
+				alertLogin.height = this.height;
 				
-				//Cc.logch("LTG", "test");
-				
-				
-				/*
-				trace(debugPanel);
-				trace(width);
-
-				
-				
-				Dispatcher.addEventListener( AppEvent.SHOW_PROJECTS, onChangeView );
-				
-				tabNav.selectedIndex = 2; 
-				
-				*/
-				
+				// Center the pop-up in the parent container.
+				PopUpManager.centerPopUp( alertLogin );
 				
 			}
 			
 			
 			
+			protected function onLoginSuccess(e:AppEvent=null):void
+			{
+				
+				trace("LTG - onLoginSuccess");
+				
+				Dispatcher.removeEventListener( AppEvent.LOGIN_SUCCESS, onLoginSuccess );
+				AppModel.init();
+				
+				
+			}
+			
+			
 			protected function onChangeView(e:AppEvent=null):void
 			{
 				
-				trace("LTG - onChangeView")
-				trace(e.type)
+				trace("LTG - onChangeView");
+				trace(e.type);
 				
 				switch( e.type )
 				{
@@ -72,10 +86,11 @@
 	</fx:Script>
 	
 	<!--<components:ProjectCreator id="projectCreator"/>-->
+	<s:SpriteVisualElement id="area" width="100%" height="100%" />
 	<s:TabbedViewNavigator id="tabNav" width="100%" height="100%">
-		<s:ViewNavigator label="Projects" id="projectsView" width="100%" height="100%" firstView="views.ProjectsView"/>
+		<!--<<s:ViewNavigator label="Projects" id="projectsView" width="100%" height="100%" firstView="views.ProjectsView"/>
 		<s:ViewNavigator label="Profile" id="profilePanel" width="100%" height="100%" firstView="views.ProfileView"/>
-		<!--<s:ViewNavigator label="Debug" id="debugPanel" width="100%" height="100%" firstView="views.DebugView"/>-->
+		s:ViewNavigator label="Debug" id="debugPanel" width="100%" height="100%" firstView="views.DebugView"/>-->
 	</s:TabbedViewNavigator>
 		
 </s:Application>
