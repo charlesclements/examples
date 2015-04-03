@@ -5,6 +5,7 @@ package model
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	
 	import mx.collections.XMLListCollection;
 
 	public class AppModel extends Object
@@ -44,16 +45,23 @@ package model
 			
 			trace( PROJECTS_FILE );
 			
-			PROJECTS_FILE = STORAGE.resolvePath("LyricsToGo/projects.xml");
+			
+			var path:String = "LyricsToGo/user/" + USER + "/projects.xml";
+			trace(path);
 			
 			
+			PROJECTS_FILE = STORAGE.resolvePath( path );
+			
+			trace( "+" );
+			
+			trace( PROJECTS_FILE );
 			
 			
 			
 			// Read XML info.
-			AppModel.STREAM.open( AppModel.PROJECTS_FILE, FileMode.READ);
-			AppModel.PROJECTS_XML = XML( AppModel.STREAM.readUTFBytes( AppModel.STREAM.bytesAvailable ) );
-			AppModel.STREAM.close();
+			STREAM.open( PROJECTS_FILE, FileMode.READ);
+			PROJECTS_XML = XML( STREAM.readUTFBytes( STREAM.bytesAvailable ) );
+			STREAM.close();
 			
 			
 			//MonsterDebugger.trace( "AppModel", PROJECTS_FILE );
@@ -64,14 +72,14 @@ package model
 			trace( PROJECTS_XML );
 			trace( PROJECTS_XML.text().length() );
 			
-			
+			/*
 			// Saving the actual file.
 			STREAM = new FileStream();
 			STREAM.open( PROJECTS_FILE, FileMode.WRITE );
 			//STREAM.writeUTFBytes( outputString );
 			//STREAM.readUTFBytes(
 			STREAM.close();
-			
+			*/
 			
 			
 			
@@ -88,7 +96,7 @@ package model
 
 			CURRENT_AUDIO_DIRECTORY = STORAGE.resolvePath("LyricsToGo/" + id + "/audio/");
 			CURRENT_AUDIO_DIRECTORY.createDirectory();
-			file.copyTo( AppModel.CURRENT_AUDIO_DIRECTORY.resolvePath( file.name ), true );
+			file.copyTo( CURRENT_AUDIO_DIRECTORY.resolvePath( file.name ), true );
 			
 			// Add audio to project xml.
 			
