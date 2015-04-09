@@ -99,11 +99,10 @@
 					MonsterDebugger.trace( this, result );
 					
 					trace(result.username);
-					trace(result.user);
 					trace(result.id);
+					trace(result.active);
 					
-					AppModel.USER = result.user;
-					//AppModel. = result.user;
+					AppModel.ID = result.id;
 					txtWarning.text = "";
 					
 					// Tell projects to populate.

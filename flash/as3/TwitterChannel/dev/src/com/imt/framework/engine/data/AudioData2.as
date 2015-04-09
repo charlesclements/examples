@@ -1,0 +1,2 @@
+﻿package com.imt.framework.engine.data{		import com.bedrock.framework.engine.data.GenericData;		import flash.utils.Dictionary;		import org.osmf.media.MediaElement;	import org.osmf.media.URLResource;
+		public class AudioData2 extends GenericData	{				public var url:String;		public var media:MediaElement;		public var resource:URLResource;		public var endClip:Number;		public var volume:Number;						public function AudioData2($data:Object=null)		{						super($data);					}			}	}

@@ -46,7 +46,13 @@
 					
 					// If it does not exist.
 					//if( !AppModel.PROJECTS_FILE.exists ) 
-					if( AppModel.PROJECTS_XML.text().length() <= 0 ) 
+					
+					
+					
+					
+					
+					//if( AppModel.PROJECTS_XML.text().length() <= 0 ) 
+					if( AppModel.PROJECTS_XML.toXMLString().length <= 0 ) 
 					{
 							
 							
@@ -55,6 +61,13 @@
 						AppModel.PROJECTS_FILE = AppModel.STORAGE.resolvePath("LyricsToGo/projects.xml");
 							
 						trace("File needs to be created.");
+						
+						return;
+						
+						
+						
+						
+						
 						
 						// This is where you create your XML File structure.
 						
@@ -178,10 +191,15 @@
 				
 				
 				
-				
+				/*
 				
 				trace(AppModel.PROJECTS_XML);
-				trace(AppModel.PROJECTS_XML[ AppModel.PROJECT_INDEX ]);
+				trace("+");
+				*/
+				//trace(AppModel.PROJECTS_XML[ 0 ][ 0 ][ 0 ]);
+				trace(AppModel.PROJECTS_XML..project[ 0 ]);
+				trace("+");
+				//trace(AppModel.PROJECTS_XML[ AppModel.PROJECT_INDEX ]);
 				
 				
 				

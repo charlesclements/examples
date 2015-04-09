@@ -1,0 +1,2 @@
+﻿package{	import com.demonsters.debugger.MonsterDebugger;		import controllers.TwitterController;		import flash.display.Sprite;
+		public class TwitterTest extends Sprite	{		public function TwitterTest()		{			super();						MonsterDebugger.initialize( this );			var t:TwitterController = new TwitterController( stage );																	}	}}

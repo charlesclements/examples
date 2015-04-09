@@ -1,0 +1,1 @@
+﻿package com.imt.mch.TeleMedicineCommandCenter.view.map.interactive.dialogue{	//import com.bedrock.framework.Bedrock;	import com.greensock.TweenMax;	import com.imt.mch.TeleMedicineCommandCenter.event.MapEvent;			public class GenericDialogue extends AbstractDialogue	{				public function GenericDialogue()		{			super();					}			}	}

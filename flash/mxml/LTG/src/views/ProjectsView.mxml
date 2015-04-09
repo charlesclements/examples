@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="Projects" xmlns:components="components.*">
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Projects" xmlns:components="components.*" initialize="init()" >
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -8,7 +8,6 @@
 	<fx:Script>
 		<![CDATA[
 			
-			import mx.events.FlexEvent;
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
 			
@@ -16,6 +15,23 @@
 			
 			public function init():void
 			{
+				
+				
+				Dispatcher.addEventListener( AppEvent.SHOW_PROJECTS, onReady );
+				
+				
+				
+				//projectMaster.visible = false;
+				
+			}
+			
+			
+			protected function onReady(e:Event):void
+			{
+				
+				trace("ProjectsView - onReady");
+				
+				Dispatcher.removeEventListener( AppEvent.SHOW_PROJECTS, onReady );
 				
 				if( !isCreated )
 				{
@@ -33,7 +49,7 @@
 				}
 				
 				projects.visible = true;
-				//projectMaster.visible = false;
+				
 				
 			}
 			
@@ -42,8 +58,16 @@
 			{
 				
 				trace("ProjectsView - onProjectViewHandler");
-				projects.visible = false;
+				//projects.visible = false;
 				//projectMaster.visible = true;
+				
+			}
+			
+			
+			protected function onActivate(e:Event):void
+			{
+				
+				trace("ProjectsView - onActivate");
 				
 			}
 			

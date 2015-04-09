@@ -1,0 +1,1 @@
+﻿package com.imt.mch.TeleMedicineCommandCenter.view.map.interactive.dialogue{		public interface IDialogue	{				function timed($seconds:Number):void	}	}

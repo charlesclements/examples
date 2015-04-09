@@ -7,13 +7,16 @@ package model
 	import flash.filesystem.FileStream;
 	
 	import mx.collections.XMLListCollection;
+	
+	import net.fastindemand.dispatcher.Dispatcher;
+	import net.fastindemand.event.AppEvent;
 
 	public class AppModel extends Object
 	{
 		
 		public static const SERVER_PATH:String = "http://localhost:8888/";
 		public static const STORAGE:File = File.applicationStorageDirectory;
-		public static var USER:String = "";
+		public static var ID:String = "";
 		public static var PID:String = "";
 		public static var PROJECTS_XML:XML = new XML();
 		public static var PROJECTS_FILE:File;
@@ -40,16 +43,14 @@ package model
 			
 			trace( "AppModel - init");
 			
-			//MonsterDebugger.initialize( AppModel );
+			// At this point:
+			// Login success.
 			
-			
-			trace( PROJECTS_FILE );
-			
-			
-			var path:String = "LyricsToGo/user/" + USER + "/projects.xml";
+			// Use the returned info to get projects.xml of the User.
+			var path:String = "LyricsToGo/user/" + ID + "/projects.xml";
 			trace(path);
 			
-			
+			// Point File to the path.
 			PROJECTS_FILE = STORAGE.resolvePath( path );
 			
 			trace( "+" );
@@ -60,17 +61,45 @@ package model
 			
 			// Read XML info.
 			STREAM.open( PROJECTS_FILE, FileMode.READ);
+			
+			// Get the XML from the File.
 			PROJECTS_XML = XML( STREAM.readUTFBytes( STREAM.bytesAvailable ) );
+			
+			// Must close stream.
 			STREAM.close();
-			
-			
-			//MonsterDebugger.trace( "AppModel", PROJECTS_FILE );
-			
 			
 			
 			trace( PROJECTS_FILE );
 			trace( PROJECTS_XML );
 			trace( PROJECTS_XML.text().length() );
+			trace( PROJECTS_XML.toXMLString().length );
+			
+			
+			// From here we already have the XML pulled from the File.
+			
+			
+			
+			// Test if the File has and XML data, if not, must create XML data here.
+			
+			var length:uint = PROJECTS_XML.toXMLString().length;
+			
+			if( length < 0 )
+			{
+				
+				// Set stuff in motion.
+				PROJECTS_XML = new XML( <projects></projects> );
+				
+			}
+			else
+			{
+				
+				
+				
+				
+				
+			}
+			
+			
 			
 			/*
 			// Saving the actual file.
@@ -82,7 +111,7 @@ package model
 			*/
 			
 			
-			
+			Dispatcher.dispatchEvent( new AppEvent( AppEvent.SHOW_PROJECTS ) );
 			
 			
 			

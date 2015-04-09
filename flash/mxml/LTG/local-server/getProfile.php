@@ -17,7 +17,8 @@
 		$array = [
 			#"id" => $id ,
 		    "username" => "Charlie",
-		    "user" => $id 
+		    "id" => $id,
+		    "active" => "true"
 		];
 		echo json_encode($array);
 
