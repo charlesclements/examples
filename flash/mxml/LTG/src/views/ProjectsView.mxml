@@ -21,7 +21,7 @@
 				
 				
 				
-				//projectMaster.visible = false;
+				projectMaster.visible = false;
 				
 			}
 			
@@ -40,29 +40,59 @@
 					isCreated = true
 					//this.removeEventListener( FlexEvent.CREATION_COMPLETE, init );
 					
-					projects.init();
-					//projectMaster.init();
-					Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onProjectViewHandler );
-					Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onProjectViewHandler );
-					Dispatcher.addEventListener( AppEvent.CLOSE_PROJECT, onCloseProject );
+					projectsList.init();
+					projectMaster.init();
+					
+					// Listen for events.
+					Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onEvent );
+					Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onEvent );
+					Dispatcher.addEventListener( AppEvent.CLOSE_PROJECT, onEvent );
 					
 				}
 				
-				projects.visible = true;
+				projectsList.visible = true;
 				
 				
 			}
 			
 			
+			protected function onEvent(e:Event):void
+			{
+				
+				trace("ProjectsView - onEvent : " + e.type);
+			
+				switch( e.type )
+				{
+					
+					case AppEvent.NEW_PROJECT:
+						projectsList.visible = false;
+						projectMaster.visible = true;
+						break;
+					
+					case AppEvent.OPEN_PROJECT:
+						projectsList.visible = false;
+						projectMaster.visible = true;
+						break;
+					
+					case AppEvent.CLOSE_PROJECT:
+						projectMaster.visible = false;
+						projectsList.visible = true;
+						break;
+					
+				}
+			
+			}
+			
+			/*
 			protected function onProjectViewHandler(e:Event):void
 			{
 				
-				trace("ProjectsView - onProjectViewHandler");
-				//projects.visible = false;
-				//projectMaster.visible = true;
+				trace("ProjectsView - onProjectViewHandler : " + e.type);
+				projectsList.visible = false;
+				projectMaster.visible = true;
 				
 			}
-			
+			*/
 			
 			protected function onActivate(e:Event):void
 			{
@@ -71,23 +101,23 @@
 				
 			}
 			
-			
+			/*
 			protected function onCloseProject(e:Event):void
 			{
 				
 				trace("ProjectsView - closeProject");
 				//projectMaster.visible = false;
-				projects.visible = true;
+				projectsList.visible = true;
 				
 			}
-			
+			*/
 			
 		]]>
 	</fx:Script>
 	
 	
-	<components:ProjectsList id="projects" width="100%" height="100%"/>
+	<components:ProjectsList id="projectsList" width="100%" height="100%"/>
 	<!--<components:Projects id="project" width="100%" height="100%"/>-->
-<!--	<components:ProjectCreator id="projectMaster" width="100%" height="100%"/>-->
+	<components:ProjectCreator id="projectMaster" width="100%" height="100%"/>
 	
 </s:View>

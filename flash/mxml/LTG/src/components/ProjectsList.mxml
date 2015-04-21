@@ -145,7 +145,7 @@
 					dataList.addEventListener( CollectionEvent.COLLECTION_CHANGE, onCollectionEvent );
 					Dispatcher.addEventListener( AppEvent.UPDATE_PROJECTS, onUpdateProjects );
 					alertRemove.addEventListener( AppEvent.REMOVE_PROJECT, onRemoveProject );
-					alertCreateFirst.addEventListener( AppEvent.OPEN_PROJECT, onOpenProject );
+					//alertCreateFirst.addEventListener( AppEvent.OPEN_PROJECT, onOpenProject );
 					
 					
 					
@@ -192,25 +192,14 @@
 				
 				
 				/*
-				
 				trace(AppModel.PROJECTS_XML);
 				trace("+");
 				*/
 				//trace(AppModel.PROJECTS_XML[ 0 ][ 0 ][ 0 ]);
-				trace(AppModel.PROJECTS_XML..project[ 0 ]);
-				trace("+");
+				//trace(AppModel.PROJECTS_XML..project[ 0 ]);
+				//trace("+");
 				//trace(AppModel.PROJECTS_XML[ AppModel.PROJECT_INDEX ]);
-				
-				
-				
-				
-				
-				
-				
-				
 				//AppModel.PID = AppModel.PROJECTS_XML
-				
-				
 				
 				
 			}
@@ -263,13 +252,15 @@
 				
 			}
 			
+			
 			protected function onOpenProject(e:Event=null):void
 			{
 				
-				trace("ProjectsList : openProject");
+				trace("ProjectsList : openProject - Let others know you are crating a new project.");
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.OPEN_PROJECT, true ) );
 				
 			}
+			
 			
 		]]>
 	</fx:Script>
@@ -279,11 +270,17 @@
 		<s:Button id="newProjectButton" label="New" click="createNewProject();"/>
 		<s:Button id="removeProjectButton" label="Remove" click="initRemoveProject();"/>
 	</s:HGroup>
-	
-	<s:List dataProvider="{AppModel.PROJECTS_LIST}" requireSelection="true" id="dataList" labelField="@title" width="100%" height="100%" change="selectionChangedHandler(event)" >
-		<s:layout>
-			<s:VerticalLayout  />
-		</s:layout>
-	</s:List>
+	<s:VGroup width="100%" height="100%">
+		<s:HGroup width="100%">
+			
+			
+			<!--itemRenderer="components.ProjectListItem"-->
+			<s:List dataProvider="{AppModel.PROJECTS_LIST}" requireSelection="true" id="dataList" labelField="@title" width="100%" height="100%" change="selectionChangedHandler(event)" >
+				<s:layout>
+					<s:VerticalLayout  />
+				</s:layout>
+			</s:List>
+		</s:HGroup>
+	</s:VGroup>
 	
 </s:SkinnableContainer>

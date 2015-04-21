@@ -147,59 +147,48 @@ package model
 		{
 			
 			trace( "AppModel - saveXML - " + id );
-			trace( xmllist );
-			
-			/*
-			trace(CURRENT_XML);
-			trace(CURRENT_XML.toXMLString().length);
-			trace(CURRENT_XML.length());
-			trace( "" );
 			
 			
+			// Current project.
+			CURRENT_XML = new XML( xmllist );
 			
-			
-			trace( "" );
-			trace(CURRENT_XML[ 0 ]);
-			
-			trace( "" );
-			trace(CURRENT_XML[ 0 ].title);
-			*/
-			
-			// add vars this way.
-			
-			
-			
-			trace( PROJECTS_XML );
-			//trace( PROJECTS_XML.@id );
-			trace( PROJECTS_XML..@id );
-			
-			
-			CURRENT_XML[ 0 ].title = xmllist.title;
-			CURRENT_XML[ 0 ].content = xmllist.content;
-			CURRENT_XML[ 0 ].audio.@name = "";
-			//CURRENT_XML[ 0 ].content = xmllist.content;
-			
-			
-			// Update title in Projects var.
-			
-			
-			trace(CURRENT_XML);
-			
-			
-			
-			
-			
-			
-			// This is the Strign that will get saved to the File.
+			// This is the String that will get saved to the File.
 			var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
 			outputString += CURRENT_XML.toXMLString();
 			outputString = outputString.replace( /\n/g, File.lineEnding );
 			
-			trace(outputString);
+			var path:String = STORAGE.nativePath + "/LyricsToGo/user/" + ID + "/projects/" + PID + "/project.xml";
+			CURRENT_PROJECT_FILE = File.documentsDirectory.resolvePath( path ); 
+			STREAM = new FileStream;
+			STREAM.open( CURRENT_PROJECT_FILE, FileMode.WRITE );
+			STREAM.writeUTFBytes( outputString );
+			STREAM.close();
 			
 			
 			
+			// All projects XML.
 			
+			PROJECTS_XML..project[ PROJECT_INDEX ].title = xmllist.title;
+			
+			// This is the String that will get saved to the File.
+			outputString = '<?xml version="1.0" encoding="utf-8"?>\n';
+			outputString += PROJECTS_XML.toXMLString();
+			outputString = outputString.replace( /\n/g, File.lineEnding );
+			
+			//trace(outputString);
+			
+			
+			path = STORAGE.nativePath + "/LyricsToGo/user/" + ID + "/projects.xml";
+			PROJECTS_FILE = File.documentsDirectory.resolvePath( path ); 
+			STREAM = new FileStream;
+			STREAM.open( PROJECTS_FILE, FileMode.WRITE );
+			STREAM.writeUTFBytes( outputString );
+			STREAM.close();
+
+			return;
+			
+			
+			/*
 			PROJECTS_FILE = STORAGE.resolvePath("LyricsToGo/projects.xml");
 			
 			
@@ -211,33 +200,8 @@ package model
 			
 			
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			/*
-			trace( "" );
-			trace(CURRENT_XML[ 0 ].title);
-			*/
-			
-			//trace( PROJECTS_XML..projects.( "@id" == PID ).toXMLString() );
-			
-			
-			
-			
-			
-			
-			//var xml:XML = new XML( xmllist );
-			//CURRENT_XML = new XML( xmllist );
-			
 			trace( "" );
 			trace(CURRENT_XML);
-			
 			
 			
 			// This is the Strign that will get saved to the File.
@@ -260,6 +224,7 @@ package model
 			STREAM.open( CURRENT_PROJECT_FILE, FileMode.WRITE );
 			STREAM.writeUTFBytes( outputString );
 			STREAM.close();
+			*/
 			
 		}
 		

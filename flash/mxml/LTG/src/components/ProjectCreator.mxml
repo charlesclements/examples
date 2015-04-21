@@ -9,17 +9,11 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	
 	<fx:Script>
 		<![CDATA[
 			
-		]]>
-	</fx:Script>
-	
-	
-	
-	<fx:Script>
-		<![CDATA[
+			// Imports.
+			import com.demonsters.debugger.MonsterDebugger;
 			import com.greensock.loading.LoaderMax;
 			import com.greensock.loading.MP3Loader;
 			
@@ -33,6 +27,7 @@
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
 			
+			// Vars.
 			// Alert window.
 			private var alertClose:AlertPopUp_CloseProject = new AlertPopUp_CloseProject;
 			private var _sound:Sound;
@@ -40,15 +35,15 @@
 			private var _loader:LoaderMax;
 			//private var audioPlayer:AudioPlayer = new AudioPlayer;
 			
+			
+			// Initializes class.
 			public function init():void
 			{
 				
-				//creationComplete="init()" 
-				
 				trace("ProjectCreator - init");
-				Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onNewProject );
-				Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onOpenProject );
-				alertClose.addEventListener( AppEvent.CLOSE_PROJECT, closeProject );
+				Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onEvent );
+				Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onEvent );
+				alertClose.addEventListener( AppEvent.CLOSE_PROJECT, onEvent );
 				
 				// Audio player.
 				audioPlayer.update();
@@ -57,128 +52,149 @@
 				
 			}
 			
-			
-			protected function onNewProject(e:Event):void
+
+			// Event handling function.
+			protected function onEvent(e:Event):void
 			{
 				
-				trace("ProjectCreator - onNewProject");
-				var d:Date = new Date;
-				AppModel.PID = String( d.time );
-				docTitle.text = String( "Untitled " + AppModel.PROJECTS_XML.children().length() );
-				docContent.text = "";
-				
-				// Createfolder.
-				var folder:File = File.documentsDirectory.resolvePath("LyricsToGo/" + AppModel.PID );
-				folder.createDirectory();
-				
-				
-				
-				
-				trace("");
-				/*trace( AppModel.PROJECTS_XML.children().length() );
-				trace( AppModel.PROJECTS_XML );*/
-				//AppModel.PROJECTS_XML.appendChild( new XML("<project id=" + AppModel.PID + " title=" + docTitle.text + " />"  ) );
-				//AppModel.PROJECTS_XML.appendChild( new XMLList(<project id="" title=""></project>) );
-				AppModel.PROJECTS_XML.prependChild( new XMLList(<project id="" title=""></project>) );
-				AppModel.PROJECTS_XML..project[ 0 ].@id = AppModel.PID;
-				AppModel.PROJECTS_XML..project[ 0 ].@title = docTitle.text;
-				
-				trace( AppModel.PROJECTS_XML );
-				/*
-				trace( AppModel.PROJECTS_XML.children().length() );
-					
-					*/
-					
-					
-					
-				// Create XML here
-				
-				
-				
-				//trace("Proj does not exists. Create.");
-				// Create the XMLList to be added.
-				
-				var xmllist:XMLList = new XMLList(<project id=""></project>);
-				
-				xmllist.@id = AppModel.PID;
-				
-				xmllist.title = docTitle.text;
-				xmllist.content = docContent.text;
-				xmllist.audio.@name = "";
-				xmllist.audio.@start = "0";
-				xmllist.audio.@end = "-1";
-				//xmllist.PID = AppModel.PID;
-				
-				
-				// Save XML in folder;
-				
-				trace(xmllist);
-				
-				
-				
-				//AppModel.CURRENT_XML = new XML( xmllist );
-				
-				/*
-				trace(AppModel.CURRENT_XML);
-				trace(AppModel.CURRENT_XML.toXMLString());
-				*/
-				
-				
-				
-				
-				AppModel.saveXML( AppModel.PID, xmllist );
-				
-				
-				/*
-				trace("+++");
-				trace(AppModel.CURRENT_XML);
-				*/
-				
-				
-				
-				
-				// Temporarily kill Save button.
-				saveButton.enabled = false;
-				
-			}
-			
-			
-			protected function onOpenProject(e:Event):void
-			{
-				
-				trace("ProjectMaster - onOpenProject");
-				
-				var xml:XML = XML( AppModel.PROJECTS_XML.children()[ AppModel.PROJECT_INDEX ] );
-				
-				trace( xml );
-				
-				//AppModel.PID = xml.PID;
-				AppModel.PID = xml.PID;
-				docTitle.text = xml.title;
-				docContent.text = xml.content;
-				
-				// Temporarily kill Save button.
-				saveButton.enabled = false;
-				trace(xml);
-				trace(String( xml.audio ).length);
-				trace("-");
-				
-				
-				
-				if( String( xml.audio ).length == 0 )
+				switch( e.type )
 				{
 					
-					if( hControls.containsElement( showMediaButton ) ) hControls.removeElement( showMediaButton );
+					case AppEvent.NEW_PROJECT:
+						
+						
+						trace("ProjectMaster - onEvent - NEW_PROJECT");
+						var d:Date = new Date;
+						AppModel.PID = String( d.time );
+						docTitle.text = String( "Untitled " + AppModel.PROJECTS_XML.children().length() );
+						docContent.text = "";
+						
+						
+						// In this location is where it needs to place the latest/newest created file placed in the beginning of the XML children.
+						
+						
+						trace( AppModel.PROJECTS_XML );
+						trace( "" );
+						trace( "" );
+						trace( "" );
+						
+						
+						
+						
+						// Createfolder.
+						var folder:File = File.documentsDirectory.resolvePath("LyricsToGo/" + AppModel.PID );
+						folder.createDirectory();
+						//AppModel.PROJECTS_XML.prependChild( new XMLList(<project id="" title=""></project>) );
+						AppModel.PROJECTS_XML.prependChild( new XMLList(
+							<project>
+								<title>{ docTitle.text }</title>
+								<id>{ AppModel.PID }</id>
+								<audio name="" url="" start="0" end="-1" />
+							</project>) );
+						
+						
+						
+						
+						
+						
+						// May want to consider using just attributes of the XML node....
+						
+						// Clean up XML file.
+						
+						
+						
+						
+						
+						
+						
+						
+						trace( AppModel.PROJECTS_XML );
+						trace( "" );
+						trace( "" );
+						trace( "" );
+						trace( AppModel.PROJECTS_XML[ 0 ] );
+						
+						
+						
+						
+						
+						
+						
+						
+						/*
+						AppModel.PROJECTS_XML..project[ 0 ].@id = AppModel.PID;
+						AppModel.PROJECTS_XML..project[ 0 ].@title = docTitle.text;
+						
+						
+						
+						
+						
+						
+						
+						//trace( AppModel.PROJECTS_XML );
+						var xmllist:XMLList = new XMLList(<project id=""></project>);
+						
+						xmllist.@id = AppModel.PID;
+						
+						xmllist.title = docTitle.text;
+						xmllist.content = docContent.text;
+						xmllist.audio.@name = "";
+						xmllist.audio.@start = "0";
+						xmllist.audio.@end = "-1";
+						//xmllist.PID = AppModel.PID;
+						
+						
+						*/
+						// Save XML in folder;
+						
+						var xmllist:XMLList = AppModel.PROJECTS_XML..project[ 0 ];
+						trace(xmllist);
+						
+						
+						
+						return;// the below is untouched and needs to be modifyed
+						
+						
+						
+						AppModel.saveXML( AppModel.PID, xmllist );
+						
+						// Temporarily kill Save button.
+						saveButton.enabled = false;
+						
+						break;
 					
+					case AppEvent.OPEN_PROJECT:
+						
+						trace("ProjectMaster - onEvent - OPEN_PROJECT");
+						var xml:XML = XML( AppModel.PROJECTS_XML.children()[ AppModel.PROJECT_INDEX ] );
+						
+						//AppModel.PID = xml.PID;
+						AppModel.PID = xml.PID;
+						
+						// Temporarily kill Save button.
+						saveButton.enabled = false;
+						
+						// Load project directory.
+						var path:String = AppModel.STORAGE.nativePath + "/LyricsToGo/user/" + AppModel.ID + "/projects/" + AppModel.PID + "/project.xml";
+						var f:File = AppModel.CURRENT_PROJECT_FILE = File.documentsDirectory.resolvePath( path ); 
+						var s:FileStream = AppModel.STREAM = new FileStream;
+						s.open( f, FileMode.READ ); 
+						AppModel.CURRENT_XML = XML( s.readUTFBytes( s.bytesAvailable ) ); 
+						s.close(); 
+						
+						// Set text field content.
+						docContent.text = AppModel.CURRENT_XML[0].content;
+						docTitle.text = AppModel.CURRENT_XML[0].title;
+						
+						break;
 					
+					case AppEvent.CLOSE_PROJECT:
+						trace("ProjectMaster - onEvent - CLOSE_PROJECT");
+						Dispatcher.dispatchEvent( new AppEvent( AppEvent.CLOSE_PROJECT, true ) );
+						break;
 					
 				}
-				
-				
-				
-				
-				
-				
+
 			}
 			
 			
@@ -186,130 +202,19 @@
 			{
 				
 				trace("ProjectCreator - saveText");
-				//var xmllist:XMLList = AppModel.PROJECTS_XML..project;
-				//var xmllist:XMLList = AppModel.CURRENT_XML..project;
-				
-				
-				
-				trace("");
-				trace(AppModel.CURRENT_XML);
-				trace("");
-				
-				
-				
-				
 				
 				var xmllist:XMLList = AppModel.CURRENT_XML.project;
-				
-				
-				trace(xmllist);
-				/*
-				trace(xmllist);
-				trace("");
-				trace(AppModel.PROJECTS_XML);
-				trace("");
-				*/
-				
-				//trace(xmllist);
-				//trace(xmllist.( @id == AppModel.PID ));
-				//trace(xmllist[1].@id);
-				
-				
-				trace("-");
-				
-				
-				
-				
-				
 				xmllist.title = docTitle.text;
 				xmllist.content = docContent.text;
+				MonsterDebugger.trace( this, xmllist );
 				
+				// Save XML project file locally at this point.
 				
-				
-				
-				
-				/*
-				
-				// Need to check if the PID exists.
-				//if( xmllist.( PID == AppModel.PID ).toString().length > 0 )
-				//if( xmllist.( @id == AppModel.PID ).toString().length > 0 )
-				if( AppModel.PROJECTS_XML.( @id == AppModel.PID ).toString().length > 0 )
-				{
-					
-					trace("Proj exists!");
-				trace("-");
-				
-					//xmllist.( PID == AppModel.PID ).title = docTitle.text;
-					//xmllist.( PID == AppModel.PID ).content = docContent.text;
-					xmllist.title = docTitle.text;
-					xmllist.content = docContent.text;
-					
-				}
-				else
-				{
-					
-					trace("Proj does not exists. Create.");
-				trace("-");
-				
-					// Create the XMLList to be added.
-					xmllist = new XMLList(<project id=""></project>);
-					
-					xmllist.@id = AppModel.PID;
-					
-					xmllist.title = docTitle.text;
-					xmllist.content = docContent.text;
-					//xmllist.PID = AppModel.PID;
-					
-					
-					// Save XML in folder;
-					
-					trace(xmllist);
-					
-					
-					
-					AppModel.saveXML( AppModel.PID, xmllist );
-					
-					//AppModel.projectsXML.prependChild( xmllist );
-					
-				}
-				
-				*/
-				
-				
-				
-				// This is where the new XML file will be saved in their own directories.
-				
-				// need to create folders and subfolders.
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				/*
-				
-				
-				// This is the Strign that will get saved to the File.
-				var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
-				outputString += AppModel.PROJECTS_XML.toXMLString();
-				outputString = outputString.replace( /\n/g, File.lineEnding );
-				
-				// Saving the actual file.
-				AppModel.STREAM = new FileStream();
-				AppModel.STREAM.open( AppModel.PROJECTS_FILE, FileMode.WRITE );
-				AppModel.STREAM.writeUTFBytes( outputString );
-				AppModel.STREAM.close();
-				*/
-				
-				
+				// Save in Model.
 				AppModel.saveXML( AppModel.PID, xmllist );
 				
 				
-				
-				
+				//return;
 				
 				// Alert everyone else that the XML has been saved and changed.
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.UPDATE_PROJECTS ) );
@@ -373,7 +278,7 @@
 
 			
 			
-			protected function _onSelected(e:Event=null):void
+			protected function _onAudioFileSelected(e:Event=null):void
 			{
 				
 				
@@ -466,7 +371,7 @@
 				
 				
 				_audioFile = new File;
-				_audioFile.addEventListener( Event.SELECT, _onSelected );
+				_audioFile.addEventListener( Event.SELECT, _onAudioFileSelected );
 				_audioFile.browse(  );//[ ".mp3" ]
 				
 				
@@ -503,26 +408,6 @@
 				
 			}
 			
-			/*
-			protected function toggleViewRecord(e:Event=null):void
-			{
-				
-				trace("ProjectMaster - toggleViewRecord");
-				
-				
-				if( contains( audioRecorder ) ) removeElement( audioRecorder );
-				else 
-				{
-					
-					addElementAt( audioRecorder, getElementIndex( hControls ) + 1 );
-					audioRecorder.update();
-					
-				}
-				
-				
-				
-			}
-			*/
 			
 			public function clear():void
 			{
@@ -532,6 +417,7 @@
 				docContent.text = "";
 				
 			}
+			
 			
 		]]>
 	</fx:Script>
@@ -562,7 +448,7 @@
 	
 	<media:AudioPlayer id="audioPlayer" />
 	<s:TextArea id="docContent" width="100%" height="100%" needsSoftKeyboard="true" change="onProjectChange()" />
-	<s:Label id="myLabel" width="180" fontWeight="bold" fontSize="24"/>
+	<!--<s:Label id="myLabel" width="180" fontWeight="bold" fontSize="24"/>-->
 	
 	
 </s:SkinnableContainer>
