@@ -69,98 +69,42 @@
 						docTitle.text = String( "Untitled " + AppModel.PROJECTS_XML.children().length() );
 						docContent.text = "";
 						
-						
-						// In this location is where it needs to place the latest/newest created file placed in the beginning of the XML children.
-						
-						
-						trace( AppModel.PROJECTS_XML );
-						trace( "" );
-						trace( "" );
-						trace( "" );
-						
-						
-						
-						
 						// Createfolder.
-						var folder:File = File.documentsDirectory.resolvePath("LyricsToGo/" + AppModel.PID );
+						var folder:File = AppModel.STORAGE.resolvePath("LyricsToGo/" + AppModel.PID );
 						folder.createDirectory();
 						//AppModel.PROJECTS_XML.prependChild( new XMLList(<project id="" title=""></project>) );
-						AppModel.PROJECTS_XML.prependChild( new XMLList(
+						
+						
+						
+						
+						var singleProjectXmlList:XMLList = new XMLList(
 							<project>
 								<title>{ docTitle.text }</title>
 								<id>{ AppModel.PID }</id>
+								<content></content>
 								<audio name="" url="" start="0" end="-1" />
-							</project>) );
+							</project>)
+						
+						
+						var addProjectXmlListNode:XMLList = new XMLList(
+							<project>
+								<title>{ docTitle.text }</title>
+								<id>{ AppModel.PID }</id>
+							</project>)
+						
+						
+						
+						AppModel.PROJECTS_XML.prependChild( addProjectXmlListNode );
+						AppModel.PROJECT_INDEX = 0;
 						
 						
 						
 						
-						
-						
-						// May want to consider using just attributes of the XML node....
-						
-						// Clean up XML file.
-						
-						
-						
-						
-						
-						
-						
-						
-						trace( AppModel.PROJECTS_XML );
-						trace( "" );
-						trace( "" );
-						trace( "" );
-						trace( AppModel.PROJECTS_XML[ 0 ] );
-						
-						
-						
-						
-						
-						
-						
-						
-						/*
-						AppModel.PROJECTS_XML..project[ 0 ].@id = AppModel.PID;
-						AppModel.PROJECTS_XML..project[ 0 ].@title = docTitle.text;
-						
-						
-						
-						
-						
-						
-						
-						//trace( AppModel.PROJECTS_XML );
-						var xmllist:XMLList = new XMLList(<project id=""></project>);
-						
-						xmllist.@id = AppModel.PID;
-						
-						xmllist.title = docTitle.text;
-						xmllist.content = docContent.text;
-						xmllist.audio.@name = "";
-						xmllist.audio.@start = "0";
-						xmllist.audio.@end = "-1";
-						//xmllist.PID = AppModel.PID;
-						
-						
-						*/
-						// Save XML in folder;
-						
-						var xmllist:XMLList = AppModel.PROJECTS_XML..project[ 0 ];
-						trace(xmllist);
-						
-						
-						
-						return;// the below is untouched and needs to be modifyed
-						
-						
-						
-						AppModel.saveXML( AppModel.PID, xmllist );
+						//AppModel.saveProjectsXML( AppModel.PROJECTS_XML );
+						AppModel.saveSingleProjectXML( AppModel.PID, singleProjectXmlList );
 						
 						// Temporarily kill Save button.
 						saveButton.enabled = false;
-						
 						break;
 					
 					case AppEvent.OPEN_PROJECT:
@@ -203,15 +147,48 @@
 				
 				trace("ProjectCreator - saveText");
 				
-				var xmllist:XMLList = AppModel.CURRENT_XML.project;
+				
+				
+				
+				
+				
+				
+				
+				// Not saving properly here.
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				var xmllist:XMLList = new XMLList( AppModel.CURRENT_XML..project[ AppModel.PROJECT_INDEX ] );
+				
+				trace(xmllist);
+				
+				
+				
+				
 				xmllist.title = docTitle.text;
 				xmllist.content = docContent.text;
 				MonsterDebugger.trace( this, xmllist );
 				
+				trace("+++");
+				trace(xmllist);
+				
+				
+				
+				//return;
+				
+				
 				// Save XML project file locally at this point.
 				
 				// Save in Model.
-				AppModel.saveXML( AppModel.PID, xmllist );
+				AppModel.saveSingleProjectXML( AppModel.PID, xmllist );
 				
 				
 				//return;
