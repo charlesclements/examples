@@ -103,6 +103,9 @@
 						//AppModel.saveProjectsXML( AppModel.PROJECTS_XML );
 						AppModel.saveSingleProjectXML( AppModel.PID, singleProjectXmlList );
 						
+						// Save main projects file.
+						AppModel.saveAllProjectsXML( AppModel.PROJECTS_XML );
+						
 						// Temporarily kill Save button.
 						saveButton.enabled = false;
 						break;

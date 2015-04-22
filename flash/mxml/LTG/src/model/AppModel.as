@@ -204,7 +204,7 @@ package model
 			//trace( AppModel.PROJECTS_XML );
 			
 			
-			saveAllProjectsXML( AppModel.PROJECTS_XML );
+			//saveAllProjectsXML( AppModel.PROJECTS_XML );
 			
 			
 			trace( "AppModel - saveSingleProjectXML - END" );
