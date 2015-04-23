@@ -63,7 +63,7 @@
 					case AppEvent.NEW_PROJECT:
 						
 						
-						trace("ProjectMaster - onEvent - NEW_PROJECT");
+						trace("ProjectCreator - onEvent - NEW_PROJECT");
 						var d:Date = new Date;
 						AppModel.PID = String( d.time );
 						docTitle.text = String( "Untitled " + AppModel.PROJECTS_XML.children().length() );
@@ -112,18 +112,18 @@
 					
 					case AppEvent.OPEN_PROJECT:
 						
-						trace("ProjectMaster - onEvent - OPEN_PROJECT");
+						trace("ProjectCreator - onEvent - OPEN_PROJECT");
 						var xml:XML = XML( AppModel.PROJECTS_XML.children()[ AppModel.PROJECT_INDEX ] );
 						
 						//AppModel.PID = xml.PID;
-						AppModel.PID = xml.PID;
+						AppModel.PID = xml.id;
 						
 						// Temporarily kill Save button.
 						saveButton.enabled = false;
 						
 						// Load project directory.
 						var path:String = AppModel.STORAGE.nativePath + "/LyricsToGo/user/" + AppModel.ID + "/projects/" + AppModel.PID + "/project.xml";
-						var f:File = AppModel.CURRENT_PROJECT_FILE = File.documentsDirectory.resolvePath( path ); 
+						var f:File = AppModel.CURRENT_PROJECT_FILE = File.applicationStorageDirectory.resolvePath( path ); 
 						var s:FileStream = AppModel.STREAM = new FileStream;
 						s.open( f, FileMode.READ ); 
 						AppModel.CURRENT_XML = XML( s.readUTFBytes( s.bytesAvailable ) ); 
@@ -136,7 +136,7 @@
 						break;
 					
 					case AppEvent.CLOSE_PROJECT:
-						trace("ProjectMaster - onEvent - CLOSE_PROJECT");
+						trace("ProjectCreator - onEvent - CLOSE_PROJECT");
 						Dispatcher.dispatchEvent( new AppEvent( AppEvent.CLOSE_PROJECT, true ) );
 						break;
 					
@@ -150,13 +150,6 @@
 				
 				trace("ProjectCreator - saveText");
 				
-				
-				
-				
-				
-				
-				
-				
 				// Not saving properly here.
 				
 				
@@ -169,32 +162,27 @@
 				
 				
 				
-				var xmllist:XMLList = new XMLList( AppModel.CURRENT_XML..project[ AppModel.PROJECT_INDEX ] );
+				//var singleProjectXMLList:XMLList = new XMLList( AppModel.CURRENT_XML..project[ AppModel.PROJECT_INDEX ] );
+				var singleProjectXMLList:XMLList = new XMLList( AppModel.CURRENT_XML );
+				singleProjectXMLList.title = docTitle.text;
+				singleProjectXMLList.content = docContent.text;
 				
-				trace(xmllist);
-				
-				
-				
-				
-				xmllist.title = docTitle.text;
-				xmllist.content = docContent.text;
-				MonsterDebugger.trace( this, xmllist );
-				
+				// Audio info?
+				trace(AppModel.PROJECTS_XML);
 				trace("+++");
-				trace(xmllist);
+				
+				AppModel.PROJECTS_XML..project[ AppModel.PROJECT_INDEX ].title = docTitle.text;
+				
+				trace(AppModel.PROJECTS_XML);
 				
 				
-				
-				//return;
 				
 				
 				// Save XML project file locally at this point.
+				AppModel.saveSingleProjectXML( AppModel.PID, singleProjectXMLList );
 				
-				// Save in Model.
-				AppModel.saveSingleProjectXML( AppModel.PID, xmllist );
-				
-				
-				//return;
+				// Save main projects file.
+				AppModel.saveAllProjectsXML( AppModel.PROJECTS_XML );
 				
 				// Alert everyone else that the XML has been saved and changed.
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.UPDATE_PROJECTS ) );

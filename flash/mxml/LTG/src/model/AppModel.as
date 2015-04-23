@@ -68,12 +68,12 @@ package model
 			// Must close stream.
 			STREAM.close();
 			
-			
+			/*
 			trace( PROJECTS_FILE );
 			trace( PROJECTS_XML );
 			trace( PROJECTS_XML.text().length() );
 			trace( PROJECTS_XML.toXMLString().length );
-			
+			*/
 			
 			// From here we already have the XML pulled from the File.
 			

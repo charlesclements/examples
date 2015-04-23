@@ -166,7 +166,7 @@
 				var xmllist:XMLList = AppModel.PROJECTS_XML..title;
 				AppModel.PROJECTS_LIST = new XMLListCollection( xmllist );
 				
-				
+				//dataList.dataProvider = AppModel.PROJECTS_LIST;
 				
 			}
 			
@@ -256,7 +256,7 @@
 			protected function onOpenProject(e:Event=null):void
 			{
 				
-				trace("ProjectsList : openProject - Let others know you are crating a new project.");
+				trace("ProjectsList : openProject - Let others know you are opening a new project.");
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.OPEN_PROJECT, true ) );
 				
 			}
@@ -275,7 +275,7 @@
 			
 			
 			<!--itemRenderer="components.ProjectListItem"-->
-			<s:List dataProvider="{AppModel.PROJECTS_LIST}" requireSelection="true" id="dataList" labelField="title" width="100%" height="100%" change="selectionChangedHandler(event)" >
+			<s:List dataProvider="{AppModel.PROJECTS_LIST}" requireSelection="true" id="dataList" labelField="title" width="300" height="100%" change="selectionChangedHandler(event)" >
 				<s:layout>
 					<s:VerticalLayout  />
 				</s:layout>
