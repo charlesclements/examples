@@ -81,7 +81,7 @@
 						break;
 					
 					case AppEvent.SHOW_PROJECTS:
-						tabNav.selectedIndex = 0; 
+						//tabNav.selectedIndex = 0; 
 						//trace(projectsView.firstView);
 						//trace( ( projectsView.firstView as ProjectsView).init );
 						//( projectsView.firstView as ProjectsView).init();
@@ -106,10 +106,10 @@
 	
 	<!--<components:ProjectCreator id="projectCreator"/>-->
 	<s:SpriteVisualElement id="area" width="100%" height="100%" />
+	
 	<s:TabbedViewNavigator id="tabNav" width="100%" height="100%">
 		<s:ViewNavigator label="Projects" id="projectsView" width="100%" height="100%" firstView="views.ProjectsView"/>
 		<s:ViewNavigator label="Profile" id="profilePanel" width="100%" height="100%" firstView="views.ProfileView"/>
-		<!--<s:ViewNavigator label="Debug" id="debugPanel" width="100%" height="100%" firstView="views.DebugView"/>-->
 	</s:TabbedViewNavigator>
 		
 </s:Application>

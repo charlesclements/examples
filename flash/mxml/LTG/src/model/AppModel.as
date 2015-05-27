@@ -123,20 +123,35 @@ package model
 			
 			trace( "AppModel - copyMusic - " + id + " - " + file.name );
 
-			CURRENT_AUDIO_DIRECTORY = STORAGE.resolvePath("LyricsToGo/" + id + "/audio/");
-			CURRENT_AUDIO_DIRECTORY.createDirectory();
-			file.copyTo( CURRENT_AUDIO_DIRECTORY.resolvePath( file.name ), true );
+			CURRENT_AUDIO_DIRECTORY = STORAGE.resolvePath("LyricsToGo/user/" + ID + "/audio/");
 			
-			// Add audio to project xml.
+			//"LyricsToGo/user/" + ID + "/
+			CURRENT_AUDIO_DIRECTORY.createDirectory();
+			file.copyTo( CURRENT_AUDIO_DIRECTORY.resolvePath( PID + "/" + file.name ), true );
+			
+			// Add audio to single project xml.
+			
+			
+			//CURRENT_XML.audio.@url = file.nativePath;
+			CURRENT_XML.audio.@url = CURRENT_AUDIO_DIRECTORY.nativePath + "/" + PID + "/" + file.name;
+			CURRENT_XML.audio.@name = file.name;
+			
 			
 			
 			trace( CURRENT_XML );
+			
+			
+			
+			/*
 			trace( CURRENT_XML.@id );
 			trace( CURRENT_XML..@id );
 			trace( CURRENT_XML.toXMLString() );
+			*/
 			
 			
+			//saveSingleProjectXML( id, new XMLList( CURRENT_XML ) );
 			
+			//return;
 			
 			
 			
@@ -148,9 +163,6 @@ package model
 		{
 			
 			trace( "AppModel - saveAllProjectsXML" );
-			
-			// Current project.
-			//CURRENT_XML = xml;
 			
 			// This is the String that will get saved to the File.
 			var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
@@ -178,14 +190,9 @@ package model
 		{
 			
 			trace( "AppModel - saveSingleProjectXML - " + id );
-			trace( xmllist );
-			trace( "++++" );
-			
 			
 			// Current project.
 			CURRENT_XML = new XML( xmllist );
-			trace( CURRENT_XML );
-			trace( "++++" );
 			
 			// This is the String that will get saved to the File.
 			var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
@@ -199,35 +206,6 @@ package model
 			STREAM.writeUTFBytes( outputString );
 			STREAM.close();
 			
-			
-			
-			//trace( AppModel.PROJECTS_XML );
-			
-			
-			//saveAllProjectsXML( AppModel.PROJECTS_XML );
-			
-			
-			trace( "AppModel - saveSingleProjectXML - END" );
-			
-			
-			
-			/*
-			// All projects XML.
-			
-			PROJECTS_XML..project[ PROJECT_INDEX ].title = xmllist.title;
-			
-			// This is the String that will get saved to the File.
-			outputString = '<?xml version="1.0" encoding="utf-8"?>\n';
-			outputString += PROJECTS_XML.toXMLString();
-			outputString = outputString.replace( /\n/g, File.lineEnding );
-			
-			path = STORAGE.nativePath + "/LyricsToGo/user/" + ID + "/projects.xml";
-			PROJECTS_FILE = File.documentsDirectory.resolvePath( path ); 
-			STREAM = new FileStream;
-			STREAM.open( PROJECTS_FILE, FileMode.WRITE );
-			STREAM.writeUTFBytes( outputString );
-			STREAM.close();
-*/
 		}
 		
 	}

@@ -39,13 +39,16 @@
 			
 		]]>
 	</fx:Script>
-	
-	<s:HGroup verticalAlign="middle" horizontalAlign="center" paddingLeft="5" paddingRight="5" width="100%">
-		<s:Label text="Music"/>
-		<s:ToggleButton id="loopButton" label="Loop" height="30"/>
-		<s:Button id="playButton" label="Play" height="30"/>		
-		<s:Button id="stopButton" label="Stop" height="30"/>		
-		<s:HSlider id="musicSlider" maximum="100" width="100%"/>
-	</s:HGroup>
+	<s:VGroup verticalAlign="middle" horizontalAlign="center" >
+		
+		<s:HGroup verticalAlign="middle" horizontalAlign="center" paddingLeft="5" paddingRight="5" width="100%">
+			<s:ToggleButton id="loopButton" label="Loop" height="30"/>
+			<s:Button id="playButton" label="Play" height="30"/>		
+			<s:Button id="stopButton" label="Stop" height="30"/>
+		</s:HGroup>
+		<s:HGroup verticalAlign="middle" horizontalAlign="center" paddingLeft="5" paddingRight="5" width="100%">
+			<s:HSlider id="musicSlider" maximum="100" width="100%"/>
+		</s:HGroup>
+	</s:VGroup>
 	
 </s:Group>

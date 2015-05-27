@@ -275,7 +275,7 @@
 			
 			
 			<!--itemRenderer="components.ProjectListItem"-->
-			<s:List dataProvider="{AppModel.PROJECTS_LIST}" requireSelection="true" id="dataList" labelField="title" width="300" height="100%" change="selectionChangedHandler(event)" >
+			<s:List dataProvider="{AppModel.PROJECTS_LIST}" doubleClick="onOpenProject(event)" requireSelection="true" id="dataList" labelField="title" width="300" height="100%" change="selectionChangedHandler(event)" >
 				<s:layout>
 					<s:VerticalLayout  />
 				</s:layout>

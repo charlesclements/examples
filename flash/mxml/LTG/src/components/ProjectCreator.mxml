@@ -72,11 +72,8 @@
 						// Createfolder.
 						var folder:File = AppModel.STORAGE.resolvePath("LyricsToGo/" + AppModel.PID );
 						folder.createDirectory();
-						//AppModel.PROJECTS_XML.prependChild( new XMLList(<project id="" title=""></project>) );
 						
-						
-						
-						
+						// Single project.
 						var singleProjectXmlList:XMLList = new XMLList(
 							<project>
 								<title>{ docTitle.text }</title>
@@ -85,7 +82,7 @@
 								<audio name="" url="" start="0" end="-1" />
 							</project>)
 						
-						
+						// All projects
 						var addProjectXmlListNode:XMLList = new XMLList(
 							<project>
 								<title>{ docTitle.text }</title>
@@ -93,14 +90,11 @@
 							</project>)
 						
 						
-						
+						// Add to PROJECTS_XML
 						AppModel.PROJECTS_XML.prependChild( addProjectXmlListNode );
 						AppModel.PROJECT_INDEX = 0;
 						
-						
-						
-						
-						//AppModel.saveProjectsXML( AppModel.PROJECTS_XML );
+						// Save single project.
 						AppModel.saveSingleProjectXML( AppModel.PID, singleProjectXmlList );
 						
 						// Save main projects file.
@@ -190,6 +184,11 @@
 				// Temporarily kill Save button.
 				saveButton.enabled = false;
 				
+				//trace(buttonBar.getChildAt( 0 ) );
+				
+					
+					
+					
 			}
 			
 			
@@ -250,8 +249,7 @@
 			{
 				
 				
-				trace( "ProjectCreator - _onSelected()" );
-				//trace( e );
+				trace( "ProjectCreator - _onAudioFileSelected()" );
 				trace( e.currentTarget );
 				
 				var f:File = e.currentTarget as File;
@@ -344,18 +342,6 @@
 				
 				
 				
-				
-				
-				/*
-				if( contains( audioPlayer ) ) removeElement( audioPlayer );
-				else 
-				{
-					
-					addElementAt( audioPlayer, getElementIndex( hControls ) + 1 );
-					audioPlayer.update();
-					
-				}
-				*/
 			}
 
 			
@@ -386,24 +372,42 @@
 				
 			}
 			
-			
+			/*
+			public function buttonBarClick():void
+			{
+				
+				trace("ProjectMaster - buttonBarClick");
+				
+				
+				//trace(buttonBar.selectedItem);
+				
+				switch( buttonBar.selectedItem )
+				{
+					
+					
+					
+					
+					
+					case "SAVE":
+						saveText();
+						break;
+					
+					
+					case "CLOSE":
+						initCloseProject()
+						break;
+					
+					
+					
+				}
+				
+			}
+			*/
 		]]>
 	</fx:Script>
 	
-	<s:HGroup id="hgroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" width="100%">
-		<s:Label>Title</s:Label>
-		<s:TextInput id="docTitle" width="100%" height="36" needsSoftKeyboard="true" change="onProjectChange()" />
-		<s:Button
-			id="saveButton" label="Save"
-			click="saveText();"
-			/>
-		<s:Button
-			id="closeButton" label="Close"
-			click="initCloseProject()"
-			/>
-	</s:HGroup>
-	
-	<s:HGroup id="hControls" verticalAlign="middle" horizontalAlign="center" paddingBottom="0" paddingLeft="5" paddingRight="5" paddingTop="0" width="100%">
+	<s:HGroup id="hControls" verticalAlign="middle" horizontalAlign="center" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%" color="#777">
+		<!--
 		<s:ToggleButton width="100%" height="30"
 						id="showMediaButton" label="SHOW MEDIA"
 						click="toggleViewAudio()"
@@ -412,11 +416,30 @@
 						id="loadAudioButton" label="LOAD MUSIC"
 						click="_loadMusic()"
 						/>
+		-->
 	</s:HGroup>
 	
 	<media:AudioPlayer id="audioPlayer" />
+	
+	<s:HGroup id="hgroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="0" paddingLeft="5" paddingRight="5" paddingTop="0" width="100%">
+		<s:TextInput id="docTitle" width="100%" height="36" needsSoftKeyboard="true" change="onProjectChange()" />
+		<s:ToggleButton width="100" height="30"
+						id="showMediaButton" label="MEDIA"
+						click="toggleViewAudio()"
+						/>
+	</s:HGroup>
 	<s:TextArea id="docContent" width="100%" height="100%" needsSoftKeyboard="true" change="onProjectChange()" />
-	<!--<s:Label id="myLabel" width="180" fontWeight="bold" fontSize="24"/>-->
+
+	<s:HGroup id="hgroupBottom" verticalAlign="middle" horizontalAlign="center" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%" right="10" left="10" >
+		<s:Button width="100%" height="30"
+			id="saveButton" label="Save"
+			click="saveText();"
+			/>
+		<s:Button width="100%" height="30"
+			id="closeButton" label="Close"
+			click="initCloseProject()"
+			/>
+	</s:HGroup>
 	
 	
 </s:SkinnableContainer>
