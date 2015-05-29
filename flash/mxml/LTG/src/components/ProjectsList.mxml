@@ -235,6 +235,10 @@
 				// Alert everyone else that the XML has been saved and changed.
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.UPDATE_PROJECTS ) );
 				
+				// Need to set this to -1 so that none of the buttons are selected.
+				// If left selected, by reselecting them, you'll potentially get an error. 
+				buttons.selectedIndex = -1;
+				
 			}
 			
 			
@@ -262,14 +266,54 @@
 			}
 			
 			
+			
+			
+			protected function buttons_clickHandler(event:MouseEvent):void
+			{
+				
+				trace("ProjectsList - buttons_clickHandler");
+				
+				
+				var s:String = ( buttons.selectedItem as String ).toUpperCase();
+				
+				
+				trace( buttons.selectedIndex );
+				// Need to set this to -1 so that none of the buttons are selected.
+				// If left selected, by reselecting them, you'll potentially get an error. 
+				buttons.selectedIndex = -1;
+				trace( buttons.selectedIndex );
+				
+				
+				switch( s )
+				{
+					
+					
+					
+					case "NEW":
+						trace( "ProjectsList - NEW" );
+						createNewProject();
+						break;
+					
+					case "OPEN":
+						trace( "ProjectsList - OPEN" );
+						onOpenProject();
+						break;
+					
+					case "REMOVE":
+						trace( "ProjectsList - REMOVE" );
+						initRemoveProject();
+						break;
+					
+					default: 
+						trace( "Nothing selected" );
+						
+				}
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
-	<s:HGroup horizontalAlign="right">
-		<s:Button id="openProjectButton" label="Open" click="onOpenProject();"/>
-		<s:Button id="newProjectButton" label="New" click="createNewProject();"/>
-		<s:Button id="removeProjectButton" label="Remove" click="initRemoveProject();"/>
-	</s:HGroup>
 	<s:VGroup width="100%" height="100%">
 		<s:HGroup width="100%">
 			
@@ -282,5 +326,15 @@
 			</s:List>
 		</s:HGroup>
 	</s:VGroup>
+	
+	
+	<s:ButtonBar id="buttons" click="buttons_clickHandler(event)" width="100%" >  
+		<s:ArrayCollection>
+			<fx:String>Open</fx:String> 
+			<fx:String>New</fx:String> 
+			<fx:String>Remove</fx:String> 
+		</s:ArrayCollection>
+	</s:ButtonBar>
+	
 	
 </s:SkinnableContainer>

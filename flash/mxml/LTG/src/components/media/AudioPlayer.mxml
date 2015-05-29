@@ -37,17 +37,27 @@
 			}
 			
 			
+			protected function options_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				trace("AudioPlayer : options");
+			}
+			
 		]]>
 	</fx:Script>
 	<s:VGroup verticalAlign="middle" horizontalAlign="center" >
-		
+		<!--
 		<s:HGroup verticalAlign="middle" horizontalAlign="center" paddingLeft="5" paddingRight="5" width="100%">
 			<s:ToggleButton id="loopButton" label="Loop" height="30"/>
 			<s:Button id="playButton" label="Play" height="30"/>		
 			<s:Button id="stopButton" label="Stop" height="30"/>
 		</s:HGroup>
-		<s:HGroup verticalAlign="middle" horizontalAlign="center" paddingLeft="5" paddingRight="5" width="100%">
-			<s:HSlider id="musicSlider" maximum="100" width="100%"/>
+		-->
+		
+		<s:HGroup verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" width="100%">
+			<s:Button id="playButton" label="PLAY" height="30" width="70"/>
+			<s:HSlider id="musicSlider" maximum="100" width="70%"/>
+			<s:Button id="options" label="*" height="30" width="30" click="options_clickHandler(event)"/>
 		</s:HGroup>
 	</s:VGroup>
 	

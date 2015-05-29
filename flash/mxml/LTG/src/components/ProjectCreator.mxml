@@ -11,13 +11,14 @@
 	
 	<fx:Script>
 		<![CDATA[
-			
-			// Imports.
 			import com.demonsters.debugger.MonsterDebugger;
 			import com.greensock.loading.LoaderMax;
 			import com.greensock.loading.MP3Loader;
 			
+			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
+			
+			import spark.components.ButtonBarButton;
 			
 			import components.alerts.AlertPopUp_CloseProject;
 			import components.media.AudioPlayer;
@@ -33,6 +34,14 @@
 			private var _sound:Sound;
 			private var _audioFile:File;
 			private var _loader:LoaderMax;
+			
+			//private var saveButton:ButtonBarButton;
+			//private var closeButton:ButtonBarButton;
+			private static var _saved:Boolean = true;
+			
+			
+			
+			//private var buttons:Array = [ { label:s ];
 			//private var audioPlayer:AudioPlayer = new AudioPlayer;
 			
 			
@@ -49,6 +58,10 @@
 				audioPlayer.update();
 				removeElement( audioPlayer );
 				showMediaButton.enabled = true;
+				/*
+				saveButton = buttons.getChildAt( 0 ) as ButtonBarButton;
+				closeButton = buttons.getChildAt( 1 ) as ButtonBarButton;
+				*/
 				
 			}
 			
@@ -56,6 +69,18 @@
 			// Event handling function.
 			protected function onEvent(e:Event):void
 			{
+				
+				trace("ProjectCreator - onEvent");
+				trace( buttons.activeEffects );
+				
+				
+				trace( buttons.selectedIndex );
+				// Need to set this to -1 so that none of the buttons are selected.
+				// If left selected, by reselecting them, you'll potentially get an error. 
+				buttons.selectedIndex = -1;
+				trace( buttons.selectedIndex );
+				
+				
 				
 				switch( e.type )
 				{
@@ -101,7 +126,8 @@
 						AppModel.saveAllProjectsXML( AppModel.PROJECTS_XML );
 						
 						// Temporarily kill Save button.
-						saveButton.enabled = false;
+						//saveButton.enabled = false;
+						_saved = false;
 						break;
 					
 					case AppEvent.OPEN_PROJECT:
@@ -113,7 +139,8 @@
 						AppModel.PID = xml.id;
 						
 						// Temporarily kill Save button.
-						saveButton.enabled = false;
+						//saveButton.enabled = false;
+						_saved = false;
 						
 						// Load project directory.
 						var path:String = AppModel.STORAGE.nativePath + "/LyricsToGo/user/" + AppModel.ID + "/projects/" + AppModel.PID + "/project.xml";
@@ -126,6 +153,8 @@
 						// Set text field content.
 						docContent.text = AppModel.CURRENT_XML[0].content;
 						docTitle.text = AppModel.CURRENT_XML[0].title;
+						
+						
 						
 						break;
 					
@@ -182,8 +211,8 @@
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.UPDATE_PROJECTS ) );
 				
 				// Temporarily kill Save button.
-				saveButton.enabled = false;
-				
+				//saveButton.enabled = false;
+				_saved = false;
 				//trace(buttonBar.getChildAt( 0 ) );
 				
 					
@@ -197,7 +226,8 @@
 			{
 				
 				//trace("ProjectMaster - onProjectChange");
-				saveButton.enabled = true;
+				//saveButton.enabled = true;
+				_saved = true;
 				
 			}
 			
@@ -205,9 +235,9 @@
 			protected function initCloseProject():void
 			{
 				
-				//trace("ProjectMaster - initCloseProject");
+				trace("ProjectMaster - initCloseProject");
 				
-				if( saveButton.enabled )
+				if( _saved )
 				{
 					
 					alertClose.open( this, true );
@@ -250,7 +280,7 @@
 				
 				
 				trace( "ProjectCreator - _onAudioFileSelected()" );
-				trace( e.currentTarget );
+				//trace( e.currentTarget );
 				
 				var f:File = e.currentTarget as File;
 				
@@ -355,6 +385,8 @@
 				else 
 				{
 					
+					//audioPlayer.width = 100;
+					
 					addElementAt( audioPlayer, getElementIndex( hControls ) + 1 );
 					audioPlayer.update();
 					
@@ -403,6 +435,38 @@
 				
 			}
 			*/
+			
+			protected function buttons_clickHandler(event:MouseEvent):void
+			{
+				
+				trace("ProjectMaster - buttons_clickHandler");
+				switch( ( buttons.selectedItem as String ).toUpperCase() )
+				{
+					
+					
+					
+					case "SAVE":
+						trace( "SAVE" );
+						saveText();
+						break;
+					
+					case "CLOSE":
+						trace( "CLOSE" );
+						initCloseProject()
+						break;
+					
+					default: 
+						trace( "Nothing selected" );
+					
+				}
+				
+				// Need to set this to -1 so that none of the buttons are selected.
+				// If left selected, by reselecting them, you'll potentially get an error. 
+				buttons.selectedIndex = -1;
+				
+			}
+			
+			
 		]]>
 	</fx:Script>
 	
@@ -419,7 +483,7 @@
 		-->
 	</s:HGroup>
 	
-	<media:AudioPlayer id="audioPlayer" />
+	<media:AudioPlayer id="audioPlayer" width="100%" />
 	
 	<s:HGroup id="hgroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="0" paddingLeft="5" paddingRight="5" paddingTop="0" width="100%">
 		<s:TextInput id="docTitle" width="100%" height="36" needsSoftKeyboard="true" change="onProjectChange()" />
@@ -430,16 +494,11 @@
 	</s:HGroup>
 	<s:TextArea id="docContent" width="100%" height="100%" needsSoftKeyboard="true" change="onProjectChange()" />
 
-	<s:HGroup id="hgroupBottom" verticalAlign="middle" horizontalAlign="center" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%" right="10" left="10" >
-		<s:Button width="100%" height="30"
-			id="saveButton" label="Save"
-			click="saveText();"
-			/>
-		<s:Button width="100%" height="30"
-			id="closeButton" label="Close"
-			click="initCloseProject()"
-			/>
-	</s:HGroup>
-	
+	<s:ButtonBar id="buttons" click="buttons_clickHandler(event)" width="100%">  
+		<s:ArrayCollection>
+			<fx:String>Save</fx:String> 
+			<fx:String>Close</fx:String> 
+		</s:ArrayCollection>
+	</s:ButtonBar>
 	
 </s:SkinnableContainer>
