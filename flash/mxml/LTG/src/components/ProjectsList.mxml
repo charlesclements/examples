@@ -123,22 +123,22 @@
 					
 					var xmllist:XMLList = AppModel.PROJECTS_XML..title;
 					
-					
+					/*
 					trace( "+" );
 					trace( "+" );
 					
 					trace( xmllist );
-					
+					*/
 					
 					
 					
 					
 					AppModel.PROJECTS_LIST = new XMLListCollection( xmllist );
-					
+					/*
 					trace( AppModel.PROJECTS_LIST );
 					
 					trace( "-" );
-					
+					*/
 					
 					
 					// Event listeners
@@ -277,11 +277,11 @@
 				var s:String = ( buttons.selectedItem as String ).toUpperCase();
 				
 				
-				trace( buttons.selectedIndex );
+				//trace( buttons.selectedIndex );
 				// Need to set this to -1 so that none of the buttons are selected.
 				// If left selected, by reselecting them, you'll potentially get an error. 
 				buttons.selectedIndex = -1;
-				trace( buttons.selectedIndex );
+				//trace( buttons.selectedIndex );
 				
 				
 				switch( s )

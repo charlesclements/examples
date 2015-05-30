@@ -50,23 +50,15 @@
 			{
 				
 				trace("ProjectCreator - init");
-				trace("-");
 				Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onEvent );
 				Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onEvent );
 				alertClose.addEventListener( AppEvent.CLOSE_PROJECT, onEvent );
 				
 				// Audio player.
 				audioPlayer.update();
-				trace("-");
-				hgroup.removeElement( audioPlayer );
-				trace("-");
+				removeElement( audioPlayer );
+				//hgroup.removeElement( audioPlayer );
 				showMediaButton.enabled = true;
-				
-				
-				trace("-");
-				
-				
-				trace(this.width);
 				
 				
 				/*
@@ -82,14 +74,14 @@
 			{
 				
 				trace("ProjectCreator - onEvent");
-				trace( buttons.activeEffects );
+				//trace( buttons.activeEffects );
 				
 				
-				trace( buttons.selectedIndex );
+				//trace( buttons.selectedIndex );
 				// Need to set this to -1 so that none of the buttons are selected.
 				// If left selected, by reselecting them, you'll potentially get an error. 
-				buttons.selectedIndex = -1;
-				trace( buttons.selectedIndex );
+				buttons.selectedIndex = -1;// May not work, apply changes to button state skins.
+				//trace( buttons.selectedIndex );
 				
 				
 				
@@ -202,12 +194,12 @@
 				singleProjectXMLList.content = docContent.text;
 				
 				// Audio info?
-				trace(AppModel.PROJECTS_XML);
-				trace("+++");
+				//trace(AppModel.PROJECTS_XML);
+				//trace("+++");
 				
 				AppModel.PROJECTS_XML..project[ AppModel.PROJECT_INDEX ].title = docTitle.text;
 				
-				trace(AppModel.PROJECTS_XML);
+				//trace(AppModel.PROJECTS_XML);
 				
 				
 				
@@ -392,13 +384,15 @@
 				trace("ProjectMaster - toggleViewAudio");
 				
 				
-				if( contains( audioPlayer ) ) removeElement( audioPlayer );
+				if( hgroup.contains( audioPlayer ) ) hgroup.removeElement( audioPlayer );
 				else 
 				{
 					
 					//audioPlayer.width = 100;
 					//hgroup.removeElement( audioPlayer );
-					hgroup.addElementAt( audioPlayer, getElementIndex( hControls ) + 1 );
+					//hgroup.addElementAt( audioPlayer, getElementIndex( hControls ) + 1 );
+					//hgroup.addElementAt( audioPlayer, 0 );
+					addElementAt( audioPlayer, 0 );
 					audioPlayer.update();
 					
 				}
@@ -481,8 +475,8 @@
 		]]>
 	</fx:Script>
 	
-	<s:HGroup id="hControls" verticalAlign="middle" horizontalAlign="center" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%" color="#777">
 		<!--
+	<s:HGroup id="hControls" verticalAlign="middle" horizontalAlign="center" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%" color="#777">
 		<s:ToggleButton width="100%" height="30"
 						id="showMediaButton" label="SHOW MEDIA"
 						click="toggleViewAudio()"
@@ -491,28 +485,32 @@
 						id="loadAudioButton" label="LOAD MUSIC"
 						click="_loadMusic()"
 						/>
+	</s:HGroup>
 		-->
-	</s:HGroup>
 	
 	
-	
+	<!--<s:VGroup width="100%">-->
 		
-	<s:HGroup id="hgroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="0" paddingLeft="5" paddingRight="5" paddingTop="0" width="100%">
-		
-		<media:AudioPlayer id="audioPlayer" />
-		<s:TextInput id="docTitle" width="100%" height="36" needsSoftKeyboard="true" change="onProjectChange()" />
-		<s:ToggleButton width="100" height="30"
-						id="showMediaButton" label="MEDIA"
-						click="toggleViewAudio()"
-						/>
-	</s:HGroup>
-	<s:TextArea id="docContent" width="100%" height="100%" needsSoftKeyboard="true" change="onProjectChange()" />
-
-	<s:ButtonBar id="buttons" click="buttons_clickHandler(event)" width="100%">  
-		<s:ArrayCollection>
-			<fx:String>Save</fx:String> 
-			<fx:String>Close</fx:String> 
-		</s:ArrayCollection>
-	</s:ButtonBar>
+			
+		<media:AudioPlayer id="audioPlayer" width="100%" />
+		<s:HGroup id="hgroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="0" paddingLeft="5" paddingRight="5" paddingTop="0" width="100%">
+			
+			<s:TextInput id="docTitle" width="100%" height="36" needsSoftKeyboard="true" change="onProjectChange()" />
+			<s:ToggleButton width="100" height="30"
+							id="showMediaButton" label="MEDIA"
+							click="toggleViewAudio()"
+							/>
+		</s:HGroup>
+		<s:TextArea id="docContent" width="100%" height="100%" needsSoftKeyboard="true" change="onProjectChange()" />
+	
+		<s:ButtonBar id="buttons" click="buttons_clickHandler(event)" width="100%">  
+			<s:ArrayCollection>
+				<fx:String>Save</fx:String> 
+				<fx:String>Close</fx:String> 
+			</s:ArrayCollection>
+		</s:ButtonBar>
+	
+	<!--</s:VGroup>-->
+	
 	
 </s:SkinnableContainer>

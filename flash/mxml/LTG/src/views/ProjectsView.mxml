@@ -37,6 +37,12 @@
 				{
 					
 					trace("ProjectsView - init");
+					
+					trace( this )
+					trace( width )
+					trace( projectMaster )
+					trace( projectMaster.width )
+					
 					isCreated = true
 					//this.removeEventListener( FlexEvent.CREATION_COMPLETE, init );
 					

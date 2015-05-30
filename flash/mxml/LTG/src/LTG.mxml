@@ -104,15 +104,7 @@
 		]]>
 	</fx:Script>
 	
-	<!--<components:ProjectCreator id="projectCreator"/>-->
-	<s:SpriteVisualElement id="area" width="100%" height="100%" />
-	<views:ProjectsView id="projectsView" width="70%" height="100%"/>
-	<!--
-	<s:View id="projectsView" width="100%" height="100%" firstView="views.ProjectsView"/>
-	<s:ViewNavigator label="Projects" id="projectsView" width="100%" height="100%" firstView="views.ProjectsView"/>
-	<s:TabbedViewNavigator id="tabNav" width="100%" height="100%">
-		<s:ViewNavigator label="Projects" id="projectsView" width="100%" height="100%" firstView="views.ProjectsView"/>
-		<s:ViewNavigator label="Profile" id="profilePanel" width="100%" height="100%" firstView="views.ProfileView"/>
-	</s:TabbedViewNavigator>
-		-->
+	<!--<s:SpriteVisualElement id="area" width="100%" height="100%" />-->
+	<views:ProjectsView id="projectsView" width="100%" height="100%"/>
+	
 </s:Application>

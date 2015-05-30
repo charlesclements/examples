@@ -10,6 +10,9 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.core.IVisualElement;
+			
+			import model.AppModel;
 			
 			
 			public static var isCreated:Boolean = false;
@@ -28,11 +31,72 @@
 			}
 			
 			
+			private function doRemoveChildren():void
+			{
+				
+				trace("AudioPlayer : doRemoveChildren");
+				remove( loaderGroup );
+				remove( playerGroup );
+				
+			}
+			
+			
+			private function add(element:IVisualElement):void
+			{
+				
+				if( !container.containsElement( element ) ) container.addElement( element );
+				
+			}
+			
+			private function remove(element:IVisualElement):void
+			{
+				
+				if( container.containsElement( element ) ) container.removeElement( element );
+				
+			}
+			
+			
 			public function update():void
 			{
 				
 				trace("AudioPlayer : update ---");
-				//width = this.parent.width;
+
+				
+				// Run condition for what to place here.
+				
+				var list:XMLList = new XMLList( AppModel.CURRENT_XML );
+				
+				//trace( AppModel.CURRENT_XML.audio );
+				//trace( AppModel.CURRENT_XML..audio );
+				//trace( list );
+				trace( list.audio.@url.toString() );
+				trace( list.audio.@url.toString().length );
+				//trace( AppModel.CURRENT_XML );
+				
+				doRemoveChildren();
+				
+				if( list.audio.@url.toString().length == 0 )
+				{
+
+					add( loaderGroup );
+					
+				}
+				else
+				{
+					
+					add( playerGroup );
+					
+					
+					
+				}
+				
+				
+				
+				
+				
+				
+				
+				trace("---");
 				
 			}
 			
@@ -52,22 +116,15 @@
 	</s:SpriteVisualElement>
 	-->
 	
-	<s:VGroup verticalAlign="middle" horizontalAlign="center" >
-		<!--
-		<s:HGroup verticalAlign="middle" horizontalAlign="center" paddingLeft="5" paddingRight="5" width="100%">
-			<s:ToggleButton id="loopButton" label="Loop" height="30"/>
-			<s:Button id="playButton" label="Play" height="30"/>		
-			<s:Button id="stopButton" label="Stop" height="30"/>
-		</s:HGroup>
-		-->
+	<s:VGroup id="container" verticalAlign="middle" horizontalAlign="center" width="100%" >
 		
-		<s:HGroup id="loaderGroup" verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" width="50%">
-			<s:Button id="loader" label="LOAD MUSIC" height="30" width="100%"/>
+		<s:HGroup id="loaderGroup" verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" width="100%">
+			<s:Button id="loader" label="LOAD MUSIC" height="50" width="100%"/>
 		</s:HGroup>
 		
 		<s:HGroup id="playerGroup" verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" width="100%">
 			<s:Button id="playButton" label="PLAY" height="30" width="70"/>
-			<s:HSlider id="musicSlider" maximum="100" width="50%"/>
+			<s:HSlider id="musicSlider" maximum="100" width="100%"/>
 			<s:Button id="options" label="*" height="30" width="30" click="options_clickHandler(event)"/>
 		</s:HGroup>
 	</s:VGroup>
