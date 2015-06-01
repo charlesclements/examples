@@ -56,7 +56,7 @@
 				
 				// Audio player.
 				audioPlayer.update();
-				removeElement( audioPlayer );
+				page.removeElement( audioPlayer );
 				//hgroup.removeElement( audioPlayer );
 				showMediaButton.enabled = true;
 				
@@ -384,7 +384,7 @@
 				trace("ProjectMaster - toggleViewAudio");
 				
 				
-				if( hgroup.contains( audioPlayer ) ) hgroup.removeElement( audioPlayer );
+				if( page.contains( audioPlayer ) ) page.removeElement( audioPlayer );
 				else 
 				{
 					
@@ -392,7 +392,7 @@
 					//hgroup.removeElement( audioPlayer );
 					//hgroup.addElementAt( audioPlayer, getElementIndex( hControls ) + 1 );
 					//hgroup.addElementAt( audioPlayer, 0 );
-					addElementAt( audioPlayer, 0 );
+					page.addElementAt( audioPlayer, 0 );
 					audioPlayer.update();
 					
 				}
@@ -489,7 +489,7 @@
 		-->
 	
 	
-	<!--<s:VGroup width="100%">-->
+	<s:VGroup id="page" width="100%" height="100%">
 		
 			
 		<media:AudioPlayer id="audioPlayer" width="100%" />
@@ -510,7 +510,7 @@
 			</s:ArrayCollection>
 		</s:ButtonBar>
 	
-	<!--</s:VGroup>-->
+	</s:VGroup>
 	
 	
 </s:SkinnableContainer>
