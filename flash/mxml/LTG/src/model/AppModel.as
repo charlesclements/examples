@@ -1,20 +1,28 @@
 package model
 {
-
 	
+	
+	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
+	import flash.net.URLRequest;
 	
 	import mx.collections.XMLListCollection;
 	
 	import net.fastindemand.dispatcher.Dispatcher;
 	import net.fastindemand.event.AppEvent;
-
+	
 	public class AppModel extends Object
 	{
 		
-		public static const SERVER_PATH:String = "http://localhost:8888/";
+		//public static const SERVER_PATH:String = "http://localhost:8888/";
+		
+		// Get server php.
+		public static const SERVER_PATH:String = "http://www.charlesclements.net/apps/ltg/";
+		
 		public static const STORAGE:File = File.applicationStorageDirectory;
 		public static var ID:String = "";
 		public static var PID:String = "";
@@ -22,7 +30,10 @@ package model
 		public static var PROJECTS_FILE:File;
 		public static var CURRENT_PROJECT_FILE:File;
 		public static var CURRENT_AUDIO_DIRECTORY:File;
+		public static var CURRENT_AUDIO_FILE_URL:String = "";
 		public static var CURRENT_MUSIC_FILE:File;
+		public static var CURRENT_SOUND:Sound = null;
+		public static var CURRENT_SOUNDCHANNEL:SoundChannel = null;
 		public static var CURRENT_XML:XML = new XML();
 		public static var STREAM:FileStream = new FileStream();
 		public static var PROJECT_INDEX:uint = 0;
@@ -48,16 +59,9 @@ package model
 			
 			// Use the returned info to get projects.xml of the User.
 			var path:String = "LyricsToGo/user/" + ID + "/projects.xml";
-			trace(path);
 			
 			// Point File to the path.
 			PROJECTS_FILE = STORAGE.resolvePath( path );
-			
-			trace( "+" );
-			
-			trace( PROJECTS_FILE );
-			
-			
 			
 			// Read XML info.
 			STREAM.open( PROJECTS_FILE, FileMode.READ);
@@ -68,15 +72,7 @@ package model
 			// Must close stream.
 			STREAM.close();
 			
-			/*
-			trace( PROJECTS_FILE );
-			trace( PROJECTS_XML );
-			trace( PROJECTS_XML.text().length() );
-			trace( PROJECTS_XML.toXMLString().length );
-			*/
-			
 			// From here we already have the XML pulled from the File.
-			
 			
 			
 			// Test if the File has and XML data, if not, must create XML data here.
@@ -99,21 +95,19 @@ package model
 				
 			}
 			
-			
-			
-			/*
-			// Saving the actual file.
-			STREAM = new FileStream();
-			STREAM.open( PROJECTS_FILE, FileMode.WRITE );
-			//STREAM.writeUTFBytes( outputString );
-			//STREAM.readUTFBytes(
-			STREAM.close();
-			*/
-			
-			
 			Dispatcher.dispatchEvent( new AppEvent( AppEvent.SHOW_PROJECTS ) );
 			
-			
+		}
+		
+		
+		public static function setupSound():void
+		{
+		
+			trace( "AppModel - setupSound()" );
+			if( CURRENT_SOUNDCHANNEL ) CURRENT_SOUNDCHANNEL.stop();
+			var list:XMLList = new XMLList( AppModel.CURRENT_XML );
+			CURRENT_AUDIO_FILE_URL = list.audio.@url.toString();
+			CURRENT_SOUND = new Sound( new URLRequest( CURRENT_AUDIO_FILE_URL ) );
 			
 		}
 		
@@ -122,39 +116,17 @@ package model
 		{
 			
 			trace( "AppModel - copyMusic - " + id + " - " + file.name );
-
-			CURRENT_AUDIO_DIRECTORY = STORAGE.resolvePath("LyricsToGo/user/" + ID + "/audio/");
 			
-			//"LyricsToGo/user/" + ID + "/
+			CURRENT_AUDIO_DIRECTORY = STORAGE.resolvePath("LyricsToGo/user/" + ID + "/audio/");
 			CURRENT_AUDIO_DIRECTORY.createDirectory();
 			file.copyTo( CURRENT_AUDIO_DIRECTORY.resolvePath( PID + "/" + file.name ), true );
 			
-			// Add audio to single project xml.
-			
-			
-			//CURRENT_XML.audio.@url = file.nativePath;
-			CURRENT_XML.audio.@url = CURRENT_AUDIO_DIRECTORY.nativePath + "/" + PID + "/" + file.name;
+			// Create new file and use it.
+			var f:File = new File( CURRENT_AUDIO_DIRECTORY.nativePath + "/" + PID + "/" + file.name );
+			CURRENT_AUDIO_FILE_URL = f.url;
+			CURRENT_XML.audio.@url = CURRENT_AUDIO_FILE_URL
 			CURRENT_XML.audio.@name = file.name;
-			
-			
-			
-			trace( CURRENT_XML );
-			
-			
-			
-			/*
-			trace( CURRENT_XML.@id );
-			trace( CURRENT_XML..@id );
-			trace( CURRENT_XML.toXMLString() );
-			*/
-			
-			
-			//saveSingleProjectXML( id, new XMLList( CURRENT_XML ) );
-			
-			//return;
-			
-			
-			
+			f = null;
 			
 		}
 		
@@ -209,5 +181,5 @@ package model
 		}
 		
 	}
-		
+	
 }

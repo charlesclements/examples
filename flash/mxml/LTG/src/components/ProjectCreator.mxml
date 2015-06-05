@@ -34,15 +34,7 @@
 			private var _sound:Sound;
 			private var _audioFile:File;
 			private var _loader:LoaderMax;
-			
-			//private var saveButton:ButtonBarButton;
-			//private var closeButton:ButtonBarButton;
 			private static var _saved:Boolean = true;
-			
-			
-			
-			//private var buttons:Array = [ { label:s ];
-			//private var audioPlayer:AudioPlayer = new AudioPlayer;
 			
 			
 			// Initializes class.
@@ -57,14 +49,7 @@
 				// Audio player.
 				audioPlayer.update();
 				page.removeElement( audioPlayer );
-				//hgroup.removeElement( audioPlayer );
 				showMediaButton.enabled = true;
-				
-				
-				/*
-				saveButton = buttons.getChildAt( 0 ) as ButtonBarButton;
-				closeButton = buttons.getChildAt( 1 ) as ButtonBarButton;
-				*/
 				
 			}
 			
@@ -163,6 +148,7 @@
 					
 					case AppEvent.CLOSE_PROJECT:
 						trace("ProjectCreator - onEvent - CLOSE_PROJECT");
+						clear();
 						Dispatcher.dispatchEvent( new AppEvent( AppEvent.CLOSE_PROJECT, true ) );
 						break;
 					
@@ -176,33 +162,10 @@
 				
 				trace("ProjectCreator - saveText");
 				
-				// Not saving properly here.
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				//var singleProjectXMLList:XMLList = new XMLList( AppModel.CURRENT_XML..project[ AppModel.PROJECT_INDEX ] );
 				var singleProjectXMLList:XMLList = new XMLList( AppModel.CURRENT_XML );
 				singleProjectXMLList.title = docTitle.text;
 				singleProjectXMLList.content = docContent.text;
-				
-				// Audio info?
-				//trace(AppModel.PROJECTS_XML);
-				//trace("+++");
-				
 				AppModel.PROJECTS_XML..project[ AppModel.PROJECT_INDEX ].title = docTitle.text;
-				
-				//trace(AppModel.PROJECTS_XML);
-				
-				
-				
 				
 				// Save XML project file locally at this point.
 				AppModel.saveSingleProjectXML( AppModel.PID, singleProjectXMLList );
@@ -214,12 +177,7 @@
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.UPDATE_PROJECTS ) );
 				
 				// Temporarily kill Save button.
-				//saveButton.enabled = false;
 				_saved = false;
-				//trace(buttonBar.getChildAt( 0 ) );
-				
-					
-					
 					
 			}
 			
@@ -249,11 +207,6 @@
 					
 					// Center the pop-up in the parent container.
 					PopUpManager.centerPopUp(alertClose);
-					
-					
-					
-					
-					
 					
 				}
 				else
@@ -291,7 +244,7 @@
 				AppModel.copyMusic( AppModel.PID, f );
 				
 				
-				
+				/*
 				return;
 				
 				
@@ -300,14 +253,6 @@
 				
 				f.addEventListener(Event.COMPLETE, _onFileLoaded );
 				
-				
-				//new URLRequest( ( e.currentTarget as File ).nativePath );
-				/*
-				var s:Sound = new Sound( new URLRequest( ( e.currentTarget as File ).nativePath ) );
-				
-				trace(s);
-				
-				*/
 				_loader = new LoaderMax( { onComplete:_onSoundLoaded } );
 				_loader.append( new MP3Loader( new URLRequest( ( e.currentTarget as File ).nativePath ) ) );
 				_loader.load();
@@ -320,15 +265,12 @@
 				
 				// Save it to the model.
 				
-				
+				*/
 				
 				
 			}
 			
-			
-			
-			
-			
+			/*
 			protected function _onFileLoaded(e:Event):void
 			{
 				
@@ -351,15 +293,13 @@
 				
 			}
 			
-			
 			protected function _onSoundLoaded(e:Event):void
 			{
 				
 				trace("ProjectMaster - _onSoundLoaded");
 				
-				
-				
 			}
+			*/
 			
 			
 			protected function _loadMusic(e:Event=null):void
@@ -367,13 +307,9 @@
 				
 				trace("ProjectMaster - _loadMusic");
 				
-				
-				
 				_audioFile = new File;
 				_audioFile.addEventListener( Event.SELECT, _onAudioFileSelected );
 				_audioFile.browse(  );//[ ".mp3" ]
-				
-				
 				
 			}
 
@@ -383,15 +319,10 @@
 				
 				trace("ProjectMaster - toggleViewAudio");
 				
-				
 				if( page.contains( audioPlayer ) ) page.removeElement( audioPlayer );
 				else 
 				{
 					
-					//audioPlayer.width = 100;
-					//hgroup.removeElement( audioPlayer );
-					//hgroup.addElementAt( audioPlayer, getElementIndex( hControls ) + 1 );
-					//hgroup.addElementAt( audioPlayer, 0 );
 					page.addElementAt( audioPlayer, 0 );
 					audioPlayer.update();
 					
@@ -406,40 +337,11 @@
 				trace("ProjectMaster - clear");
 				docTitle.text = "";
 				docContent.text = "";
+				audioPlayer.clear();
+				page.removeElement( audioPlayer );
 				
 			}
 			
-			/*
-			public function buttonBarClick():void
-			{
-				
-				trace("ProjectMaster - buttonBarClick");
-				
-				
-				//trace(buttonBar.selectedItem);
-				
-				switch( buttonBar.selectedItem )
-				{
-					
-					
-					
-					
-					
-					case "SAVE":
-						saveText();
-						break;
-					
-					
-					case "CLOSE":
-						initCloseProject()
-						break;
-					
-					
-					
-				}
-				
-			}
-			*/
 			
 			protected function buttons_clickHandler(event:MouseEvent):void
 			{

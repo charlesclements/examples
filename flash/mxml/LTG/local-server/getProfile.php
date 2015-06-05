@@ -14,12 +14,12 @@
 	{
 		#Call database here.
 
-		$array = [
+		$array = array(
 			#"id" => $id ,
 		    "username" => "Charlie",
 		    "id" => $id,
 		    "active" => "true"
-		];
+		);
 		echo json_encode($array);
 
 	}

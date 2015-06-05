@@ -63,6 +63,9 @@
 				ldr.dataFormat = URLLoaderDataFormat.BINARY;
 				ldr.addEventListener(Event.COMPLETE, onLoginLoad);
 				
+				
+				
+				
 				// Create URLRequest.
 				var req:URLRequest = new URLRequest( AppModel.SERVER_PATH + "login.php");
 				req.method = URLRequestMethod.POST;

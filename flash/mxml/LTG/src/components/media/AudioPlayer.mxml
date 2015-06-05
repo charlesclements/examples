@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					  xmlns:s="library://ns.adobe.com/flex/spark"
-					  initialize="init()" xmlns:mx="library://ns.adobe.com/flex/mx">
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 initialize="init()" xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -10,6 +10,9 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.greensock.loading.LoaderMax;
+			import com.greensock.loading.MP3Loader;
+			
 			import mx.core.IVisualElement;
 			
 			import model.AppModel;
@@ -17,6 +20,10 @@
 			
 			public static var isCreated:Boolean = false;
 			
+			//private var _sound:Sound;
+			private var _audioFile:File;
+			private var _loader:LoaderMax;
+			private var _musicPlaying:Boolean = false;
 			
 			public function init():void
 			{
@@ -31,7 +38,7 @@
 			}
 			
 			
-			private function doRemoveChildren():void
+			private function _doRemoveChildren():void
 			{
 				
 				trace("AudioPlayer : doRemoveChildren");
@@ -56,47 +63,101 @@
 			}
 			
 			
+			public function clear():void
+			{
+				
+				trace("AudioPlayer : clear");
+				
+				if( AppModel.CURRENT_SOUNDCHANNEL ) AppModel.CURRENT_SOUNDCHANNEL.stop();
+				AppModel.CURRENT_SOUNDCHANNEL = null;
+				AppModel.CURRENT_SOUND = null;
+				_doRemoveChildren();
+				playButton.label = "PLAY";
+				_musicPlaying = false;
+				
+				// Reset scrubber.
+				
+			}
+			
+			
 			public function update():void
 			{
 				
-				trace("AudioPlayer : update ---");
-
+				trace("AudioPlayer : update");
+				
 				
 				// Run condition for what to place here.
 				
 				var list:XMLList = new XMLList( AppModel.CURRENT_XML );
-				
-				//trace( AppModel.CURRENT_XML.audio );
-				//trace( AppModel.CURRENT_XML..audio );
-				//trace( list );
-				trace( list.audio.@url.toString() );
+				//trace( list.audio.@url.toString() );
 				trace( list.audio.@url.toString().length );
-				//trace( AppModel.CURRENT_XML );
 				
-				doRemoveChildren();
+				_doRemoveChildren();
 				
 				if( list.audio.@url.toString().length == 0 )
 				{
-
+					
 					add( loaderGroup );
 					
 				}
 				else
 				{
 					
+					AppModel.setupSound();
 					add( playerGroup );
-					
-					
 					
 				}
 				
+			}
+			
+			
+			protected function _loadMusic(e:Event=null):void
+			{
 				
+				trace("ProjectMaster - _loadMusic");
 				
+				_audioFile = new File;
+				_audioFile.addEventListener( Event.SELECT, _onAudioFileSelected );
+				_audioFile.browse(  );//[ ".mp3" ]
 				
+			}
+			
+			
+			protected function _onAudioFileSelected(e:Event=null):void
+			{
 				
+				trace( "ProjectCreator - _onAudioFileSelected()" );
 				
+				// Copies audio file to directory.
+				AppModel.copyMusic( AppModel.PID, e.currentTarget as File );
 				
-				trace("---");
+				// Update the class.
+				update();
+				
+			}
+			
+			
+			protected function _playMusic(e:MouseEvent=null):void
+			{
+				
+				trace("ProjectMaster - _playMusic");
+				
+				if( AppModel.CURRENT_SOUND.bytesTotal > 0 && !_musicPlaying )
+				{
+					
+					AppModel.CURRENT_SOUNDCHANNEL = AppModel.CURRENT_SOUND.play( 0 );
+					playButton.label = "STOP";
+					_musicPlaying = true;
+					
+				}
+				else
+				{
+				
+					AppModel.CURRENT_SOUNDCHANNEL.stop();
+					playButton.label = "PLAY";
+					_musicPlaying = false;
+				
+				}
 				
 			}
 			
@@ -107,23 +168,24 @@
 				trace("AudioPlayer : options");
 			}
 			
+			
 		]]>
 	</fx:Script>
 	<!--
 	<s:SpriteVisualElement percentWidth="90">
-		<
-		
+	<
+	
 	</s:SpriteVisualElement>
 	-->
 	
 	<s:VGroup id="container" verticalAlign="middle" horizontalAlign="center" width="100%" >
 		
 		<s:HGroup id="loaderGroup" verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" width="100%">
-			<s:Button id="loader" label="LOAD MUSIC" height="50" width="100%"/>
+			<s:Button id="loader" label="LOAD MUSIC" click="_loadMusic()" height="50" width="100%"/>
 		</s:HGroup>
 		
 		<s:HGroup id="playerGroup" verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" width="100%">
-			<s:Button id="playButton" label="PLAY" height="30" width="70"/>
+			<s:Button id="playButton" label="PLAY" click="_playMusic();" height="30" width="70"/>
 			<s:HSlider id="musicSlider" maximum="100" width="100%"/>
 			<s:Button id="options" label="*" height="30" width="30" click="options_clickHandler(event)"/>
 		</s:HGroup>
