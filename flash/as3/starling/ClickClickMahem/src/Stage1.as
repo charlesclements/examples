@@ -18,7 +18,7 @@
 	import com.imt.framework.display.AbstractStarlingDisplay;
 	import com.imt.framework.display.IDisplay;
 	import com.imt.framework.event.StarlingSiteEvent;
-	import com.imt.game.gadgets.MemoryCardsManager;
+	import com.imt.game.gadgets.GamePlay;
 	import com.imt.game.vehicles.Plane;
 	import com.imt.objects.ParallaxBackground;
 	import starling.display.Sprite;
@@ -212,7 +212,7 @@
 			Assets.getTextureAtlas( "Stage1_0" ).dispose();
 			Assets.getTextureAtlas( "Stage1_1" ).dispose();
 			// Destroy the sequences that weere created.
-			( Assets.MEMORY_CARDS_MANAGER as MemoryCardsManager ).destroySequences( name );
+			( Assets.GAME_PLAY as GamePlay ).destroySequences( name );
 			// Child display objects.
 			removeChild( bg as Sprite );
 			bg.destroy();

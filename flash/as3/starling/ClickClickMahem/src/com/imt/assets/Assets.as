@@ -32,7 +32,7 @@
 		private static var ASSETS:HashMap = new HashMap;
 		private static var LOADERS:Dictionary = new Dictionary;
 		private static var _showTraces:Boolean = false;
-		public static var MEMORY_CARDS_MANAGER:IDisplay;
+		public static var GAME_PLAY:IDisplay;
 		public static var LEVELS:SuperArray;
 		public static var ASSETS_PATH:String = "";
 		private static var _sounds:Dictionary = new Dictionary();

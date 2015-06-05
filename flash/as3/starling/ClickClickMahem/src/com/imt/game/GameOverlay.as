@@ -22,7 +22,7 @@
 	import com.imt.framework.gadget.ios.gamecenter.GameCenterGadget;
 	import com.imt.framework.gadget.text.BlinkingText;
 	import com.imt.framework.gadget.text.TemporaryText;
-	import com.imt.game.gadgets.MemoryCardsManager;
+	import com.imt.game.gadgets.GamePlay;
 	
 	import flash.display.BitmapData;
 	
@@ -64,7 +64,7 @@
 		private var matchedVocals:Array;
 		private var assets:Assets;
 		// Game
-		//private var memoryManager:IDisplay;
+		private var gamePlay:IDisplay;
 		//
 		private var _isWinner:Boolean = false;
 		private var _gamecenter:GameCenterGadget;
@@ -185,7 +185,7 @@
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.PAUSE, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.RESUME, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.SCORE_LOADED, onEvent );
-			//( memoryManager as Sprite ).addEventListener( StarlingSiteEvent.CARD_TOUCHED, onEvent );
+			( gamePlay as Sprite ).addEventListener( StarlingSiteEvent.CARD_TOUCHED, onEvent );
 			//StarlingDispatcher.addEventListener( StarlingSiteEvent.START_GAME, onEvent );
 			// Visiblity.
 			playButton.visible = false;
@@ -243,7 +243,7 @@
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.PLAY_GAME, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.PAUSE, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.RESUME, onEvent );
-			//( memoryManager as Sprite ).removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
+			( gamePlay as Sprite ).removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			// Clear tweens.
 			TweenMax.killTweensOf( readyGraphic );
 			// Visiblity.
@@ -255,7 +255,7 @@
 			textMatch.visible = false;
 			textNoMatch.visible = false;
 			// Clear gadgets.
-			//memoryManager.clear();
+			gamePlay.clear();
 			// Stopwatch.
 			stopwatch.stopTimer();
 			
@@ -493,7 +493,7 @@
 			trace(this + " : readyGraphicComplete()");
 			//Assets.getSfx( "VOICE_MATCH_THE_CARDS_SND" ).playSound();
 			_isWinner = false;
-			//memoryManager.refresh();
+			gamePlay.refresh();
 			//memoryManager.start();     
 			// PauseView.
 			_pauseView.refresh();
@@ -561,7 +561,7 @@
 					newGameButton.visible = false;
 					//( energyGuage as Sprite ).visible = false;
 					startButton.blink();
-					//memoryManager.clear();
+					gamePlay.clear();
 					// PauseView.
 					_pauseView.clear();
 					break;
@@ -582,7 +582,7 @@
 					_isWinner = false;
 					textHolder.change( textLose );
 					textLose.intro();
-					//memoryManager.outro();
+					gamePlay.outro();
 					//Assets.getSfx( "VOICE_AWWW_SND" ).playSound();
 					outro();
 					break;
@@ -592,7 +592,7 @@
 					_isWinner = true;
 					textHolder.change( textWin ).currentDisplay.intro();
 					outro();
-					//memoryManager.outro();
+					gamePlay.outro();
 					_pauseView.clear();
 					stopwatch.stopTimer();
 					StarlingDispatcher.dispatchEvent( new StarlingSiteEvent( StarlingSiteEvent.NEW_TIME, { time:stopwatch.getTime() } ) );
@@ -782,11 +782,11 @@
 			/*
 			//var xml:XML = Assets.getXML( "cards.xml" );
 			//var c:TextureAtlas = Assets.createTextureAtlas( "cards_atlas", Assets.getTexture( "cards.png" ), xml );
-			// Game.
-			Assets.MEMORY_CARDS_MANAGER = memoryManager = new MemoryCardsManager;
-			addChild( memoryManager as Sprite );
-			memoryManager.initialize( { atlas:Assets.getTextureAtlas( "assets" ), xml:Assets.getXML( "assets.xml" ), alias:name } );
 			*/
+			// Game.
+			Assets.GAME_PLAY = gamePlay = new GamePlay;
+			addChild( gamePlay as Sprite );
+			gamePlay.initialize( { atlas:Assets.getTextureAtlas( "assets" ), xml:Assets.getXML( "assets.xml" ), alias:name } );
 		}
 		
 		
