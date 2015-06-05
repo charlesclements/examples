@@ -64,7 +64,7 @@
 		private var matchedVocals:Array;
 		private var assets:Assets;
 		// Game
-		private var memoryManager:IDisplay;
+		//private var memoryManager:IDisplay;
 		//
 		private var _isWinner:Boolean = false;
 		private var _gamecenter:GameCenterGadget;
@@ -100,7 +100,8 @@
 				
 				// Audio
 				path = Assets.ASSETS_PATH + "media/sounds/memory_game/";//
-				Assets.appendSfx( name, new MP3Loader( path + "music/BG_music_loop_103bpm.mp3", { autoPlay:false, volume:0.6, repeat:-1 } ), "BG_MUSIC" );
+				Assets.appendSfx( name, new MP3Loader( path + "music/NewIntroMusic.mp3", { autoPlay:false, volume:0.6, repeat:-1 } ), "BG_MUSIC" );
+				//Assets.appendSfx( name, new MP3Loader( path + "music/BG_music_loop_103bpm.mp3", { autoPlay:false, volume:0.6, repeat:-1 } ), "BG_MUSIC" );
 				Assets.appendSfx( name, new MP3Loader( path + "ui/match.mp3", { autoPlay:false, volume:0.8 } ), "MATCH_SND" );
 				Assets.appendSfx( name, new MP3Loader( path + "ui/no_match.mp3", { autoPlay:false, volume:0.65 } ), "NO_MATCH_SND" );
 				Assets.appendSfx( name, new MP3Loader( path + "ui/touch.mp3", { autoPlay:false } ), "SELECT_SND" );
@@ -184,7 +185,7 @@
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.PAUSE, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.RESUME, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.SCORE_LOADED, onEvent );
-			( memoryManager as Sprite ).addEventListener( StarlingSiteEvent.CARD_TOUCHED, onEvent );
+			//( memoryManager as Sprite ).addEventListener( StarlingSiteEvent.CARD_TOUCHED, onEvent );
 			//StarlingDispatcher.addEventListener( StarlingSiteEvent.START_GAME, onEvent );
 			// Visiblity.
 			playButton.visible = false;
@@ -242,7 +243,7 @@
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.PLAY_GAME, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.PAUSE, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.RESUME, onEvent );
-			( memoryManager as Sprite ).removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
+			//( memoryManager as Sprite ).removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			// Clear tweens.
 			TweenMax.killTweensOf( readyGraphic );
 			// Visiblity.
@@ -254,7 +255,7 @@
 			textMatch.visible = false;
 			textNoMatch.visible = false;
 			// Clear gadgets.
-			memoryManager.clear();
+			//memoryManager.clear();
 			// Stopwatch.
 			stopwatch.stopTimer();
 			
@@ -492,8 +493,8 @@
 			trace(this + " : readyGraphicComplete()");
 			//Assets.getSfx( "VOICE_MATCH_THE_CARDS_SND" ).playSound();
 			_isWinner = false;
-			memoryManager.refresh();
-			memoryManager.start();     
+			//memoryManager.refresh();
+			//memoryManager.start();     
 			// PauseView.
 			_pauseView.refresh();
 			stopwatch.startTimer();
@@ -560,7 +561,7 @@
 					newGameButton.visible = false;
 					//( energyGuage as Sprite ).visible = false;
 					startButton.blink();
-					memoryManager.clear();
+					//memoryManager.clear();
 					// PauseView.
 					_pauseView.clear();
 					break;
@@ -581,7 +582,7 @@
 					_isWinner = false;
 					textHolder.change( textLose );
 					textLose.intro();
-					memoryManager.outro();
+					//memoryManager.outro();
 					//Assets.getSfx( "VOICE_AWWW_SND" ).playSound();
 					outro();
 					break;
@@ -591,7 +592,7 @@
 					_isWinner = true;
 					textHolder.change( textWin ).currentDisplay.intro();
 					outro();
-					memoryManager.outro();
+					//memoryManager.outro();
 					_pauseView.clear();
 					stopwatch.stopTimer();
 					StarlingDispatcher.dispatchEvent( new StarlingSiteEvent( StarlingSiteEvent.NEW_TIME, { time:stopwatch.getTime() } ) );
@@ -777,13 +778,15 @@
 		{
 			
 			trace(this + " : createMemoryGame()");
+			
+			/*
 			//var xml:XML = Assets.getXML( "cards.xml" );
 			//var c:TextureAtlas = Assets.createTextureAtlas( "cards_atlas", Assets.getTexture( "cards.png" ), xml );
 			// Game.
 			Assets.MEMORY_CARDS_MANAGER = memoryManager = new MemoryCardsManager;
 			addChild( memoryManager as Sprite );
 			memoryManager.initialize( { atlas:Assets.getTextureAtlas( "assets" ), xml:Assets.getXML( "assets.xml" ), alias:name } );
-			
+			*/
 		}
 		
 		

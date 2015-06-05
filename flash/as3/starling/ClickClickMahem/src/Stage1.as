@@ -32,13 +32,13 @@
 		
 		// Stage objects.
 		private var bg:IDisplay;
-		private var _rocket:IDisplay;
-		private var _plane:IDisplay;
+		//private var _rocket:IDisplay;
+		//private var _plane:IDisplay;
 		// Game.
-		private var _cardAtlas:TextureAtlas;
-		private var _cardXML:XML;
-		private var assets:Assets;
-		private var _timeline:TimelineMax;
+		//private var _cardAtlas:TextureAtlas;
+		//private var _cardXML:XML;
+		//private var assets:Assets;
+		//private var _timeline:TimelineMax;
 
 		
 		// Constructor.
@@ -70,10 +70,11 @@
 				Assets.appendXML( name, new XMLLoader( path + "Stage1_1.xml", {  } ), "Stage1_1.xml" );
 				Assets.appendTexture( name, new ImageLoader( path + "Stage1_0.png", {  } ), "Stage1_0.png" );
 				Assets.appendTexture( name, new ImageLoader( path + "Stage1_1.png", {  } ), "Stage1_1.png" );
-				Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/music/stages/City2.mp3", { autoPlay:false, volume:0.9, repeat:-1  } ), "Stage_1" );
-				Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/plane/PlaneStartup.mp3", { autoPlay:false, volume:0.6, repeat:0  } ), "PlaneStartup" );
-				Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/plane/PlaneTravel.mp3", { autoPlay:false, volume:.7, repeat:-1  } ), "PlaneTravel" );
-				Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/plane/PlaneTakeoff.mp3", { autoPlay:false, volume:0.9, repeat:0  } ), "PlaneTakeoff" );
+				Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/music/stages/StageMusic.mp3", { autoPlay:false, volume:0.9, repeat:-1  } ), "Stage_1" );
+				//Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/music/stages/City2.mp3", { autoPlay:false, volume:0.9, repeat:-1  } ), "Stage_1" );
+				//Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/plane/PlaneStartup.mp3", { autoPlay:false, volume:0.6, repeat:0  } ), "PlaneStartup" );
+				//Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/plane/PlaneTravel.mp3", { autoPlay:false, volume:.7, repeat:-1  } ), "PlaneTravel" );
+				//Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/plane/PlaneTakeoff.mp3", { autoPlay:false, volume:0.9, repeat:0  } ), "PlaneTakeoff" );
 				StarlingDispatcher.addEventListener( StarlingSiteEvent.ASSETS_LOADED, _onAssetsReady );
 				Assets.load( name );
  				
@@ -102,12 +103,14 @@
 			// Update the satege in app.
 			StarlingDispatcher.dispatchEvent( new StarlingSiteEvent( StarlingSiteEvent.UPDATE_STAGE, { name:name } ) );
 			// static MemoryCardsManager.
-			( Assets.MEMORY_CARDS_MANAGER as MemoryCardsManager ).setCurrentStage( name );
+			//( Assets.MEMORY_CARDS_MANAGER as MemoryCardsManager ).setCurrentStage( name );
 			//
 			//Assets.getSfx("PlaneTakeoff").pause();
 			bg.refresh();
 			// Visiblity.
 			visible = true;
+			
+			/*
 			// Plane stuff.
 			with( _plane as Plane )
 			{
@@ -117,6 +120,9 @@
 				rotation = 0;
 				
 			}
+			*/
+			
+			
 			// Call intro().
 			intro();
 			
@@ -143,19 +149,23 @@
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.MATCHED_SEQUENCE, onEvent );
 			// Sound.
 			Assets.getSfx( "Stage_1" ).pauseSound();
-			Assets.getSfx( "PlaneStartup" ).pauseSound();
-			Assets.getSfx( "PlaneTravel" ).pauseSound();
-			Assets.getSfx( "PlaneTakeoff" ).pauseSound();
+			//Assets.getSfx( "PlaneStartup" ).pauseSound();
+			//Assets.getSfx( "PlaneTravel" ).pauseSound();
+			//Assets.getSfx( "PlaneTakeoff" ).pauseSound();
 	/*		Assets.getSfx( "PLANE_OUTRO_SPUTTERS_SND" ).pauseSound();
 			Assets.getSfx( "PLANE_COASTING_SND" ).pauseSound();
 			Assets.getSfx( "PLANE_FLIES_OFF_SND" ).pauseSound();
 			Assets.getSfx( "PLANE_IDLE_SND" ).pauseSound();*/
 			// Parallax BG.
 			bg.clear();
+			
+			/*
 			// Plane.
 			_plane.clear();
 			( _plane as Plane ).x = -500;
 			( _plane as Plane ).y = ( _plane as Plane ).groundY;
+			*/
+			
 			
 		}
 		
@@ -168,15 +178,14 @@
 			
 			trace( this + " : intro()" );
 			Assets.getSfx( "Stage_1" ).gotoSoundTime( 0, true );
-			Assets.getSfx("PlaneStartup").gotoSoundTime(0, true);
-			Assets.getSfx("PlaneTravel").gotoSoundTime(0, true);
-		//	trace ("IM PUTTING THE PLANE TAKEOFF HERE SO GET READY TO TAKEOFF PLANE!");
-			//Assets.getSfx("PlaneTakeoff").gotoSoundTime(0,false);
+			
+			//Assets.getSfx("PlaneStartup").gotoSoundTime(0, true);
+			//Assets.getSfx("PlaneTravel").gotoSoundTime(0, true);
+			//TweenMax.fromTo( _plane, 4, { x:-500, y:( _plane as Plane ).groundY, shortRotation:{ rotation:MathUtil.degreesToRadians( 0 ) } }, { x:( _plane as Plane ).centerX, ease:Power3.easeOut } );
+			
+			//bg.intro();
+			
 			//Assets.getSfx("PlaneTakeoff").pause();
-			//Assets.getSfx( "PLANE_COASTING_SND" ).playSound();
-			TweenMax.fromTo( _plane, 4, { x:-500, y:( _plane as Plane ).groundY, shortRotation:{ rotation:MathUtil.degreesToRadians( 0 ) } }, { x:( _plane as Plane ).centerX, ease:Power3.easeOut } );
-			bg.intro();
-			Assets.getSfx("PlaneTakeoff").pause();
 		}
 		
 		
@@ -184,8 +193,8 @@
 		{
 			
 			trace( this + " : outro()" );
-			TweenMax.to( _plane, 2, { y:( _plane as Plane ).groundY, ease:Power3.easeOut, overwrite:2 } );
-			TweenMax.to( _plane, 8, { x:-300, ease:Power3.easeOut, overwrite:2 } );
+			//TweenMax.to( _plane, 2, { y:( _plane as Plane ).groundY, ease:Power3.easeOut, overwrite:2 } );
+			//TweenMax.to( _plane, 8, { x:-300, ease:Power3.easeOut, overwrite:2 } );
 			bg.outro();
 			
 		}
@@ -207,14 +216,15 @@
 			// Child display objects.
 			removeChild( bg as Sprite );
 			bg.destroy();
-			removeChild( _plane as Sprite );
-			_plane.destroy();
+			//removeChild( _plane as Sprite );
+			//_plane.destroy();
 			// End.
 			initialized = false;
 			
 		}
 		
 		
+		 // Assets are ready and place objects on stage.
 		protected function _onAssetsReady(event:StarlingSiteEvent):void
 		{
 			
@@ -232,6 +242,8 @@
 				bg.initialize();
 				( bg as ParallaxBackground ).speed = 0;
 				addChild( bg as Sprite );
+				
+				/*
 				// Plane.
 				_plane = new Plane;
 				with( _plane as Plane )
@@ -244,10 +256,18 @@
 					
 				}
 				addChild( _plane as Plane );
+				
+				
 				// An instance of MemoryCardsManager is created in GameOverlay and saved into the Assets class as Assets.MEMORY_CARDS_MANAGER for other classes use.
 				( Assets.MEMORY_CARDS_MANAGER as MemoryCardsManager ).setCurrentStage( name );
 				//( Assets.MEMORY_CARDS_MANAGER as MemoryCardsManager ).createSequences( name, [ 4, 4 ] );
 				( Assets.MEMORY_CARDS_MANAGER as MemoryCardsManager ).createSequences( name, [ 4, 4, 4, 4, 6, 6, 6, 6 ] );
+				
+				*/
+				
+				
+				
+				
 				// Set initialized property.
 				initialized = true;
 				dispatchEvent( new StarlingSiteEvent( StarlingSiteEvent.INITIALIZE_COMLETE ) );
@@ -281,16 +301,16 @@
 				case StarlingSiteEvent.PAUSE:
 					bg.clear();
 					Assets.getSfx( "Stage_1" ).pauseSound();
-					Assets.getSfx( "PlaneStartup" ).pauseSound();
-					Assets.getSfx( "PlaneTravel" ).pauseSound();
-					Assets.getSfx( "PlaneTakeoff" ).pauseSound();
+					//Assets.getSfx( "PlaneStartup" ).pauseSound();
+					//Assets.getSfx( "PlaneTravel" ).pauseSound();
+					//Assets.getSfx( "PlaneTakeoff" ).pauseSound();
 					break;
 				
 				case StarlingSiteEvent.RESUME:
 					bg.refresh();
 					Assets.getSfx( "Stage_1" ).playSound();
-					Assets.getSfx( "PlaneStartup" ).playSound();
-					Assets.getSfx( "PlaneTravel" ).playSound();
+					//Assets.getSfx( "PlaneStartup" ).playSound();
+					//Assets.getSfx( "PlaneTravel" ).playSound();
 				  //Assets.getSfx( "PlaneTakeoff" ).playSound();
 					break;
 				
@@ -304,22 +324,22 @@
 				
 				case StarlingSiteEvent.WIN:
 					trace(this + " : " + event.type);
-					TweenMax.to( _plane, 2.5, { x:1800, y:100, shortRotation:{ rotation:MathUtil.degreesToRadians( -30 ) }, ease:Power3.easeIn, onComplete:onPlaneComplete, overwrite:2 } );//overwrite:5, 
+					//TweenMax.to( _plane, 2.5, { x:1800, y:100, shortRotation:{ rotation:MathUtil.degreesToRadians( -30 ) }, ease:Power3.easeIn, onComplete:onPlaneComplete, overwrite:2 } );//overwrite:5, 
 					TweenMax.delayedCall( 2, bg.outro );
 					// Audio.
 					/*Assets.getSfx( "PLANE_OUTRO_SPUTTERS_SND" ).pauseSound();
 					Assets.getSfx( "PLANE_COASTING_SND" ).pauseSound();
 					Assets.getSfx( "PLANE_FLIES_OFF_SND" ).playSound();*/
-					Assets.getSfx( "PlaneStartup" ).pauseSound();
-					Assets.getSfx( "PlaneTravel" ).pauseSound();
-					Assets.getSfx("PlaneTakeoff").gotoSoundTime(0,false);
-					Assets.getSfx( "PlaneTakeoff" ).playSound();
+					//Assets.getSfx( "PlaneStartup" ).pauseSound();
+					//Assets.getSfx( "PlaneTravel" ).pauseSound();
+					//Assets.getSfx("PlaneTakeoff").gotoSoundTime(0,false);
+					//Assets.getSfx( "PlaneTakeoff" ).playSound();
 					break;
 				
 				case StarlingSiteEvent.NO_MATCH:
 					trace( this + " : " + event.type );
 					//Assets.getSfx( "PLANE_FLIES_OFF_SND" ).playSound();
-					_swayVehicle( -80, -0.05 );
+					//_swayVehicle( -80, -0.05 );
 					break;
 				
 				case StarlingSiteEvent.MATCHED:
@@ -329,7 +349,7 @@
 				case StarlingSiteEvent.CARDS_MATCHED:
 					trace( this + " : StarlingSiteEvent.CARDS_MATCHED" );
 					pb.speed += 8;
-					_swayVehicle( 100, 0.15 );
+					//_swayVehicle( 100, 0.15 );
 					break;
 				
 				case StarlingSiteEvent.MATCHED_SEQUENCE:
@@ -370,26 +390,6 @@
 			
 		}
 		
-		
-		private function  _swayVehicle( $x:int, $speed:Number ):void
-		{
-			
-			trace(this + " : _swayVehicle " + $x );
-			
-			_timeline = new TimelineMax;
-			/*
-			var arr:Array = [];
-			var c:int = ( _rocket as Rocket ).centerX;
-			arr.push( new TweenMax( _rocket, 1, {  x:c + $x, overwrite:2 } ) );
-			arr.push( new TweenMax( _rocket, 3, {  x:c, ease:Power2.easeInOut, overwrite:2 } ) );
-			_timeline.appendMultiple( arr, 0, TweenAlign.SEQUENCE );
-			*/
-			
-			
-			//( _rocket as Rocket ).speed += $speed;
-			//( _plane as Plane ).speed += $speed;
-			
-		}
 		
 		
 	}

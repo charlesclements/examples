@@ -67,11 +67,12 @@
 			_root.start();
 			// GameCenter stuff.
 			// This only works from the IOS device.
+			/*
 			_gamecenter = new GameCenterGadget;
 			addChild( _gamecenter );
 			_gamecenter.initialize( { isAIR:false } );
 			removeChild( _gamecenter );
-			
+			*/
 		}
 		
 		
