@@ -10,6 +10,9 @@
 	import com.imt.framework.display.StarlingDisplayer;
 	import com.imt.framework.event.StarlingSiteEvent;
 	import com.imt.game.GameOverlay;
+	
+	import flash.system.ApplicationDomain;
+	
 	import starling.display.Sprite;
 	import starling.events.Event;
 
@@ -40,6 +43,10 @@
 		{
 			
 			trace(this + " initialize");
+			
+			
+			
+			
 			Assets.LEVELS = new SuperArray( data.levels );
 			Assets.ASSETS_PATH = ( data.assetsPath == null ) ? "" : data.assetsPath;
 			// Events.

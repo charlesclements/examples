@@ -368,13 +368,13 @@
 				clearButton.x = GameData.STAGE_WIDTH / 2 - 150;// - startButton.width;// - 25;
 				clearButton.y = 70;
 				clearButton.addEventListener( StarlingSiteEvent.TOUCHED, onEvent );
-				addChild( clearButton );
+				//addChild( clearButton );
 				
 				showGamecenter = new GameButton( { id:"showGamecenter" }, Texture.fromBitmapData( new BitmapData( 25, 25, false, 0xffff00 ) ) );
 				showGamecenter.x = GameData.STAGE_WIDTH / 2 - 150;// - startButton.width;// - 25;
 				showGamecenter.y = 100;
 				showGamecenter.addEventListener( StarlingSiteEvent.TOUCHED, onEvent );
-				addChild( showGamecenter );
+				//addChild( showGamecenter );
 				
 				
 				

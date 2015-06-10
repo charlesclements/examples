@@ -3,6 +3,7 @@
 	
 	
 	import com.demonsters.debugger.MonsterDebugger;
+	import com.imt.assets.Assets;
 	import com.imt.framework.core.dispatcher.StarlingDispatcher;
 	import com.imt.framework.display.IDisplay;
 	import com.imt.framework.engine.controller.StageController;
@@ -19,7 +20,7 @@
 	
 	
 	//[SWF(frameRate="60", width="1024", height="748", backgroundColor="0x333333")]
-	public class ClickClickMahem extends flash.display.Sprite
+	public class ClickClickMayhem extends flash.display.Sprite
 	{
 		
 		
@@ -27,20 +28,31 @@
 		private var stats:Stats;
 		private var myStarling:Starling;
 		public var defaultPic:Bitmap;
+		public var w:uint;
+		public var h:uint;
+		
 		
 		// Constructor.
 		private var _gamecenter:GameCenterGadget;
 		
 		// Constructor.
-		public function ClickClickMahem()
+		public function ClickClickMayhem()
 		{
 			
 			trace(this);
-			MonsterDebugger.initialize( this );
+			
+			//MonsterDebugger.initialize( this );
+			
+			trace(stage.stageWidth);
+			
+			
+			Assets.WIDTH = stage.stageWidth;
+			Assets.HEIGHT = stage.stageHeight;
+			
 			// Starling
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.READY, _onReady );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.ALL_ASSETS_LOADED, _onAllAssetsLoaded );
-			myStarling = new Starling( StageController, stage, new Rectangle( 0, 0, 1024, 748 ) );
+			myStarling = new Starling( StageController, stage, new Rectangle( 0, 0, Assets.WIDTH, Assets.HEIGHT ) );
 			myStarling.antiAliasing = 1;
 			myStarling.start();
 			
@@ -55,7 +67,6 @@
 			_root = myStarling.root as IDisplay;
 			//_root.initialize( { levels:[ new Stage1 ], assetsPath:"../../../SHARED/"  } );
 			_root.initialize( { levels:[ new Stage1 ], assetsPath:""  } );
-			
 			
 		}
 		
