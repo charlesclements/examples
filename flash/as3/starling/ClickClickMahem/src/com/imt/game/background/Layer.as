@@ -1,11 +1,12 @@
 package com.imt.game.background
 {
-	//import com.demonsters.debugger.MonsterDebugger;
+
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.Texture;
+	
 	
 	public class Layer extends Sprite
 	{

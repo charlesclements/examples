@@ -20,7 +20,9 @@
 	import com.imt.framework.event.StarlingSiteEvent;
 	import com.imt.game.gadgets.GamePlay;
 	import com.imt.game.vehicles.Plane;
-	import com.imt.objects.ParallaxBackground;
+	import com.imt.objects.Background;
+	//import com.imt.objects.ParallaxBackground;
+	
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.TextureAtlas;
@@ -61,15 +63,18 @@
 				TweenPlugin.activate( [ AutoAlphaPlugin, ColorTransformPlugin, ScalePlugin ] );
 				StarlingDispatcher.addEventListener( StarlingSiteEvent.START_GAME, onEvent );
 				visible = false;
+
 				// Assign assets to be loaded.
 				var path:String = Assets.ASSETS_PATH + "media/graphics/games/memory_plane_game/stages/stage1/";
 				Assets.showTraces( false );
 				Assets.createLoader( name );
+				/*
 				// Load Sprite sheets.
 				Assets.appendXML( name, new XMLLoader( path + "Stage1_0.xml", {  } ), "Stage1_0.xml" );
 				Assets.appendXML( name, new XMLLoader( path + "Stage1_1.xml", {  } ), "Stage1_1.xml" );
 				Assets.appendTexture( name, new ImageLoader( path + "Stage1_0.png", {  } ), "Stage1_0.png" );
 				Assets.appendTexture( name, new ImageLoader( path + "Stage1_1.png", {  } ), "Stage1_1.png" );
+				*/
 				Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/music/stages/StageMusic.mp3", { autoPlay:false, volume:0.9, repeat:-1  } ), "Stage_1" );
 				//Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/music/stages/City2.mp3", { autoPlay:false, volume:0.9, repeat:-1  } ), "Stage_1" );
 				//Assets.appendSfx( name, new MP3Loader( Assets.ASSETS_PATH + "media/sounds/memory_game/plane/PlaneStartup.mp3", { autoPlay:false, volume:0.6, repeat:0  } ), "PlaneStartup" );
@@ -100,28 +105,13 @@
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.NO_MATCH, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.START_GAME, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.PLAY_AGAIN, onEvent );
-			// Update the satege in app.
+			
+			// Update the stage in app.
 			StarlingDispatcher.dispatchEvent( new StarlingSiteEvent( StarlingSiteEvent.UPDATE_STAGE, { name:name } ) );
-			// static MemoryCardsManager.
-			//( Assets.MEMORY_CARDS_MANAGER as MemoryCardsManager ).setCurrentStage( name );
-			//
-			//Assets.getSfx("PlaneTakeoff").pause();
 			bg.refresh();
+			
 			// Visiblity.
 			visible = true;
-			
-			/*
-			// Plane stuff.
-			with( _plane as Plane )
-			{
-				
-				x = -500;
-				y = groundY;
-				rotation = 0;
-				
-			}
-			*/
-			
 			
 			// Call intro().
 			intro();
@@ -134,6 +124,7 @@
 			
 			trace(this + " : clear");
 			visible = false;
+			
 			// Event listeners.
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.PAUSE, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.RESUME, onEvent );
@@ -147,25 +138,12 @@
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.CARDS_MATCHED, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.MATCHED, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.MATCHED_SEQUENCE, onEvent );
+			
 			// Sound.
 			Assets.getSfx( "Stage_1" ).pauseSound();
-			//Assets.getSfx( "PlaneStartup" ).pauseSound();
-			//Assets.getSfx( "PlaneTravel" ).pauseSound();
-			//Assets.getSfx( "PlaneTakeoff" ).pauseSound();
-	/*		Assets.getSfx( "PLANE_OUTRO_SPUTTERS_SND" ).pauseSound();
-			Assets.getSfx( "PLANE_COASTING_SND" ).pauseSound();
-			Assets.getSfx( "PLANE_FLIES_OFF_SND" ).pauseSound();
-			Assets.getSfx( "PLANE_IDLE_SND" ).pauseSound();*/
+
 			// Parallax BG.
 			bg.clear();
-			
-			/*
-			// Plane.
-			_plane.clear();
-			( _plane as Plane ).x = -500;
-			( _plane as Plane ).y = ( _plane as Plane ).groundY;
-			*/
-			
 			
 		}
 		
@@ -179,13 +157,6 @@
 			trace( this + " : intro()" );
 			Assets.getSfx( "Stage_1" ).gotoSoundTime( 0, true );
 			
-			//Assets.getSfx("PlaneStartup").gotoSoundTime(0, true);
-			//Assets.getSfx("PlaneTravel").gotoSoundTime(0, true);
-			//TweenMax.fromTo( _plane, 4, { x:-500, y:( _plane as Plane ).groundY, shortRotation:{ rotation:MathUtil.degreesToRadians( 0 ) } }, { x:( _plane as Plane ).centerX, ease:Power3.easeOut } );
-			
-			//bg.intro();
-			
-			//Assets.getSfx("PlaneTakeoff").pause();
 		}
 		
 		
@@ -193,8 +164,6 @@
 		{
 			
 			trace( this + " : outro()" );
-			//TweenMax.to( _plane, 2, { y:( _plane as Plane ).groundY, ease:Power3.easeOut, overwrite:2 } );
-			//TweenMax.to( _plane, 8, { x:-300, ease:Power3.easeOut, overwrite:2 } );
 			bg.outro();
 			
 		}
@@ -206,23 +175,20 @@
 			
 			trace( this + " : destroy()" );
 			clear();
-			//MonsterDebugger.trace( this, Assets.getLoader( name ) );
-			//Assets.getLoader( name ).dispose( true );
 			Assets.disposeLoader( name );
 			Assets.getTextureAtlas( "Stage1_0" ).dispose();
 			Assets.getTextureAtlas( "Stage1_1" ).dispose();
-			// Destroy the sequences that weere created.
-			( Assets.GAME_PLAY as GamePlay ).destroySequences( name );
+			
+			// Destroy the sequences that were created.
+			//( Assets.GAME_PLAY as GamePlay ).destroySequences( name );
 			// Child display objects.
 			removeChild( bg as Sprite );
 			bg.destroy();
-			//removeChild( _plane as Sprite );
-			//_plane.destroy();
+
 			// End.
 			initialized = false;
 			
 		}
-		
 		
 		 // Assets are ready and place objects on stage.
 		protected function _onAssetsReady(event:StarlingSiteEvent):void
@@ -232,41 +198,17 @@
 			{
 				
 				trace(this + " : _onAssetsReady " + event.type + " : " + event.data.name);
+				
 				// Create atlases.
-				Assets.createTextureAtlas( "Stage1_0", Assets.getTexture( "Stage1_0.png" ), Assets.getXML( "Stage1_0.xml" )  );
-				Assets.createTextureAtlas( "Stage1_1", Assets.getTexture( "Stage1_1.png" ), Assets.getXML( "Stage1_1.xml" )  );
+				//Assets.createTextureAtlas( "Stage1_0", Assets.getTexture( "Stage1_0.png" ), Assets.getXML( "Stage1_0.xml" )  );
+				//Assets.createTextureAtlas( "Stage1_1", Assets.getTexture( "Stage1_1.png" ), Assets.getXML( "Stage1_1.xml" )  );
 				// Event.
 				StarlingDispatcher.removeEventListener( StarlingSiteEvent.ASSETS_LOADED, _onAssetsReady );
 				// Add Bitmap as BG here.
-				bg = new ParallaxBackground;
+				bg = new Background;
 				bg.initialize();
-				( bg as ParallaxBackground ).speed = 0;
+				( bg as Background ).speed = 0;
 				addChild( bg as Sprite );
-				
-				/*
-				// Plane.
-				_plane = new Plane;
-				with( _plane as Plane )
-				{
-					
-					x = -500;
-					groundY = y = 540;//620;
-					rotation = 0;
-					centerX = 500;
-					
-				}
-				addChild( _plane as Plane );
-				
-				
-				// An instance of MemoryCardsManager is created in GameOverlay and saved into the Assets class as Assets.MEMORY_CARDS_MANAGER for other classes use.
-				( Assets.MEMORY_CARDS_MANAGER as MemoryCardsManager ).setCurrentStage( name );
-				//( Assets.MEMORY_CARDS_MANAGER as MemoryCardsManager ).createSequences( name, [ 4, 4 ] );
-				( Assets.MEMORY_CARDS_MANAGER as MemoryCardsManager ).createSequences( name, [ 4, 4, 4, 4, 6, 6, 6, 6 ] );
-				
-				*/
-				
-				
-				
 				
 				// Set initialized property.
 				initialized = true;
@@ -276,7 +218,7 @@
 			
 		}	
 		
-		
+		/*
 		private function onPlaneComplete():void
 		{
 			
@@ -284,6 +226,7 @@
 			//Assets.getSfx( "PLANE_IDLE_SND" ).playSound();
 			
 		}
+		*/
 		
 		
 		// Class event handler.
@@ -292,7 +235,7 @@
 			
 			trace(this + " : " + event.type);
 			var Y:String;
-			var pb:ParallaxBackground = ( bg as ParallaxBackground );
+			var pb:Background = ( bg as Background );
 			//var p:Rocket = ( _rocket as Rocket );
 			
 			switch( event.type )

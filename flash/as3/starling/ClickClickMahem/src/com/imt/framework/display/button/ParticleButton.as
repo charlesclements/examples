@@ -11,8 +11,8 @@
 		public function ParticleButton()
 		{
 			
-			trace( "ParticleButton" );
-			super( { id:"particle" }, Texture.fromBitmapData( new BitmapData( 25, 25, false, 0xff0000 ) ), "", null );
+			//trace( "ParticleButton" );
+			super( { id:"particle" }, Texture.fromBitmapData( new BitmapData( 25, 25, false, 0xff0000 ) ), "", Texture.fromBitmapData( new BitmapData( 25, 25, false, 0x00ff00 ) ) );
 			
 		}
 		
