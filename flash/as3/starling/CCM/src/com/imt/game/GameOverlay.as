@@ -94,12 +94,27 @@
 				trace(this + " : initialize()")
 				// AssetEngine.
 				Assets.createLoader( name );
-				var path:String = Assets.ASSETS_PATH + "media/graphics/games/memory_plane_game/";//
+				
+				
+				
+				
+				var path:String = Assets.ASSETS_PATH + "media/graphics/games/ccm/";
+				Assets.appendXML( name, new XMLLoader( path + "new-assets.xml", {  } ), "new-assets.xml" );
+				Assets.appendTexture( name, new ImageLoader( path + "new-assets.png", {  } ), "new-assets.png" );
+				
+				/*				
+				var path:String = Assets.ASSETS_PATH + "media/graphics/games/memory_plane_game/";
 				Assets.appendXML( name, new XMLLoader( path + "assets.xml", {  } ), "assets.xml" );
 				Assets.appendTexture( name, new ImageLoader( path + "assets.png", {  } ), "assets.png" );
+				*/
+				
+				
+				
+				
+				
 				
 				// Audio
-				path = Assets.ASSETS_PATH + "media/sounds/memory_game/";//
+				path = Assets.ASSETS_PATH + "media/sounds/memory_game/";
 				Assets.appendSfx( name, new MP3Loader( path + "music/NewIntroMusic.mp3", { autoPlay:false, volume:0.6, repeat:-1 } ), "BG_MUSIC" );
 				//Assets.appendSfx( name, new MP3Loader( path + "music/BG_music_loop_103bpm.mp3", { autoPlay:false, volume:0.6, repeat:-1 } ), "BG_MUSIC" );
 				Assets.appendSfx( name, new MP3Loader( path + "ui/match.mp3", { autoPlay:false, volume:0.8 } ), "MATCH_SND" );
@@ -322,11 +337,12 @@
 			if( event.data.name == name )
 			{
 				
+				trace("");
 				trace(this + " : _onAssetsReady " + event.type + " : " + event.data.name);
 				Assets.getSfx( "BG_MUSIC" ).gotoSoundTime( 0, true );
 				//Assets.getSfx( "VOICE_NEOS_WORLD_SND" ).gotoSoundTime( 0, true );
 				StarlingDispatcher.removeEventListener( StarlingSiteEvent.ASSETS_LOADED, _onAssetsReady );
-				Assets.createTextureAtlas( "assets", Assets.getTexture( "assets.png" ), Assets.getXML( "assets.xml" )  );
+				Assets.createTextureAtlas( "assets", Assets.getTexture( "new-assets.png" ), Assets.getXML( "new-assets.xml" )  );
 				var atlas:TextureAtlas = Assets.getTextureAtlas( "assets" );
 				// Sounds.
 				matchedVocals = [];
@@ -344,7 +360,16 @@
 				
 				// Splash page.
 				//splashPage = new Image( Assets.getTexture( "SplashPage" ) );
-				splashPage = new Image( atlas.getTexture( "splash_page/MemoryPlane" ) );
+				//splashPage = new Image( atlas.getTexture( "splash_page/MemoryPlane" ) );
+				splashPage = new Image( Texture.fromColor( 1024, 748, 0x333333 ) );
+				
+				
+				
+				
+				
+				
+				
+				
 				addChild( splashPage );
 				// Instructions.
 				instructionsButton = new GameButton( { id:"instructionsButton" }, Texture.fromColor( 300, 300, 0xCCCCCC, true, 1 ) );
@@ -354,9 +379,13 @@
 				instructionsButton.blink();
 				instructionsButton.visible = true;
 				addChild( instructionsButton );
+				
+				
+				
 				// Start button.
 				//startButton = new GameButton( { id:"startButton" }, Assets.getTextureAtlas( "memory_plane" ).getTexture( "text/play_game" ) );
-				startButton = new GameButton( { id:"startButton" }, atlas.getTexture( "text/play_game" ) );
+				//startButton = new GameButton( { id:"startButton" }, atlas.getTexture( "text/play_game" ) );
+				startButton = new GameButton( { id:"startButton" }, atlas.getTexture( "play-game0000" ) );
 				startButton.x = GameData.STAGE_WIDTH - startButton.width - 25;
 				startButton.y = 500;
 				startButton.addEventListener( StarlingSiteEvent.TOUCHED, onEvent );
@@ -381,22 +410,21 @@
 				
 				
 				
-				
 				// Ready.
-				readyGraphic = new Image( atlas.getTexture( "text/ready" ) );
+				readyGraphic = new Image( atlas.getTexture( "ready0000" ) );
 				readyGraphic.x = ( GameData.STAGE_WIDTH / 2 ) - ( readyGraphic.width / 2 );
 				readyGraphic.y = ( GameData.STAGE_HEIGHT / 2 ) - ( readyGraphic.height / 2 ) - 100;
 				readyGraphic.visible = false;
 				addChild( readyGraphic );
 				// PlayButton.
-				playButton = new GameButton( { id:"PlayButton" }, atlas.getTexture( "text/play_game" ) );
+				playButton = new GameButton( { id:"PlayButton" }, atlas.getTexture( "play-game0000" ) );
 				playButton.x = ( GameData.STAGE_WIDTH / 2 ) - ( playButton.width / 2 );
 				playButton.y = 300;
 				playButton.visible = false;
 				addChild( playButton );
 				// PlayAgainButton.
 				//playAgainButton = new GameButton( { id:"PlayAgainButton" }, Assets.getTextureAtlas( "game_text" ).getTexture( "play_again" ) );
-				playAgainButton = new GameButton( { id:"PlayAgainButton" }, atlas.getTexture( "ui/PlayAgain" ) );
+				playAgainButton = new GameButton( { id:"PlayAgainButton" }, atlas.getTexture( "play-again0000" ) );
 				playAgainButton.x = 400;//( GameData.STAGE_WIDTH * 0.25 ) - ( playButton.width / 2 );
 				playAgainButton.y = 310;
 				playAgainButton.visible = false;
@@ -404,20 +432,24 @@
 				// PlayAgainButton.
 				//playAgainButton = new GameButton( { id:"PlayAgainButton" }, Assets.getTextureAtlas( "game_text" ).getTexture( "play_again" ) );
 				//newGameButton.x = ( GameData.STAGE_WIDTH * 0.25 ) - ( newGameButton.width / 2 );
-				newGameButton = new GameButton( { id:"NewGameButton" }, atlas.getTexture( "ui/NewGame" ) );
+				newGameButton = new GameButton( { id:"NewGameButton" }, atlas.getTexture( "new-game0000" ) );
 				newGameButton.x = 10;
 				newGameButton.y = 310;
 				newGameButton.visible = false;
 				addChild( newGameButton );
+				
+				
+				
+				/*
 				// NextLevelButton.
 				//nextLevelButton = new GameButton( { id:"NextLevelButton" }, Assets.getTextureAtlas( "game_text" ).getTexture( "next_level" ) );
 				//nextLevelButton.x = ( GameData.STAGE_WIDTH * 0.75 ) - ( nextLevelButton.width / 2 );
-				nextLevelButton = new GameButton( { id:"NextLevelButton" }, atlas.getTexture( "ui/NextLevel" ) );
+				nextLevelButton = new GameButton( { id:"NextLevelButton" }, atlas.getTexture( "next-level0000" ) );
 				nextLevelButton.x = GameData.STAGE_WIDTH - nextLevelButton.width - 10;
 				nextLevelButton.y = 310;
 				nextLevelButton.visible = false;
 				addChild( nextLevelButton );
-				
+				*/
 				/*
 				// AboutButton.
 				aboutButton = new GameButton( { id:"AboutButton" }, atlas.getTexture( "ui/AboutButton" ) );
@@ -437,18 +469,22 @@
 				// Anything text related should go in here.
 				textHolder = new StarlingDisplayer();
 				addChild( textHolder );
+				trace("+");
 				// Create
-				textWin = new TemporaryText( atlas.getTexture( "text/win" ) );
-				textLose = new TemporaryText( atlas.getTexture( "text/lose" ) );
-				textMatch = new TemporaryText( atlas.getTexture( "text/match" ) );
-				textNoMatch = new TemporaryText( atlas.getTexture( "text/no_match" ) );
-				textNewBestTime = new BlinkingText( atlas.getTexture( "text/new-best-time" ) );
+				textWin = new TemporaryText( atlas.getTexture( "win0000" ) );
+				trace("+");
+				textLose = new TemporaryText( atlas.getTexture( "try-again0000" ) );
+				trace("+");
+				//textMatch = new TemporaryText( atlas.getTexture( "match0000" ) );
+				//textNoMatch = new TemporaryText( atlas.getTexture( "no_match0000" ) );
+				textNewBestTime = new BlinkingText( atlas.getTexture( "new-best-time0000" ) );
 				// Add to stage.
 				textHolder.addChild( textWin as Sprite );
 				textWin.visible = false;
 				textWin.refresh();
 				textWin.y = 60;
 				textHolder.addChild( textLose as Sprite );
+				trace("+");
 				textLose.visible = false;
 				textLose.refresh();
 				textLose.y = 200;
@@ -456,11 +492,13 @@
 				textMatch.visible = false;
 				textMatch.y = 50;
 				textMatch.refresh();
+				trace("+");
 				// New Best Time.
 				addChild( textNewBestTime );
 				textNewBestTime.refresh();
 				textNewBestTime.y = 165;//400;
 				
+				trace("+");
 				
 				// textNoMatch.
 				textHolder.addChild( textNoMatch as Sprite );
@@ -680,13 +718,13 @@
 							TweenMax.to( readyGraphic, 0.6, { autoAlpha:0, delay:2 } );
 							StarlingDispatcher.dispatchEvent( new StarlingSiteEvent( StarlingSiteEvent.PLAY_AGAIN ) );
 							break;
-						
+						/*
 						case "NextLevelButton":
 							_hideTextButtons();
 							Assets.getSfx( "BG_MUSIC" ).pauseSound();
 							StarlingDispatcher.dispatchEvent( new StarlingSiteEvent( StarlingSiteEvent.NEXT_LEVEL ) );
 							break;
-						
+						*/
 						case "NewGameButton":
 							Assets.getSfx( "BG_MUSIC" ).pauseSound();
 							StarlingDispatcher.dispatchEvent( new StarlingSiteEvent( StarlingSiteEvent.NEW_GAME ) );

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="new-assets.png">
+	<!-- Created with Adobe Flash Professional version 14.0.0.110 -->
+	<!-- http://www.adobe.com/products/flash.html -->
+	<SubTexture name="back0000" x="2" y="2" width="97" height="51" pivotX="48.5" pivotY="25.15"/>
+	<SubTexture name="end-game0000" x="101" y="2" width="97" height="73" pivotX="48.5" pivotY="36.4"/>
+	<SubTexture name="new-best-time0000" x="2" y="77" width="183" height="51" pivotX="91.1" pivotY="25.75"/>
+	<SubTexture name="new-game0000" x="2" y="130" width="97" height="73" pivotX="48.5" pivotY="36.4"/>
+	<SubTexture name="pause0000" x="101" y="130" width="94" height="51" pivotX="46.4" pivotY="25.15"/>
+	<SubTexture name="play-again0000" x="2" y="205" width="97" height="73" pivotX="48.5" pivotY="36.4"/>
+	<SubTexture name="play-game0000" x="101" y="205" width="97" height="73" pivotX="48.5" pivotY="36.4"/>
+	<SubTexture name="ready0000" x="2" y="280" width="97" height="51" pivotX="48.5" pivotY="25.15"/>
+	<SubTexture name="resume0000" x="101" y="280" width="109" height="51" pivotX="54.45" pivotY="25.15"/>
+	<SubTexture name="try-again0000" x="2" y="333" width="97" height="73" pivotX="48.5" pivotY="36.6"/>
+	<SubTexture name="win0000" x="101" y="333" width="97" height="73" pivotX="48.5" pivotY="36.6"/>
+</TextureAtlas>

@@ -65,7 +65,7 @@
 				visible = false;
 
 				// Assign assets to be loaded.
-				var path:String = Assets.ASSETS_PATH + "media/graphics/games/memory_plane_game/stages/stage1/";
+				//var path:String = Assets.ASSETS_PATH + "media/graphics/games/memory_plane_game/stages/stage1/";
 				Assets.showTraces( false );
 				Assets.createLoader( name );
 				/*
