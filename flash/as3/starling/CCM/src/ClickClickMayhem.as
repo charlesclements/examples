@@ -3,6 +3,8 @@
 	
 	
 	import com.demonsters.debugger.MonsterDebugger;
+	import com.gamua.flox.Flox;
+	import com.gamua.flox.Player;
 	import com.imt.assets.Assets;
 	import com.imt.framework.core.dispatcher.StarlingDispatcher;
 	import com.imt.framework.display.IDisplay;
@@ -13,6 +15,8 @@
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
+	
+	import flox.model.FloxModel;
 	
 	import net.hires.debug.Stats;
 	
@@ -42,9 +46,9 @@
 			trace(this);
 			
 			//MonsterDebugger.initialize( this );
-			
-			trace(stage.stageWidth);
-			
+
+			// Init FLOX stuff.
+			FloxModel.intialize();
 			
 			Assets.WIDTH = stage.stageWidth;
 			Assets.HEIGHT = stage.stageHeight;

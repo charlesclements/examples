@@ -49,6 +49,7 @@
 			
 			Assets.LEVELS = new SuperArray( data.levels );
 			Assets.ASSETS_PATH = ( data.assetsPath == null ) ? "" : data.assetsPath;
+			
 			// Events.
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.ALL_ASSETS_LOADED, _onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.CHANGE, _onEvent );
@@ -57,9 +58,11 @@
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.NEXT_LEVEL, _onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.NEW_GAME, _onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.QUIT, _onEvent );
+			
 			// Displays game content.
 			display = new StarlingDisplayer();
 			addChild( display );
+			
 			// UI overlay.
 			overlay = new GameOverlay;
 			( overlay as Sprite ).addEventListener( Event.COMPLETE, _onEvent );
