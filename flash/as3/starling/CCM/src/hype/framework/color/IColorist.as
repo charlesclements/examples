@@ -1,5 +1,6 @@
 package hype.framework.color {
-	import flash.display.Sprite;
+	
+	import starling.display.Sprite;
 
 	/**
 	 * Interface that Colorists must implement

@@ -186,6 +186,7 @@
 			stopwatch.addEventListener( StopWatchStarling.STOP, onEvent );
 			stopwatch.addEventListener( StopWatchStarling.PAUSE, onEvent );
 			stopwatch.addEventListener( StopWatchStarling.RESUME, onEvent );
+			stopwatch.addEventListener( StopWatchStarling.TIMER_COMPLETE, onEvent );
 
 			// Events.
 			playButton.addEventListener( StarlingSiteEvent.TOUCHED, onEvent );
@@ -503,7 +504,7 @@
 			//memoryManager.start();     
 			// PauseView.
 			_pauseView.refresh();
-			stopwatch.startTimer();
+			stopwatch.startTimer( 4000 );
 			
 		}
 		
@@ -517,6 +518,12 @@
 			{
 				
 				
+				
+				case StopWatchStarling.TIMER_COMPLETE:
+					
+					trace(this + " : Show final results here.");
+					StarlingDispatcher.dispatchEvent( new StarlingSiteEvent( StarlingSiteEvent.TIMER_COMPLETE ) );
+					break;
 				
 				case StopWatchStarling.START:
 					break;
@@ -542,7 +549,7 @@
 					//stopwatch.setDiplayTime( event.data.score );
 					stopwatch.setBestTime( event.data.score );
 					break;
-				
+				/*
 				//case StarlingSiteEvent.START_GAME:
 				case StarlingSiteEvent.PLAY_GAME:
 					//backButton.visible = true;
@@ -552,6 +559,9 @@
 					textLose.outro();
 					stopwatch.startTimer();
 					break;
+				*/
+				
+				
 				
 				case StarlingSiteEvent.BACK_TO_BEGINNING:
 					trace(this + " : StarlingSiteEvent.BACK_TO_BEGINNING.");

@@ -5,50 +5,36 @@ package com.fatbird.utils
 	public class NumberFormater 
 	{
 
-		/*
-		public static function formatTime(n:int):String
-		{
-			var timeMilliseconds:Number = int((n/30) * 100);
-	
-			var minutes:Number = int(timeMilliseconds / 100 / 60);
-			var seconds:Number = int(timeMilliseconds / 100 - (minutes * 60));
-			var milliseconds:Number = int(timeMilliseconds - (seconds*100)-(minutes*100 * 60));
-			
-			var minformat:String = String( (minutes<10)? "0"+minutes : minutes );
-			var secformat:String = String( (seconds<10)? "0"+seconds : seconds );
-			var milformat:String = String( (milliseconds<10) ? "0"+milliseconds : milliseconds );
-			
-			return minformat + ":" + secformat + ":" + milformat;
-			
-		}
-		*/
+
+		// Vars.
+		// Strings.
+		private static var hrs_str:String
+		private static var mins_str:String;
+		private static var secs_str:String;
+		private static var milli_str:String;
+		private static var time:String = "";
+		
+		// Numbers.
+		private static var milli:Number = 0;
+		private static var secs:Number = 0;
+		private static var mins:Number = 0;
+		private static var hrs:Number = 0;
 		
 		
-		/*
-		@usage
-		var time:String = getTime(....., "-", false, true, true); // returns XX-XX as mins-secs
-		*/
-		
+		// Format a given time value.
 		public static function formatTime( value:int, separator:String=":", showHrs:Boolean=true, showMins:Boolean=true, showSecs:Boolean=true, showMilliSecs:Boolean=false ) : String
 		{
-			//milliseconds to hrs:mins:secs
-			var hrs_str:String
-			var mins_str:String;
-			var secs_str:String;
-			var milli_str:String;
-			var time:String = "";
 			
-			var milli:Number = 0;
-			var secs:Number = 0;
-			var mins:Number = 0;
-			var hrs:Number = 0;
+			//trace("NumberFormater : " + value);
 			
-			if( value == 0 ) {
-				milli = 0;
-				secs = 0;
-				mins =0;
-				hrs = 0;
-			} else {
+			// Clear vars.
+			hrs_str = mins_str = secs_str = milli_str = time = "";
+			
+			// Check if value is 0 or continue.
+			if( value == 0 ){ milli = secs = mins = hrs = 0; } 
+			else 
+			{
+				
 				milli = Math.floor( value );
 				secs = Math.floor( milli/1000 );
 				mins = Math.floor(secs/60);
@@ -56,44 +42,34 @@ package com.fatbird.utils
 				milli %= 1000;
 				secs %= 60;
 				mins %= 60;
-			}
-			if( hrs < 10 ){
-				hrs_str = "0" + String( hrs );
-			}else{
-				hrs_str = String( hrs );
-			}
-			if( mins < 10 ){
-				mins_str = "0" + String( mins );
-			}else{
-				mins_str = String( mins );
-			}
-			if( secs < 10 ){
-				secs_str = "0" + String( secs );
-			}else{
-				secs_str = String( secs );
-			}
-			if( milli < 10 ){
-				milli_str = "0" + String( milli );
-			}else{
-				milli_str = String( milli );
+				
 			}
 			
-			if( showHrs ){
-				time += hrs_str + separator;
-			}
-			if( showMins ){
-				time += mins_str + separator;
-			}
-			if( showSecs ){
-				time += secs_str + separator;
-			}
-			if( showMilliSecs ){
-				time += milli_str;
-			}
+			// Check double and single digit placements.
+			if( hrs < 10 ){ hrs_str = "0" + String( hrs ); }
+			else{ hrs_str = String( hrs ); }
+			if( mins < 10 ){ mins_str = "0" + String( mins ); }
+			else{ mins_str = String( mins ); }
+			if( secs < 10 ){ secs_str = "0" + String( secs ); }
+			else{ secs_str = String( secs ); }
+			
+			//trace( "milli : " + milli );
+			
+			if( milli < 10 ){ milli_str = "00" + String( milli ); }
+			else{ milli_str = String( milli ); }
+			
+			// Check what to display.
+			if( showHrs ){ time += hrs_str + separator; }
+			if( showMins ){ time += mins_str + separator; }
+			if( showSecs ){ time += secs_str + separator; }
+			if( showMilliSecs ){ time += milli_str; }
 			time = time.substring( 0, time.length-1 );
 			
+			// Return formatted time.
 			return time;
+			
 		}
+		
 		
 		public static function formatTimeWithDays(n:Number):String
 		{

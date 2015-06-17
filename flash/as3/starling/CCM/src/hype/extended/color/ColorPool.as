@@ -1,10 +1,12 @@
-package hype.extended.color {
-	import hype.framework.color.IColorist;
-
-	import flash.display.DisplayObject;
+﻿package hype.extended.color {
+	//import flash.display.DisplayObject;
 	import flash.display.InteractiveObject;
-	import flash.display.Sprite;
 	import flash.geom.ColorTransform;
+	
+	import hype.framework.color.IColorist;
+	
+	import starling.display.DisplayObject;
+	import starling.display.Sprite;
 
 	/**
 	 * Colorist that applies colors from a specified pool
@@ -82,10 +84,27 @@ package hype.extended.color {
 				child = sprite.getChildAt(i);
 				if (child is InteractiveObject) {
 					rgb = _colorList[Math.floor(Math.random() * numColors)];
-					child.transform.colorTransform = new ColorTransform(0, 0, 0, 1, rgb >> 16, rgb >> 8 & 255, rgb & 255, 0);
+					
+					// Temp disable.
+					// child.transform.colorTransform = new ColorTransform(0, 0, 0, 1, rgb >> 16, rgb >> 8 & 255, rgb & 255, 0);
 				}
 			}
 		}
+/*		public function colorChildren(sprite:Sprite):void {
+			var max:uint = sprite.numChildren;
+			var i:uint;
+			var child:DisplayObject;
+			var rgb:uint;
+			var numColors:uint = _colorList.length;
+			
+			for (i=0; i<max; ++i) {
+				child = sprite.getChildAt(i);
+				if (child is InteractiveObject) {
+					rgb = _colorList[Math.floor(Math.random() * numColors)];
+					child.transform.colorTransform = new ColorTransform(0, 0, 0, 1, rgb >> 16, rgb >> 8 & 255, rgb & 255, 0);
+				}
+			}
+		}*/
 		
 		/**
 		 * Get a random color from the color pool

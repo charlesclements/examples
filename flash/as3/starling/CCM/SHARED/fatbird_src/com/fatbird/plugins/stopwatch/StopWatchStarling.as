@@ -3,6 +3,9 @@ package com.fatbird.plugins.stopwatch
 	
 	import com.demonsters.debugger.MonsterDebugger;
 	import com.fatbird.utils.NumberFormater;
+	import com.greensock.TimelineMax;
+	import com.greensock.TweenAlign;
+	import com.greensock.TweenMax;
 	import com.imt.assets.Assets;
 	import com.imt.assets.fonts.Fonts;
 	import com.imt.framework.engine.data.GameData;
@@ -27,56 +30,51 @@ package com.fatbird.plugins.stopwatch
 		public static const CURRENT:String="StopWatch.onCurrent";
 		public static const PAUSE:String="StopWatch.onPause";
 		public static const RESUME:String="StopWatch.onResume";
+		public static const TIMER_COMPLETE:String="StopWatch.onTimerComplete";
 		private var startTime:int;
 		private var stopTime:int;
 		private var resumeTime:int;
 		private var currTime:int;
 		private var newTime:int;
+		private var _countDownTime:int;
 		private var mainTimer:Timer = new Timer(100);
+		private var countdownTimer:Timer = new Timer(100);
 		private var timerTextValue:TextField;
 		private var timerTextLabel:TextField;
 		private var bestTimeTextLabel:TextField;
 		private var bestTimeTextValue:TextField;
 		private var holder:Sprite;
+		private var blinkTween:TimelineMax;
 		
 		
 		//public function StopWatchStarling(target:IEventDispatcher=null)
 		public function StopWatchStarling()
 		{
 			
-			//trace("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 			trace(this);
-			///super(target);
 			super();
+			
+			// Setup blinking.
+			blinkTween = new TimelineMax( { repeat:-1} );
+			
 			// Holder.
 			holder = new Sprite;
 			addChild( holder );
 			holder.visible = false;
 			holder.x = 75;
+			
 			// Vars.
 			var s:int = 40;
 			var h:int = 60;
 			var _y:int = 10;
+			
 			// Label.
-			
-			
-			
-			//MonsterDebugger.trace( this, Fonts.getFont( "NeoFont2-ipadhd" ) );
-			//trace( Fonts.getFont( "NeoFont2-ipadhd" ) );
-			
-		//	Fonts.createFont( "NeoFont2-ipadhd", Assets.getBitmap( "NeoFont2-ipadhd.png" ), Assets.getXML( "NeoFont2-ipadhd.fnt" ) );
-			
-			
-			
-			
 			timerTextLabel = new TextField( 200, h, "Time:", "Game-Bold", s, 0xffffff );
 			holder.addChild( timerTextLabel );
+			
 			with( timerTextLabel )
 			{
 				
-				//border = true;
-				//width = 400;
-				//height=60;
 				x = 10;//300;
 				y = _y;
 				//fontSize = 40;
@@ -84,15 +82,13 @@ package com.fatbird.plugins.stopwatch
 				hAlign = HAlign.LEFT;
 				
 			}
+
 			// Value.
 			timerTextValue = new TextField( 500, h, "", "Game-Med", s, 0xffffff );
 			holder.addChild( timerTextValue );
 			with( timerTextValue )
 			{
 				
-				//border = true;
-				//width = 400;
-				//height = 60;
 				x = 130;//300;
 				y = _y;
 				//fontSize = 40;
@@ -113,7 +109,6 @@ package com.fatbird.plugins.stopwatch
 				//width = 400;//stage.stageWidth;//=450;
 				//height=60;
 				x = GameData.STAGE_WIDTH - width;//500;//300;
-				//x = timerTextValue.x + 150;
 				y = _y;
 				//fontSize = 40;
 				//autoSize = TextFormatAlign.LEFT;
@@ -148,23 +143,55 @@ package com.fatbird.plugins.stopwatch
 			
 			currTime = getTimer();
 			newTime = currTime - startTime;
-			//timerText.text = "Time: "+ String( newTime );
-			//timerText.text = String( newTime );
-			var s:String = com.fatbird.utils.NumberFormater.formatTime( newTime );
+			//var s:String = com.fatbird.utils.NumberFormater.formatTime( newTime );
+			var s:String = com.fatbird.utils.NumberFormater.formatTime( newTime, "", false, true, true, true );
 			timerTextValue.text = s;
-			//trace( s );
 			
 		}
 		
 		
-		public function startTimer():void
+		public function startTimer(countDownTime:int = -1):void
 		{
 			
-			//trace("startTimer ++++++++++");
+			if( countDownTime > 0 )
+			{
+				
+				_countDownTime = countDownTime;
+				countdownTimer = new Timer( countDownTime );
+				countdownTimer.addEventListener(TimerEvent.TIMER, _countdownTimerHandler);
+				countdownTimer.start();
+				
+				
+			}
+			
 			startTime = getTimer();
 			mainTimer.start();
 			holder.visible = true;
 			dispatchEvent( new starling.events.Event( START ) );
+			
+		}
+		
+		
+		
+		
+		public function _countdownTimerHandler(e:TimerEvent):void
+		{
+			
+			trace( this + " : _countdownTimerHandler");
+			
+			//currTime = getTimer();
+			//newTime = currTime - startTime;
+			//var s:String = com.fatbird.utils.NumberFormater.formatTime( newTime );
+			
+			
+			stopTimer();
+			holder.visible = true;
+			var s:String = com.fatbird.utils.NumberFormater.formatTime( _countDownTime, "", false, true, true, true );
+			timerTextValue.text = s;
+			
+			blink( true, 5 );
+			
+			dispatchEvent( new starling.events.Event( TIMER_COMPLETE ) );
 			
 		}
 
@@ -174,9 +201,11 @@ package com.fatbird.plugins.stopwatch
 			
 			stopTime = getTimer();
 			mainTimer.stop();
+			countdownTimer.stop();
 			holder.visible = false;
 			//dispatchEvent( StopWatchStarling.STOP );
 			dispatchEvent( new starling.events.Event( STOP ) );
+			//updateTime();
 			
 		}
 		
@@ -199,6 +228,7 @@ package com.fatbird.plugins.stopwatch
 			resumeTime = getTimer();
 			startTime += resumeTime - stopTime;
 			mainTimer.start();
+			countdownTimer.start();
 			holder.visible = true;
 			dispatchEvent( new starling.events.Event( RESUME ) );
 			
@@ -237,6 +267,48 @@ package com.fatbird.plugins.stopwatch
 			// Visible.
 			bestTimeTextLabel.visible = ( n>0 );
 			bestTimeTextValue.visible = ( n>0 );
+			
+		}
+		
+		
+		
+		public function blink(doBlinking:Boolean=true, repeat:int=-1):void
+		{
+			
+			trace(this + " : blink : "  + doBlinking );
+			
+			if( doBlinking )
+			{
+				
+				blinkTween.clear();
+				
+				//TweenMax.to( this, 0, { alpha:0 } );
+				
+				
+				blinkTween = new TimelineMax( { repeat:repeat} );
+				var arr:Array = [];
+				
+				//var X:int = x;
+				
+				arr.push( new TweenMax( this, 0, { delay:0.5, alpha:0 } ) );
+				arr.push( new TweenMax( this, 0, { delay:0.5, alpha:1 } ) );
+				//arr.push( new TweenMax( this, 0, { delay:0, alpha:1 } ) );
+/*				arr.push( new TweenMax( this, 0.2, { delay:0.5, x:X + 15 } ) );
+				arr.push( new TweenMax( this, 0.2, { delay:0.05, x:X } ) );*/
+				blinkTween.appendMultiple( arr, 0, TweenAlign.SEQUENCE );
+				
+				blinkTween.play( 0 );
+				
+			}
+			else
+			{
+				
+				blinkTween.gotoAndStop( 0 );
+				blinkTween.clear();
+				
+			}
+			
+			
 			
 		}
 		
