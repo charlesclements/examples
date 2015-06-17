@@ -37,26 +37,31 @@ package com.imt.framework.display.view
 		{
 			
 			trace( this + " : initialize" );
+			
 			// Create BG here.
 			_bg = new Image( Texture.fromColor( GameData.STAGE_WIDTH, GameData.STAGE_HEIGHT, 0xbb000000 ) );//, 0x000000, true
 			_bg.visible = false;
 			addChild( _bg );
+			
 			// Add buttons here.
 			var atlas:TextureAtlas = Assets.getTextureAtlas( "assets" );
+			
 			// ResumeButton.
-			_resumeButton = new GameButton( { id:"ResumeButton" }, atlas.getTexture( "text/resume" ) );
+			_resumeButton = new GameButton( { id:"ResumeButton" }, atlas.getTexture( "resume0000" ) );
 			_resumeButton.x = ( GameData.STAGE_WIDTH / 2 ) - ( _resumeButton.width / 2 );
 			_resumeButton.y = 200;
 			_resumeButton.visible = false;
 			addChild( _resumeButton );
+			
 			// EndGame.
-			_endGameButton = new GameButton( { id:"EndGameButton" }, atlas.getTexture( "text/end-game" ) );
+			_endGameButton = new GameButton( { id:"EndGameButton" }, atlas.getTexture( "end-game0000" ) );
 			_endGameButton.x = ( GameData.STAGE_WIDTH / 2 ) - ( _endGameButton.width / 2 );
 			_endGameButton.y = 400;
 			_endGameButton.visible = false;
 			addChild( _endGameButton );
+			
 			// PauseButton.
-			_pauseButton = new GameButton( { id:"PauseButton" }, atlas.getTexture( "text/pause" ) );
+			_pauseButton = new GameButton( { id:"PauseButton" }, atlas.getTexture( "pause0000" ) );
 			_pauseButton.x = _pauseButton.y = 10;//25;
 			_pauseButton.visible = false;
 			addChild( _pauseButton );

@@ -41,6 +41,7 @@
 		//private var energyGuage:IDisplay;
 		private var _defaultLoadingGraphic:IDisplay;
 		private var _pauseView:IDisplay;
+		
 		// Buttons.
 		private var instructionsButton:GameButton;
 		//private var backButton:GameButton;
@@ -54,18 +55,20 @@
 		private var quitButton:GameButton;
 		private var nextLevelButton:GameButton;
 		private var newGameButton:GameButton;
+		
 		// Text.
 		private var textHolder:StarlingDisplayer;
 		private var textLose:TemporaryText;
 		private var textWin:TemporaryText;
 		private var textMatch:TemporaryText;
 		private var textNoMatch:TemporaryText;
+		
 		// Vocals.
 		private var matchedVocals:Array;
 		private var assets:Assets;
+		
 		// Game
-		private var gamePlay:IDisplay;
-		//
+		private var gameplay:IDisplay;
 		private var _isWinner:Boolean = false;
 		private var _gamecenter:GameCenterGadget;
 		private var stopwatch:StopWatchStarling;
@@ -177,16 +180,18 @@
 		{
 			
 			trace(this + " : refresh()");
+			
 			// Stopwatch.
 			stopwatch.addEventListener( StopWatchStarling.START, onEvent );
 			stopwatch.addEventListener( StopWatchStarling.STOP, onEvent );
 			stopwatch.addEventListener( StopWatchStarling.PAUSE, onEvent );
 			stopwatch.addEventListener( StopWatchStarling.RESUME, onEvent );
+
 			// Events.
 			playButton.addEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			playAgainButton.addEventListener( StarlingSiteEvent.TOUCHED, onEvent );
-			nextLevelButton.addEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			newGameButton.addEventListener( StarlingSiteEvent.TOUCHED, onEvent );
+
 			// Global events.
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.NEW_BEST_TIME, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.LOSE, onEvent );
@@ -200,35 +205,16 @@
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.PAUSE, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.RESUME, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.SCORE_LOADED, onEvent );
-			( gamePlay as Sprite ).addEventListener( StarlingSiteEvent.CARD_TOUCHED, onEvent );
+			( gameplay as Sprite ).addEventListener( StarlingSiteEvent.CARD_TOUCHED, onEvent );
 			//StarlingDispatcher.addEventListener( StarlingSiteEvent.START_GAME, onEvent );
+
 			// Visiblity.
 			playButton.visible = false;
-			//aboutButton.visible = false;
 			playAgainButton.visible = false;
-			nextLevelButton.visible = false;
-			nextLevelButton.blink( false );
 			newGameButton.visible = false;
 			textLose.visible = false;
 			textWin.visible = false;
-			textMatch.visible = false;
-			textNoMatch.visible = false;
-			//textNewBestTime.visible = false;
-			
-			
-			
-			
-			
-			
-			
-			// Do ready vocal.
-			//Assets.getSfx( "VOICE_READY_SND" ).gotoSoundTime( 0, true );
-			/*
-			// Tween.
-			TweenMax.to( readyGraphic, 0, { autoAlpha:0 } );
-			TweenMax.to( readyGraphic, 0.6, { autoAlpha:1, delay:0.5, onComplete:readyGraphicComplete } );
-			TweenMax.to( readyGraphic, 0.6, { autoAlpha:0, delay:2 } );
-			*/
+
 		}
 		
 		
@@ -245,7 +231,7 @@
 			playButton.removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			//aboutButton.removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			playAgainButton.removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
-			nextLevelButton.removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
+			//nextLevelButton.removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			//quitButton.removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			// Global events.
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.LOSE, onEvent );
@@ -258,7 +244,7 @@
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.PLAY_GAME, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.PAUSE, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.RESUME, onEvent );
-			( gamePlay as Sprite ).removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
+			( gameplay as Sprite ).removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			// Clear tweens.
 			TweenMax.killTweensOf( readyGraphic );
 			// Visiblity.
@@ -267,10 +253,10 @@
 			// Text.
 			textLose.visible = false;
 			textWin.visible = false;
-			textMatch.visible = false;
-			textNoMatch.visible = false;
+			//textMatch.visible = false;
+			//textNoMatch.visible = false;
 			// Clear gadgets.
-			gamePlay.clear();
+			gameplay.clear();
 			// Stopwatch.
 			stopwatch.stopTimer();
 			
@@ -346,12 +332,6 @@
 				var atlas:TextureAtlas = Assets.getTextureAtlas( "assets" );
 				// Sounds.
 				matchedVocals = [];
-				/*
-				matchedVocals.push( Assets.getSfx( "VOICE_OKAY_SND" ) );	
-				matchedVocals.push( Assets.getSfx( "VOICE_LETS_DO_IT_SND" ) );
-				matchedVocals.push( Assets.getSfx( "VOICE_PLAY_WITH_ME_SND" ) );
-				matchedVocals.push( Assets.getSfx( "VOICE_WOW_SND" ) );
-				*/
 				
 				Fonts.createFont( "Game-Light", Assets.getBitmap( "Game-Light-ipad.png" ), Assets.getXML( "Game-Light-ipad.fnt" ) );
 				Fonts.createFont( "Game-Reg", Assets.getBitmap( "Game-Reg-ipad.png" ), Assets.getXML( "Game-Reg-ipad.fnt" ) );
@@ -359,18 +339,9 @@
 				Fonts.createFont( "Game-Bold", Assets.getBitmap( "Game-Bold-ipad.png" ), Assets.getXML( "Game-Bold-ipad.fnt" ) );
 				
 				// Splash page.
-				//splashPage = new Image( Assets.getTexture( "SplashPage" ) );
-				//splashPage = new Image( atlas.getTexture( "splash_page/MemoryPlane" ) );
-				splashPage = new Image( Texture.fromColor( 1024, 748, 0x333333 ) );
-				
-				
-				
-				
-				
-				
-				
-				
+				splashPage = new Image( Texture.fromColor( Assets.WIDTH, Assets.HEIGHT, 0x333333 ) );
 				addChild( splashPage );
+				
 				// Instructions.
 				instructionsButton = new GameButton( { id:"instructionsButton" }, Texture.fromColor( 300, 300, 0xCCCCCC, true, 1 ) );
 				instructionsButton.x = 100;//GameData.STAGE_WIDTH - startButton.width - 25;
@@ -380,11 +351,7 @@
 				instructionsButton.visible = true;
 				addChild( instructionsButton );
 				
-				
-				
 				// Start button.
-				//startButton = new GameButton( { id:"startButton" }, Assets.getTextureAtlas( "memory_plane" ).getTexture( "text/play_game" ) );
-				//startButton = new GameButton( { id:"startButton" }, atlas.getTexture( "text/play_game" ) );
 				startButton = new GameButton( { id:"startButton" }, atlas.getTexture( "play-game0000" ) );
 				startButton.x = GameData.STAGE_WIDTH - startButton.width - 25;
 				startButton.y = 500;
@@ -404,11 +371,6 @@
 				showGamecenter.y = 100;
 				showGamecenter.addEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 				//addChild( showGamecenter );
-				
-				
-				
-				
-				
 				
 				// Ready.
 				readyGraphic = new Image( atlas.getTexture( "ready0000" ) );
@@ -469,12 +431,9 @@
 				// Anything text related should go in here.
 				textHolder = new StarlingDisplayer();
 				addChild( textHolder );
-				trace("+");
 				// Create
 				textWin = new TemporaryText( atlas.getTexture( "win0000" ) );
-				trace("+");
 				textLose = new TemporaryText( atlas.getTexture( "try-again0000" ) );
-				trace("+");
 				//textMatch = new TemporaryText( atlas.getTexture( "match0000" ) );
 				//textNoMatch = new TemporaryText( atlas.getTexture( "no_match0000" ) );
 				textNewBestTime = new BlinkingText( atlas.getTexture( "new-best-time0000" ) );
@@ -483,39 +442,48 @@
 				textWin.visible = false;
 				textWin.refresh();
 				textWin.y = 60;
+				
 				textHolder.addChild( textLose as Sprite );
-				trace("+");
 				textLose.visible = false;
 				textLose.refresh();
 				textLose.y = 200;
+				
+				/*
+				trace("+");
 				textHolder.addChild( textMatch as Sprite );
 				textMatch.visible = false;
 				textMatch.y = 50;
 				textMatch.refresh();
-				trace("+");
+				*/
+				
 				// New Best Time.
 				addChild( textNewBestTime );
 				textNewBestTime.refresh();
 				textNewBestTime.y = 165;//400;
 				
-				trace("+");
-				
+				/*
 				// textNoMatch.
 				textHolder.addChild( textNoMatch as Sprite );
 				textNoMatch.visible = false;
 				textNoMatch.refresh();
 				textNoMatch.y = 50;
+				*/
+				
 				// Stopwatch
 				stopwatch = new StopWatchStarling;
 				addChild( stopwatch );
-				//
+				
+				// Make game.
 				_createMemoryGame();
+
 				// Do pause.
 				_pauseView = new PauseView();
 				_pauseView.initialize();
 				addChild( _pauseView as Sprite );
+				
 				// Add quick iDisplay.
-				_defaultLoadingGraphic = new FastStarlingDisplay( new Image( Assets.getTextureAtlas( "assets" ).getTexture( "loading/bg" ) ) );
+				//_defaultLoadingGraphic = new FastStarlingDisplay( new Image(  Assets.getTextureAtlas( "assets" ).getTexture( "loading/bg" ) ) );
+				_defaultLoadingGraphic = new FastStarlingDisplay( new Image( Texture.fromColor( Assets.WIDTH, Assets.HEIGHT, 0xbb0000 ) ) );
 				_defaultLoadingGraphic.initialize();
 				//
 				initialized = true;
@@ -531,7 +499,7 @@
 			trace(this + " : readyGraphicComplete()");
 			//Assets.getSfx( "VOICE_MATCH_THE_CARDS_SND" ).playSound();
 			_isWinner = false;
-			gamePlay.refresh();
+			gameplay.refresh();
 			//memoryManager.start();     
 			// PauseView.
 			_pauseView.refresh();
@@ -595,13 +563,24 @@
 					splashPage.visible = true;
 					//backButton.visible = false;
 					playAgainButton.visible = false;
-					nextLevelButton.visible = false;
+					//nextLevelButton.visible = false;
 					newGameButton.visible = false;
 					//( energyGuage as Sprite ).visible = false;
 					startButton.blink();
-					gamePlay.clear();
+					gameplay.clear();
 					// PauseView.
 					_pauseView.clear();
+					
+					
+					// Kill animating.
+					
+					
+					
+					
+					
+					
+					
+					
 					break;
 				
 				case StarlingSiteEvent.DISABLE_BUTTONS:
@@ -620,7 +599,7 @@
 					_isWinner = false;
 					textHolder.change( textLose );
 					textLose.intro();
-					gamePlay.outro();
+					gameplay.outro();
 					//Assets.getSfx( "VOICE_AWWW_SND" ).playSound();
 					outro();
 					break;
@@ -630,7 +609,7 @@
 					_isWinner = true;
 					textHolder.change( textWin ).currentDisplay.intro();
 					outro();
-					gamePlay.outro();
+					gameplay.outro();
 					_pauseView.clear();
 					stopwatch.stopTimer();
 					StarlingDispatcher.dispatchEvent( new StarlingSiteEvent( StarlingSiteEvent.NEW_TIME, { time:stopwatch.getTime() } ) );
@@ -822,9 +801,9 @@
 			//var c:TextureAtlas = Assets.createTextureAtlas( "cards_atlas", Assets.getTexture( "cards.png" ), xml );
 			*/
 			// Game.
-			Assets.GAME_PLAY = gamePlay = new GamePlay;
-			addChild( gamePlay as Sprite );
-			gamePlay.initialize( { atlas:Assets.getTextureAtlas( "assets" ), xml:Assets.getXML( "assets.xml" ), alias:name } );
+			Assets.GAME_PLAY = gameplay = new GamePlay;
+			addChild( gameplay as Sprite );
+			gameplay.initialize( { atlas:Assets.getTextureAtlas( "assets" ), xml:Assets.getXML( "new-assets.xml" ), alias:name } );
 		}
 		
 		
