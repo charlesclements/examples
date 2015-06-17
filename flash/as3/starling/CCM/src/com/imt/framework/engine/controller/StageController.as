@@ -44,9 +44,6 @@
 			
 			trace(this + " initialize");
 			
-			
-			
-			
 			Assets.LEVELS = new SuperArray( data.levels );
 			Assets.ASSETS_PATH = ( data.assetsPath == null ) ? "" : data.assetsPath;
 			
