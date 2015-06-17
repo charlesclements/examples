@@ -50,6 +50,10 @@
 			// Init FLOX stuff.
 			FloxModel.intialize();
 			
+			
+			
+			
+			
 			Assets.WIDTH = stage.stageWidth;
 			Assets.HEIGHT = stage.stageHeight;
 			
