@@ -82,8 +82,15 @@
 			
 			for (i=0; i<max; ++i) {
 				child = sprite.getChildAt(i);
+				
+				trace("colorChildren ; " + child is InteractiveObject)
+				
 				if (child is InteractiveObject) {
 					rgb = _colorList[Math.floor(Math.random() * numColors)];
+					
+					
+					//child
+					
 					
 					// Temp disable.
 					// child.transform.colorTransform = new ColorTransform(0, 0, 0, 1, rgb >> 16, rgb >> 8 & 255, rgb & 255, 0);
