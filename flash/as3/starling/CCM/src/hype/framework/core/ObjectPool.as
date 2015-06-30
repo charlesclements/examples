@@ -143,51 +143,24 @@
 			}
 		}
 		
-		/**
-		 * Request all of the objects the pool can contain at once.
-		 */
-		/*
-		public function requestAll():void {
-			trace(this + " : requestAll()" );
-			trace("_count : "+ _count );
-			trace("_max : "+ _max );
-			
-			while(_count < _max) {
-				trace( _count );
-				request();
-			}
-		}
-
-*/		
-		
 		
 		/**
 		 * Request all of the objects the pool can contain at once.
 		 */
 		public function requestAll():void {
 			trace("" );
-			trace("" );
 			trace(this + " : requestAll()" );
-			trace("_count : "+ _count );
-			trace("_max : "+ _max );
-			trace("_activeSet.length : "+ _activeSet.length );
 			
-			//_count = 0;
+			// Release everyone before requesting all again.
+			//releaseAll();
 			
+			// Create Objects if needed to be released.
+			while(_count < _max) { request() };
 			
-			releaseAll();
+			// Check _inactive
+			var l:uint = _inactiveSet.length;
+			for( var i:uint = 0; i < l; i++ ) { request() };
 			
-			// Problem w this is that it doesnt check the _inactiveSet pool.
-			
-			// Prob in counting.
-			
-			// This will only check for _count,
-			// Count is only affected when objects are released.		
-			
-			while(_count < _max) {
-				trace( this + " : requestAll() : _count : " + _count );
-				request();
-			}
 		}
 		
 		
