@@ -1,4 +1,6 @@
-package hype.framework.core {
+﻿package hype.framework.core {
+	import com.demonsters.debugger.MonsterDebugger;
+	
 	import hype.framework.behavior.AbstractBehavior;
 	import hype.framework.trigger.AbstractTrigger;
 
@@ -112,14 +114,22 @@ package hype.framework.core {
 		 * @return The new or recycled object
 		 */
 		public function request():Object {
+			
+			trace(this + " : request()" );
+			
 			var obj:Object;
 			
+			// If an object has already been released back into the pool, it gets added to the _inactiveSet.
+			// I guess it first checks and would take from a previously released Obj within the _inactiveSet before calling a new random object.
 			if (_inactiveSet.length > 0) {
 				obj = _inactiveSet.pull();
 				_activeSet.insert(obj);
 				onRequestObject(obj);
 
 				return obj;
+				
+			// Theres nothing in the _inactiveSet, count is less than max.
+			// Grab random object.
 			} else if (_count < _max) {
 				obj = makeRandomObject();
 				++_count;
@@ -136,11 +146,76 @@ package hype.framework.core {
 		/**
 		 * Request all of the objects the pool can contain at once.
 		 */
+		/*
 		public function requestAll():void {
+			trace(this + " : requestAll()" );
+			trace("_count : "+ _count );
+			trace("_max : "+ _max );
+			
 			while(_count < _max) {
+				trace( _count );
 				request();
 			}
 		}
+
+*/		
+		
+		
+		/**
+		 * Request all of the objects the pool can contain at once.
+		 */
+		public function requestAll():void {
+			trace("" );
+			trace("" );
+			trace(this + " : requestAll()" );
+			trace("_count : "+ _count );
+			trace("_max : "+ _max );
+			trace("_activeSet.length : "+ _activeSet.length );
+			
+			//_count = 0;
+			
+			
+			releaseAll();
+			
+			// Problem w this is that it doesnt check the _inactiveSet pool.
+			
+			// Prob in counting.
+			
+			// This will only check for _count,
+			// Count is only affected when objects are released.		
+			
+			while(_count < _max) {
+				trace( this + " : requestAll() : _count : " + _count );
+				request();
+			}
+		}
+		
+		
+		public function releaseAll():void {
+			
+			trace("" );
+			trace(this + " : releaseAll()" );
+			var o:Object;
+			var l:uint = _activeSet.length;
+			
+			for( var i:uint = 0; i < l; i++ )
+			{
+				
+				// Pull any object it gives you in order to have an Object to reference.
+				o = _activeSet.pull();
+				
+				// Re insert() the Object that was pulled, because only Objects in the _activeSet get released.
+				_activeSet.insert( o );
+				
+				// Do releasing.
+				release( o );
+				
+			}
+			
+		}
+		
+		
+		// Would releaseAll() be helpful?
 		
 		/**
 		 * Release an object back into the pool.
@@ -168,6 +243,8 @@ package hype.framework.core {
 				if (!reusable) {
 					--_count;
 				}
+				
+				//trace( this + " : release : reusable: " + reusable );
 
 				if (autoClean) {
 					AbstractBehavior.removeBehaviorsFromObject(object);

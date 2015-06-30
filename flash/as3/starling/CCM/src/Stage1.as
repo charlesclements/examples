@@ -18,7 +18,7 @@
 	import com.imt.framework.display.AbstractStarlingDisplay;
 	import com.imt.framework.display.IDisplay;
 	import com.imt.framework.event.StarlingSiteEvent;
-	import com.imt.game.gadgets.GamePlay;
+	import com.imt.game.GamePlay;
 	import com.imt.game.vehicles.Plane;
 	import com.imt.objects.Background;
 	//import com.imt.objects.ParallaxBackground;

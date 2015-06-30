@@ -63,6 +63,10 @@ package hype.framework.behavior {
 		 * @param object Object to remove all behaviors from
 		 */
 		public static function removeBehaviorsFromObject(object:Object):void {
+			
+			//trace("+++ removeBehaviorsFromObject " + object);
+			
+			
 			var list:Array = manager.getRhythmsOfType(AbstractBehavior);
 			var max:int = list.length;
 			var i:int;

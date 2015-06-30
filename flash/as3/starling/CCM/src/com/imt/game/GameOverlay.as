@@ -22,7 +22,6 @@
 	import com.imt.framework.gadget.ios.gamecenter.GameCenterGadget;
 	import com.imt.framework.gadget.text.BlinkingText;
 	import com.imt.framework.gadget.text.TemporaryText;
-	import com.imt.game.gadgets.GamePlay;
 	
 	import flash.display.BitmapData;
 	

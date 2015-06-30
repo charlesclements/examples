@@ -176,9 +176,11 @@ package hype.framework.core {
 		 * @param f Function to run on every element of the set
 		 */
 		public function forEach(f:Function):void {
+			trace(this + " : forEach()" );
 			var node:ObjectNode = _head;
 
 			while (node) {
+				trace(this + " : forEach() : Zip thru nodes. " );
 				f(node.obj);
 				node = node.next;
 			}		

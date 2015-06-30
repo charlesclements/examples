@@ -45,7 +45,7 @@
 			
 			trace(this);
 			
-			//MonsterDebugger.initialize( this );
+			MonsterDebugger.initialize( this );
 
 			// Init FLOX stuff.
 			FloxModel.intialize();
