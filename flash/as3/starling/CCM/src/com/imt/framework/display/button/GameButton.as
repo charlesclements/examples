@@ -1,4 +1,4 @@
-package com.imt.framework.display.button
+﻿package com.imt.framework.display.button
 {
 	import starling.textures.Texture;
 	

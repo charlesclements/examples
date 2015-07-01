@@ -13,6 +13,7 @@
 		protected var _count:uint;
 		protected var _activeSet:ObjectSet;
 		protected var _inactiveSet:ObjectSet;
+		protected var _tempSet:ObjectSet;
 		
 		/**
 		 * Whether to automatically attempt to remove any triggers and behaviors on an object when it is released back into the pool (defaults to true)
@@ -59,10 +60,24 @@
 		}
 		
 		/**
+		 * The inactive set of objects
+		 */
+		public function get inactiveSet():ObjectSet {
+			return _inactiveSet;
+		}
+		
+		/**
 		 * The active set of objects
 		 */
 		public function get activeSet():ObjectSet {
 			return _activeSet;
+		}
+		
+		/**
+		 * The active set of objects
+		 */
+		public function get tempSet():ObjectSet {
+			return _tempSet;
 		}
 		
 		/**
