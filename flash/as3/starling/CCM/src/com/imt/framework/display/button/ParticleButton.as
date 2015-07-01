@@ -29,13 +29,10 @@
 		public function removeMe():void
 		{
 			
-			trace( "ParticleButton - removeMe" );
-			
-			
+			//trace( "ParticleButton - removeMe" );
+			parent.removeChild( this );
 			
 		}
-		
-		
 		
 		
 		public function setup():void

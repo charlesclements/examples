@@ -196,14 +196,16 @@
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.NEW_BEST_TIME, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.LOSE, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.WIN, onEvent );
-			StarlingDispatcher.addEventListener( StarlingSiteEvent.NO_MATCH, onEvent );
-			StarlingDispatcher.addEventListener( StarlingSiteEvent.MATCHED_SEQUENCE, onEvent );
-			StarlingDispatcher.addEventListener( StarlingSiteEvent.MATCHED, onEvent );
-			StarlingDispatcher.addEventListener( StarlingSiteEvent.CARDS_MATCHED, onEvent );
+			//StarlingDispatcher.addEventListener( StarlingSiteEvent.NO_MATCH, onEvent );
+			//StarlingDispatcher.addEventListener( StarlingSiteEvent.MATCHED_SEQUENCE, onEvent );
+			//StarlingDispatcher.addEventListener( StarlingSiteEvent.MATCHED, onEvent );
+			//StarlingDispatcher.addEventListener( StarlingSiteEvent.CARDS_MATCHED, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.DONE, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.PLAY_GAME, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.PAUSE, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.RESUME, onEvent );
+			StarlingDispatcher.addEventListener( StarlingSiteEvent.GAME_COMPLETE, onEvent );
+			StarlingDispatcher.addEventListener( StarlingSiteEvent.GAME_OVER, onEvent );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.SCORE_LOADED, onEvent );
 			( gameplay as Sprite ).addEventListener( StarlingSiteEvent.CARD_TOUCHED, onEvent );
 			//StarlingDispatcher.addEventListener( StarlingSiteEvent.START_GAME, onEvent );
@@ -222,29 +224,35 @@
 		{
 			
 			trace(this + " : clear()");
+			
 			// Stopwatch.
 			stopwatch.removeEventListener( StopWatchStarling.START, onEvent );
 			stopwatch.removeEventListener( StopWatchStarling.STOP, onEvent );
 			stopwatch.removeEventListener( StopWatchStarling.PAUSE, onEvent );
 			stopwatch.removeEventListener( StopWatchStarling.RESUME, onEvent );
+			
 			// Events.
 			playButton.removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			//aboutButton.removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			playAgainButton.removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			//nextLevelButton.removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
 			//quitButton.removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
+			
 			// Global events.
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.LOSE, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.WIN, onEvent );
-			StarlingDispatcher.removeEventListener( StarlingSiteEvent.NO_MATCH, onEvent );
-			StarlingDispatcher.removeEventListener( StarlingSiteEvent.CARDS_MATCHED, onEvent );
-			StarlingDispatcher.removeEventListener( StarlingSiteEvent.MATCHED, onEvent );
-			StarlingDispatcher.removeEventListener( StarlingSiteEvent.MATCHED_SEQUENCE, onEvent );
+			//StarlingDispatcher.removeEventListener( StarlingSiteEvent.NO_MATCH, onEvent );
+			//StarlingDispatcher.removeEventListener( StarlingSiteEvent.CARDS_MATCHED, onEvent );
+			//StarlingDispatcher.removeEventListener( StarlingSiteEvent.MATCHED, onEvent );
+			//StarlingDispatcher.removeEventListener( StarlingSiteEvent.MATCHED_SEQUENCE, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.DONE, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.PLAY_GAME, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.PAUSE, onEvent );
 			StarlingDispatcher.removeEventListener( StarlingSiteEvent.RESUME, onEvent );
+			StarlingDispatcher.removeEventListener( StarlingSiteEvent.GAME_COMPLETE, onEvent );
+			StarlingDispatcher.removeEventListener( StarlingSiteEvent.GAME_OVER, onEvent );
 			( gameplay as Sprite ).removeEventListener( StarlingSiteEvent.TOUCHED, onEvent );
+			
 			// Clear tweens.
 			TweenMax.killTweensOf( readyGraphic );
 			// Visiblity.
@@ -298,12 +306,13 @@
 			if( _isWinner && Assets.LEVELS.length > 1 && Assets.LEVELS.selectedIndex != Assets.LEVELS.lastIndex )
 			{
 				
+				/*
 				//nextLevelButton.visible = true; 
 				TweenMax.to( nextLevelButton, 0, { autoAlpha:0 } );
 				TweenMax.to( nextLevelButton, 0.25, { delay:2, autoAlpha:1 } );
 				nextLevelButton.blink();
 				//TweenMax.delayedCall( 0.5, nextLevelButton.blink );
-				
+				*/
 			}
 			// Quit.
 			// Does the following actually in use? 
@@ -630,6 +639,8 @@
 					//Assets.getSfx( "SELECT_SND" ).playSound();
 					break;
 				
+				/*
+				
 				case StarlingSiteEvent.NO_MATCH:
 					Assets.getSfx( "NO_MATCH_SND" ).gotoSoundTime( 0, true );
 					textHolder.change( textNoMatch ).currentDisplay.start();
@@ -643,6 +654,43 @@
 				case StarlingSiteEvent.MATCHED_SEQUENCE:
 					Assets.getSfx( "MATCH_SND" ).gotoSoundTime( 0, true );
 					break;
+				
+				*/
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				case StarlingSiteEvent.GAME_COMPLETE:
+					trace(this + " : StarlingSiteEvent.GAME_COMPLETE");
+					//Assets.getSfx( "BG_MUSIC" ).pauseSound();
+					playAgainButton.visible = true;
+					break;
+				
+				
+				case StarlingSiteEvent.GAME_OVER:
+					trace(this + " : StarlingSiteEvent.GAME_OVER");
+					//Assets.getSfx( "BG_MUSIC" ).pauseSound();
+					playAgainButton.visible = true;
+					break;
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				
 				case StarlingSiteEvent.PAUSE:
 					Assets.getSfx( "BG_MUSIC" ).pauseSound();
@@ -753,12 +801,14 @@
 		private function _hideTextButtons():void
 		{
 			
+			trace(this + " : _hideTextButtons" );
+			
 			playAgainButton.visible = false;
 			playAgainButton.blink( false );
 			newGameButton.visible = false;
 			newGameButton.blink( false );
-			nextLevelButton.visible = false;
-			nextLevelButton.blink( false );
+			//nextLevelButton.visible = false;
+			//nextLevelButton.blink( false );
 			//quitButton.visible = false;
 			playButton.visible = false;
 			//aboutButton.visible = false;
@@ -766,8 +816,12 @@
 			// Text.
 			textLose.visible = false;
 			textWin.visible = false;
-			textMatch.visible = false;
-			textNoMatch.visible = false;
+			trace("+" );
+			//textMatch.visible = false;
+			trace("+" );
+			//textNoMatch.visible = false;
+			trace("+" );
+			trace(this + " : _hideTextButtons - END" );
 			
 		}
 		

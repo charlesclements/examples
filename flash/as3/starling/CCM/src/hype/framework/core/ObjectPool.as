@@ -13,7 +13,7 @@
 		protected var _count:uint;
 		protected var _activeSet:ObjectSet;
 		protected var _inactiveSet:ObjectSet;
-		protected var _tempSet:ObjectSet;
+		protected var _tempSet:ObjectSet;// CDC
 		
 		/**
 		 * Whether to automatically attempt to remove any triggers and behaviors on an object when it is released back into the pool (defaults to true)
@@ -55,6 +55,7 @@
 			
 			_activeSet = new ObjectSet();
 			_inactiveSet = new ObjectSet();
+			_tempSet = new ObjectSet();
 			
 			onCreateObject = onRequestObject = onReleaseObject = function(obj:Object):void{};
 		}
