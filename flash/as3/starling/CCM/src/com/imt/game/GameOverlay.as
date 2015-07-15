@@ -513,7 +513,7 @@
 			//memoryManager.start();     
 			// PauseView.
 			_pauseView.refresh();
-			stopwatch.startTimer( 4000 );
+			stopwatch.startTimer( 30000 );
 			
 		}
 		
@@ -817,11 +817,6 @@
 			// Text.
 			textLose.visible = false;
 			textWin.visible = false;
-			trace("+" );
-			//textMatch.visible = false;
-			trace("+" );
-			//textNoMatch.visible = false;
-			trace("+" );
 			trace(this + " : _hideTextButtons - END" );
 			
 		}

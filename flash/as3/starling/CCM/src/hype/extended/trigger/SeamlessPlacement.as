@@ -16,7 +16,7 @@ package hype.extended.trigger {
 	/**
 	 * Trigger that fires when an object has exited from a shape.
 	 */
-	public class SeemlessPlacement extends AbstractTrigger implements ITrigger 
+	public class SeamlessPlacement extends AbstractTrigger implements ITrigger 
 	{
 		
 		
@@ -33,7 +33,7 @@ package hype.extended.trigger {
 		 * @param shapeFlag True if the actual shape of the shape is to be used (defaults to false)
 		 * @param enterOnceFlag True if the object must enter the shape at least once (defaults to false)
 		 */
-		public function SeemlessPlacement(target:Object, rectangle:Rectangle) 
+		public function SeamlessPlacement(target:Object, rectangle:Rectangle) 
 		{
 			
 			super( function(){}, target);

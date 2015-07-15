@@ -4,10 +4,10 @@
 	
 	import starling.textures.Texture;
 	
-	public class ParticleButton extends AbstractButton
+	public class Armor extends AbstractButton
 	{
 		
-		public function ParticleButton()
+		public function Armor()
 		{
 			
 			//trace( "ParticleButton" );
