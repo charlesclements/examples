@@ -30,6 +30,7 @@
 	import starling.events.Event;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
+	import com.imt.model.Storage;
 	
 	
 	public class GameOverlay extends AbstractStarlingDisplay implements IDisplay
@@ -348,7 +349,7 @@
 				Fonts.createFont( "Game-Bold", Assets.getBitmap( "Game-Bold-ipad.png" ), Assets.getXML( "Game-Bold-ipad.fnt" ) );
 				
 				// Splash page.
-				splashPage = new Image( Texture.fromColor( Assets.WIDTH, Assets.HEIGHT, 0x333333 ) );
+				splashPage = new Image( Texture.fromColor( Storage.WIDTH, Storage.HEIGHT, 0x333333 ) );
 				addChild( splashPage );
 				
 				// Instructions.
@@ -492,7 +493,7 @@
 				
 				// Add quick iDisplay.
 				//_defaultLoadingGraphic = new FastStarlingDisplay( new Image(  Assets.getTextureAtlas( "assets" ).getTexture( "loading/bg" ) ) );
-				_defaultLoadingGraphic = new FastStarlingDisplay( new Image( Texture.fromColor( Assets.WIDTH, Assets.HEIGHT, 0xbb0000 ) ) );
+				_defaultLoadingGraphic = new FastStarlingDisplay( new Image( Texture.fromColor( Storage.WIDTH, Storage.HEIGHT, 0xbb0000 ) ) );
 				_defaultLoadingGraphic.initialize();
 				//
 				initialized = true;

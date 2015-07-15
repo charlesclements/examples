@@ -11,15 +11,12 @@
 	import com.imt.framework.engine.controller.StageController;
 	import com.imt.framework.event.StarlingSiteEvent;
 	import com.imt.framework.gadget.ios.gamecenter.GameCenterGadget;
-	
+	import com.imt.model.Storage;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
-	
 	import flox.model.FloxModel;
-	
 	import net.hires.debug.Stats;
-	
 	import starling.core.Starling;
 	
 	
@@ -50,17 +47,14 @@
 			// Init FLOX stuff.
 			FloxModel.intialize();
 			
-			
-			
-			
-			
-			Assets.WIDTH = stage.stageWidth;
-			Assets.HEIGHT = stage.stageHeight;
+			// Set stage dimensions.
+			Storage.WIDTH = stage.stageWidth;
+			Storage.HEIGHT = stage.stageHeight;
 			
 			// Starling
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.READY, _onReady );
 			StarlingDispatcher.addEventListener( StarlingSiteEvent.ALL_ASSETS_LOADED, _onAllAssetsLoaded );
-			myStarling = new Starling( StageController, stage, new Rectangle( 0, 0, Assets.WIDTH, Assets.HEIGHT ) );
+			myStarling = new Starling( StageController, stage, new Rectangle( 0, 0, Storage.WIDTH, Storage.HEIGHT ) );
 			myStarling.antiAliasing = 1;
 			myStarling.start();
 			

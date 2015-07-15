@@ -35,8 +35,8 @@
 		public static var GAME_PLAY:IDisplay;
 		public static var LEVELS:SuperArray;
 		public static var ASSETS_PATH:String = "";
-		public static var WIDTH:uint = 0;
-		public static var HEIGHT:uint = 0;
+		/*public static var WIDTH:uint = 0;
+		public static var HEIGHT:uint = 0;*/
 		private static var _sounds:Dictionary = new Dictionary();
 		
 		/*
