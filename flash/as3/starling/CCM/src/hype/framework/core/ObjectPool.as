@@ -50,6 +50,13 @@
 			} else {
 				throw new Error("Bad argument passed to ObjectPool. First argument must be class or array of classes");
 			}
+			
+			
+			trace("ObjectPool");
+			trace(content);
+			trace(max);
+			
+			
 			_max = max;
 			_count = 0;
 			
@@ -187,8 +194,13 @@
 			var o:Object;
 			var l:uint = _activeSet.length;
 			
+			trace(l);
+			
 			for( var i:uint = 0; i < l; i++ )
 			{
+				
+				trace(i);
+				
 				
 				// Pull any object it gives you in order to have an Object to reference.
 				o = _activeSet.pull();

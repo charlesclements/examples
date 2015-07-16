@@ -12,6 +12,7 @@
 	import hype.extended.behavior.VariableVibration;
 	import hype.extended.trigger.SeamlessPlacement;
 	
+	import starling.display.Sprite;
 	import starling.textures.Texture;
 	
 	
@@ -26,19 +27,30 @@
 			
 			//trace( "Armor" );
 			
-			super( { id:"particle" }, Texture.fromBitmapData( new BitmapData( 25, 25, false, 0xff0000 ) ), "", Texture.fromBitmapData( new BitmapData( 25, 25, false, 0x00ff00 ) ) );
+			super( { id:"Armor" }, Texture.fromBitmapData( new BitmapData( 50, 50, false, 0xff0000 ) ), "", Texture.fromBitmapData( new BitmapData( 25, 25, false, 0x00ff00 ) ) );
 			
 			// Stage 1.
 			_behaviour.push( [] );
 			
-			var stage:uint = 0;
-			_behaviour[ stage ].push( new VariableVibration( this, "x", 0.99, 0.05, 1.5 ) );
-			_behaviour[ stage ].push( new VariableVibration( this, "y", 0.99, 0.05, 1.5 ) );
-			_behaviour[ stage ].push( new VariableVibration( this, "rotation", 0.99, 0.05, 0.1 ) );
-			_behaviour[ stage ].push( new SeamlessPlacement( this, new Rectangle( 0, 0, Storage.WIDTH, Storage.HEIGHT ) ) );
+			var tempIndex:uint = 0;
+			_behaviour[ tempIndex ].push( new VariableVibration( this, "x", 0.99, 0.05, 1.5 ) );
+			_behaviour[ tempIndex ].push( new VariableVibration( this, "y", 0.99, 0.05, 1.5 ) );
+			_behaviour[ tempIndex ].push( new VariableVibration( this, "rotation", 0.99, 0.05, 0.1 ) );
+			_behaviour[ tempIndex ].push( new SeamlessPlacement( this, new Rectangle( 0, 0, Storage.WIDTH, Storage.HEIGHT ) ) );
+			
+			
+			// Stage 2.
+			_behaviour.push( [] );
+			
+			tempIndex = 1;
+			//_behaviour[ stageIndex ].push( new VariableVibration( this, "x", 0.99, 0.05, 1.5 ) );
+			//_behaviour[ stageIndex ].push( new VariableVibration( this, "y", 0.99, 0.05, 1.5 ) );
+			_behaviour[ tempIndex ].push( new VariableVibration( this, "rotation", 0.99, 0.05, 0.1 ) );
+			//_behaviour[ stageIndex ].push( new SeamlessPlacement( this, new Rectangle( 0, 0, Storage.WIDTH, Storage.HEIGHT ) ) );
 			
 			// Random rotation.
 			rotation = MathUtil.degreesToRadians( Math.random() * 360 );
+			scaleX = scaleY = 0.6 + ( Math.floor( Math.random() * 100 ) * 0.01);
 			
 		}
 
@@ -47,15 +59,15 @@
 		public function startBehaviour():void
 		{
 			
-			//trace( "Armor - startBehaviour" );
+			trace( "Armor - startBehaviour" );
 			
 			// Kill running behaviours.
 			stopBehaviour();
 			
-			for( var a:uint = 0; a < _behaviour[ _stage ].length; a++ )
+			for( var a:uint = 0; a < _behaviour[ _stageIndex ].length; a++ )
 			{
 				
-				_behaviour[ _stage ][ a ].start();
+				_behaviour[ _stageIndex ][ a ].start();
 				
 			}
 			
@@ -66,9 +78,12 @@
 		public function stopBehaviour():void
 		{
 			
-			//trace( "Armor - stopBehaviour" );
+			trace( "Armor - stopBehaviour" );
 			
 			var stagesLength:uint = _behaviour.length;
+			
+			trace( stagesLength );
+			
 			
 			for( var a:uint = 0; a < stagesLength; a++ )
 			{
@@ -76,7 +91,10 @@
 				for( var b:uint = 0; b < stagesLength; b++ )
 				{
 					
-					_behaviour[ a ][ b ].stop();
+					trace( _behaviour[ a ][ b ] );
+					if( _behaviour[ a ][ b ] != undefined ) _behaviour[ a ][ b ].stop();
+					
+					
 					
 				}
 				
