@@ -1,9 +1,12 @@
 ﻿package com.imt.model
 {
+	import flash.display.Stage;
+
 	public class Storage extends Object
 	{
 		
 		
+		public static var FLASH_STAGE:Stage = null;
 		public static var WIDTH:uint = 0;
 		public static var HEIGHT:uint = 0;
 		

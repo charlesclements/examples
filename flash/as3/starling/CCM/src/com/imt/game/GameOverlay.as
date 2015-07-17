@@ -513,7 +513,7 @@
 			//memoryManager.start();     
 			// PauseView.
 			_pauseView.refresh();
-			stopwatch.startTimer( 30000 );
+			stopwatch.startTimer( 120000 );
 			
 		}
 		

@@ -48,6 +48,7 @@
 			FloxModel.intialize();
 			
 			// Set stage dimensions.
+			Storage.FLASH_STAGE = stage;
 			Storage.WIDTH = stage.stageWidth;
 			Storage.HEIGHT = stage.stageHeight;
 			
