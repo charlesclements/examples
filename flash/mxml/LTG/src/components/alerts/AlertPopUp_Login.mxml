@@ -35,7 +35,9 @@
 				
 				trace("AlertPopUp_Login - onLogin");
 				getLogin();
-				//close();
+				
+				//Dispatcher.dispatchEvent( new AppEvent( AppEvent.LOGIN_SUCCESS ) );
+				close();
 				
 			}
 			
@@ -62,9 +64,6 @@
 				var ldr:URLLoader = new URLLoader();
 				ldr.dataFormat = URLLoaderDataFormat.BINARY;
 				ldr.addEventListener(Event.COMPLETE, onLoginLoad);
-				
-				
-				
 				
 				// Create URLRequest.
 				var req:URLRequest = new URLRequest( AppModel.SERVER_PATH + "login.php");

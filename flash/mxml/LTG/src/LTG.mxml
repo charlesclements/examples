@@ -13,17 +13,14 @@
 	
 	<fx:Script>
 		<![CDATA[
+			
+			
 			import com.demonsters.debugger.MonsterDebugger;
-			
 			import mx.managers.PopUpManager;
-			
 			import components.alerts.AlertPopUp_Login;
-			
 			import model.AppModel;
-			
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
-			
 			import views.ProjectsView;
 			
 			
@@ -69,7 +66,9 @@
 			protected function onEvent(e:AppEvent=null):void
 			{
 				
+				trace("+");
 				trace("LTG - onEvent");
+				trace("+");
 				trace(e.type);
 				
 				switch( e.type )
