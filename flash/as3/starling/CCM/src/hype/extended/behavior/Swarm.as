@@ -1,10 +1,11 @@
 package hype.extended.behavior {
+	import flash.geom.Point;
+	
 	import hype.framework.behavior.AbstractBehavior;
 	import hype.framework.behavior.IBehavior;
 	import hype.framework.core.HypeMath;
-
-	import flash.display.DisplayObject;
-	import flash.geom.Point;
+	
+	import starling.display.DisplayObject;
 
 	/**
 	 * Makes the target object chase after a point
@@ -37,9 +38,15 @@ package hype.extended.behavior {
 		 * @protected
 		 */
 		public function run(target:Object):void {
+			
+			trace("run");
 			var clip:DisplayObject = target as DisplayObject;
 			var angle:Number = Math.atan2(_point.y - clip.y, _point.x - clip.x) * HypeMath.R2D;
 			var deltaAngle:Number = HypeMath.getDegreeDistance(clip.rotation, angle);
+			
+			trace(_point.x + ", " + _point.y );
+			trace(clip.x + ", " + clip.y );
+			
 			
 			clip.rotation += deltaAngle * _turnEase + (Math.random() * _twitch * 2) - _twitch;
 			clip.x += Math.cos(clip.rotation * HypeMath.D2R) * _speed;
