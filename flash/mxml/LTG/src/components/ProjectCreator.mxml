@@ -11,16 +11,19 @@
 	
 	<fx:Script>
 		<![CDATA[
-			
-			
 			import com.greensock.loading.LoaderMax;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.IList;
 			import mx.managers.PopUpManager;
+			
 			import components.alerts.AlertPopUp_CloseProject;
 			import components.media.AudioPlayer;
+			
 			import model.AppModel;
+			
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
-			import mx.collections.ArrayCollection;
 			
 			
 			[Bindable]
@@ -41,7 +44,8 @@
 			private var _audioFile:File;
 			private var _loader:LoaderMax;
 			private static var _saved:Boolean = true;
-			
+			[Bindable]
+			private var xmllist:XMLList;
 			
 			// Initializes class.
 			public function init():void
@@ -94,6 +98,7 @@
 						
 						// Createfolder.
 						var folder:File = AppModel.STORAGE.resolvePath("LyricsToGo/" + AppModel.PID );
+						
 						folder.createDirectory();
 						
 						// Single project.
@@ -143,6 +148,12 @@
 						// Load project directory.
 						var path:String = AppModel.STORAGE.nativePath + "/LyricsToGo/user/" + AppModel.ID + "/projects/" + AppModel.PID + "/project.xml";
 						var f:File = AppModel.CURRENT_PROJECT_FILE = File.applicationStorageDirectory.resolvePath( path ); 
+						
+						trace("++++");
+						trace(path);
+						
+						
+						
 						var s:FileStream = AppModel.STREAM = new FileStream;
 						s.open( f, FileMode.READ ); 
 						AppModel.CURRENT_XML = XML( s.readUTFBytes( s.bytesAvailable ) ); 
@@ -152,13 +163,17 @@
 						docContent.text = AppModel.CURRENT_XML[0].content;
 						docTitle.text = AppModel.CURRENT_XML[0].title;
 						
-						
+						//var xmllist:XMLList = new XMLList( AppModel.CURRENT_XML );
+						//trace(xmllist);
+						////versesList.//.dataProvider( xmllist );
+						//versesList.
 						
 						break;
 					
 					case AppEvent.CLOSE_PROJECT:
 						trace("ProjectCreator - onEvent - CLOSE_PROJECT");
 						clear();
+						trace("-");
 						Dispatcher.dispatchEvent( new AppEvent( AppEvent.CLOSE_PROJECT, true ) );
 						break;
 					
@@ -348,7 +363,7 @@
 				docTitle.text = "";
 				docContent.text = "";
 				audioPlayer.clear();
-				page.removeElement( audioPlayer );
+				if( page.contains( audioPlayer ) ) page.removeElement( audioPlayer );
 				
 			}
 			
@@ -417,7 +432,8 @@
 							id="showMediaButton" label="MEDIA"
 							click="toggleViewAudio()"
 							/>
-			<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%" dataProvider="{this.dataProvider}" />
+			<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%" dataProvider="{dataProvider}" />
+			<!--<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%"  />-->
 			<s:Button id="newVerse" label="New"></s:Button>
 			
 		</s:HGroup>

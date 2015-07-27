@@ -42,8 +42,9 @@
 			{
 				
 				trace("AudioPlayer : doRemoveChildren");
-				remove( loaderGroup );
-				remove( playerGroup );
+				if( contains( loaderGroup ) ) remove( loaderGroup );
+				if( contains( playerGroup ) ) remove( playerGroup );
+				trace("AudioPlayer : doRemoveChildren END");
 				
 			}
 			
