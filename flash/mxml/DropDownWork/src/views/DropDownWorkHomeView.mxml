@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="HomeView" xmlns:ns="http://www.flextras.com/mxml">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+		
+		
+		
+		
+	</fx:Declarations>
+	
+	
+		
+		<fx:Script>
+			<![CDATA[
+				
+				import mx.collections.XMLListCollection;
+				
+				[Embed(source='test.xml', mimeType="application/octet-stream")]
+				public static const xmlClass:Class; 
+				private var _xml:XML = new XML( new xmlClass );
+				
+				[Bindable]
+				private var _xmlListCollection:XMLListCollection = new XMLListCollection( _xml.content );
+				
+			]]>
+		</fx:Script>
+			
+	
+	<ns:DropDownList width="100%" id="drop1" dataProvider="{_xmlListCollection}" labelField="@name"></ns:DropDownList>
+	
+</s:View>
