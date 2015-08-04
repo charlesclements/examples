@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		xmlns:s="library://ns.adobe.com/flex/spark" title="HomeView" initialize="init();" xmlns:ns="http://www.flextras.com/mxml">
+		xmlns:s="library://ns.adobe.com/flex/spark" title="HomeView" initialize="init();" xmlns:ns="http://www.flextras.com/mxml" xmlns:mobile="components.mobile.*">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		
@@ -16,79 +16,64 @@
 			<![CDATA[
 				
 				import mx.collections.XMLListCollection;
-				
 				import spark.events.IndexChangeEvent;
 				
-				[Embed(source='test.xml', mimeType="application/octet-stream")]
+				[Embed(source='test1.xml', mimeType="application/octet-stream")]
 				public static const xmlClass:Class; 
 				private var _xml:XML = new XML( new xmlClass );
-				
 				[Bindable]
-				private var _xmlListCollection:XMLListCollection;// = new XMLListCollection( _xml.content );
-				
-				
+				private var _xmlListCollection:XMLListCollection;
 				
 				private function init():void
 				{
 					
 					trace("init");
 					
-					//_xmlListCollection.u
+					// Check to see if there are @name attributes
+					// If none, create the name attribute and define it.
+					if( _xml.content.@name.length() == 0 )
+					{
+						
+						trace( _xml.content.length() );
+						
+						if( _xml.content.length() == 1 )
+						{
+							
+							_xml.content.@name = "Verse 1";
+							
+							// Dispatch save event here.
+							trace( " : Dispatch save event here." );
+							
+						}
+						
+					}
 					
+					//trace( _xml.content.@name.length() );
+					//trace( _xml.content.@name );
 					
-					var editXML:XML = 
-						<test>
-							<content name="NEW VERSE" />
-						</test>;
+					// Add NEW VERSE to XML.
+					_xml.appendChild( <content name="CREATE NEW VERSE"></content> );
+					_xml.appendChild( <content name="EDIT NAMES"></content> );
 					
-					
-					_xml.appendChild( editXML );
-					
-					
-					
+					// Add special coloring for CREATE and EDIT items?
 					
 					_xmlListCollection = new XMLListCollection( _xml.content );
-					
-					
-					// Add EDIT button to dropdown?
-					
-					// Create XMLList
-					
-				//	_xmlListCollection.addItem( editXML );
-					
-					
-					
-					
-					
-					
-					/*
-					
-					var editXMLList:XMLList = new XMLList( editXML );
-					
-					
-					//trace(editXML);
-					
-					_xmlListCollection.addItem( editXMLList );
-					*/
-					
-					trace(_xmlListCollection.source.children());
-					trace(_xmlListCollection.length);
-					
-					
-					
-					
 					
 				}
 				
 				
 				
 				
-				private function onEvent(e:Event):void
+				private function _onDropDownEvent(e:Event):void
 				{
 					
 					
-					trace(e.type);
-					trace( ( e.target as DropDownList ).selectedIndex);
+					trace("_onDropDownEvent : " + e.type);
+					//trace( ( e.target as DropDownList ).selectedIndex);
+					trace( ( e.target as DropDownList ).selectedItem.@name);
+					
+					
+					
 					
 					
 					
@@ -99,7 +84,6 @@
 			]]>
 		</fx:Script>
 			
-	
-	<ns:DropDownList width="100%" selectedIndex="0" id="drop1" dataProvider="{_xmlListCollection}" change="onEvent(event)" labelField="@name"></ns:DropDownList>
+	<ns:DropDownList width="100%" prompt="SELECT ONE" selectedIndex="0" id="drop1" dataProvider="{_xmlListCollection}" change="_onDropDownEvent(event)" labelField="@name"></ns:DropDownList>
 	
 </s:View>

@@ -5,7 +5,46 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.XMLListCollection;
+			
+			
+			[Bindable]
+			private var _xmlListCollection:XMLListCollection;// = new XMLListCollection( _xml.content );
+			
+			
+			
+			
+			public function setup(xml:XML):void
+			{
+				
+				
+				// Check to see if @name attribute exists.
+				
+				
+				if( xml.content.length );
+				
+				
+				
+				
+				
+				
+				// Add NEW VERSE to XML.
+				_xml.appendChild( <content name="NEW VERSE"></content> );
+				
+				_xmlListCollection = new XMLListCollection( _xml.content );
+				
+				
+				
+				
+			}
+			
+			
+			
+			
+		]]>
+	</fx:Script>
 	
 	
 </ns:DropDownList>
