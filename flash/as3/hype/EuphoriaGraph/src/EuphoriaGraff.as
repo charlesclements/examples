@@ -1,31 +1,39 @@
 package
 {
-	import com.yr.tracknames.gadgets.AudioGadget;
-	import com.yr.tracknames.gadgets.Visuals;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
+	import hype.framework.sound.SoundAnalyzer;
+	
+	//import objects.AudioGadget;
 	import objects.Visuals;
 	
 	public class EuphoriaGraff extends Sprite
 	{
+		
+		//private var _audioGadget:AudioGadget;
+		private var _visuals:Visuals;
+		private var _clip:Sprite;
+		
+		
 		public function EuphoriaGraff()
 		{
 			
 			
-			
+			_clip = new Sprite;
+			addChild( _clip );
 			
 			
 			// Create audio gadget.
-			_audioGadget = new AudioGadget;
-			_audioGadget.addEventListener( "READY", onReady );
-			_audioGadget.initialize( {} );
+			//_audioGadget = new AudioGadget;
+			//_audioGadget.addEventListener( "READY", onReady );
+			//_audioGadget.initialize( {} );
 			
 			// Visual stuff.
 			_visuals = new Visuals();
 			_clip.addChild( _visuals );
-			_visuals.intitialize( { soundAnalyzer:_audioGadget.soundAnalyzer, x:0, y:326, w:1200, h:535 } );
+			_visuals.intitialize( { soundAnalyzer:new SoundAnalyzer, x:0, y:326, w:1200, h:535 } );
 			
 			
 			
