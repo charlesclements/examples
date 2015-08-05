@@ -15,6 +15,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.IList;
+			import mx.collections.XMLListCollection;
 			import mx.managers.PopUpManager;
 			
 			import components.alerts.AlertPopUp_CloseProject;
@@ -35,6 +36,12 @@
 					{label:'Arkansas',data:4}, 
 					{label:'California',data:5}
 			]);
+			
+			
+			[Bindable]
+			private var _xmlListCollection:XMLListCollection;
+			
+			
 
 		
 			// Vars.
@@ -106,7 +113,7 @@
 							<project>
 								<title>{ docTitle.text }</title>
 								<id>{ AppModel.PID }</id>
-								<content></content>
+								<content name="Verse 1"></content>
 								<audio name="" url="" start="0" end="-1" />
 							</project>)
 						
@@ -136,10 +143,10 @@
 					case AppEvent.OPEN_PROJECT:
 						
 						trace("ProjectCreator - onEvent - OPEN_PROJECT");
-						var xml:XML = XML( AppModel.PROJECTS_XML.children()[ AppModel.PROJECT_INDEX ] );
+						var projectReferenceXml:XML = XML( AppModel.PROJECTS_XML.children()[ AppModel.PROJECT_INDEX ] );
 						
 						//AppModel.PID = xml.PID;
-						AppModel.PID = xml.id;
+						AppModel.PID = projectReferenceXml.id;
 						
 						// Temporarily kill Save button.
 						//saveButton.enabled = false;
@@ -153,21 +160,43 @@
 						trace(path);
 						
 						
-						
+						// Pull XML from local file.
 						var s:FileStream = AppModel.STREAM = new FileStream;
 						s.open( f, FileMode.READ ); 
 						AppModel.CURRENT_XML = XML( s.readUTFBytes( s.bytesAvailable ) ); 
 						s.close(); 
 						
+						// XML to DROPDOWN
+						
+						// Check to see if there are @name attributes
+						// If none, create the name attribute and define it.
+						if( AppModel.CURRENT_XML.content.@name.length() == 0 )
+						{
+							
+							if( AppModel.CURRENT_XML.content.length() == 1 )
+							{
+								
+								AppModel.CURRENT_XML.content.@name = "Verse 1";
+								
+								// Save single project.
+								AppModel.saveSingleProjectXML( AppModel.PID, new XMLList( AppModel.CURRENT_XML ) );
+								
+							}
+							
+						}
+						else trace( "ProjectCreator - onEvent : Content name attribute already exists!!" );
+						
+						// Add NEW VERSE to XML.
+						// Add special coloring for CREATE and EDIT items?
+						AppModel.CURRENT_XML.appendChild( <content name="CREATE NEW VERSE"></content> );
+						AppModel.CURRENT_XML.appendChild( <content name="EDIT NAMES"></content> );
+						
+						// Add XML node.
+						_xmlListCollection = new XMLListCollection( AppModel.CURRENT_XML.content );
+						
 						// Set text field content.
-						docContent.text = AppModel.CURRENT_XML[0].content;
+						docContent.text = AppModel.CURRENT_XML[0].content[0];
 						docTitle.text = AppModel.CURRENT_XML[0].title;
-						
-						//var xmllist:XMLList = new XMLList( AppModel.CURRENT_XML );
-						//trace(xmllist);
-						////versesList.//.dataProvider( xmllist );
-						//versesList.
-						
 						break;
 					
 					case AppEvent.CLOSE_PROJECT:
@@ -399,6 +428,24 @@
 			}
 			
 			
+			
+			private function _onDropDownEvent(e:Event):void
+			{
+				
+				
+				trace("ProjectMaster - _onDropDownEvent : " + e.type);
+				//trace( ( e.target as DropDownList ).selectedIndex);
+				trace( ( e.target as DropDownList ).selectedItem.@name);
+				
+				
+				
+				
+				
+				
+			}
+			
+			
+			
 		]]>
 	</fx:Script>
 	
@@ -432,7 +479,11 @@
 							id="showMediaButton" label="MEDIA"
 							click="toggleViewAudio()"
 							/>
-			<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%" dataProvider="{dataProvider}" />
+			<!--<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%" dataProvider="{dataProvider}" />-->
+			<!--<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%" dataProvider="{_xmlListCollection}" change="_onDropDownEvent(event)" labelField="@name" />
+			-->
+			
+			
 			<!--<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%"  />-->
 			<s:Button id="newVerse" label="New"></s:Button>
 			
@@ -441,6 +492,12 @@
 		<s:HGroup id="hgroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="0" paddingLeft="5" paddingRight="5" paddingTop="0" width="100%">
 			
 			<s:TextInput id="docTitle" width="100%" height="36" needsSoftKeyboard="true" change="onProjectChange()" />
+			
+		</s:HGroup>
+		
+		<s:HGroup id="DropdaownGroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="0" paddingLeft="5" paddingRight="5" paddingTop="0" width="100%">
+			
+			<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%" dataProvider="{_xmlListCollection}" change="_onDropDownEvent(event)" labelField="@name" />
 			
 		</s:HGroup>
 		

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- containers\spark\myComponents\MyAlertPopUp.mxml -->
+<s:SkinnablePopUpContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+						   xmlns:s="library://ns.adobe.com/flex/spark" 
+						   xmlns:mx="library://ns.adobe.com/flex/mx" 
+						   width="100%" height="100%" initialize="init()">
+	
+	<fx:Script>
+		<![CDATA[
+			
+			//import model.AppModel;
+			
+			
+			private function init():void
+			{
+				
+				trace("AlertPopUp_CreateNewVerse - init");
+				
+				
+			}
+			
+			
+			protected function onCreate():void
+			{
+				
+				trace("AlertPopUp_CreateNewVerse - onCreate");
+				
+				// Add new Verse name to master XML.
+				
+				// Save.
+				
+				close();
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+	<s:Panel title="Please signin." width="100%" height="100%" backgroundColor="0xdddddd">
+		<s:VGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+			<s:HGroup  paddingBottom="20" paddingLeft="10" paddingRight="10" horizontalAlign="left">
+				<s:Label id="txtWarning" text=""/>
+			</s:HGroup>
+			<s:HGroup>
+				<s:VGroup>
+					<s:Label text="What are we creating?"/>
+					<s:TextInput id="creation" width="100%"/>
+				</s:VGroup>
+			</s:HGroup>
+			<s:VGroup verticalAlign="bottom">
+				<s:HGroup verticalAlign="middle" width="100%" paddingLeft="10" paddingRight="10">
+					<s:Button id="btnNewUser" label="Create" height="50" width="100%" click="onCreate();"/>
+					<s:Button id="btnLogin" label="Close" height="50" width="100%" click="close();"/>
+				</s:HGroup>
+			</s:VGroup>
+		</s:VGroup>
+	</s:Panel>
+	
+</s:SkinnablePopUpContainer>
