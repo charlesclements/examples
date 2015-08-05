@@ -18,10 +18,10 @@ package model
 	public class AppModel extends Object
 	{
 		
-		public static const SERVER_PATH:String = "http://localhost:8888/";
+		//public static const SERVER_PATH:String = "http://localhost:8888/";
 		
 		// Get server php.
-		//public static const SERVER_PATH:String = "http://www.charlesclements.net/apps/ltg/";
+		public static const SERVER_PATH:String = "http://www.charlesclements.net/apps/ltg/";
 		
 		public static const STORAGE:File = File.applicationStorageDirectory;
 		public static var ID:String = "";
@@ -56,15 +56,29 @@ package model
 			
 			// At this point:
 			// Login success.
+			trace( "-");
+			
+			
+			
+			//var directory:String = "LyricsToGo/user/" + ID;
+			
 			
 			// Use the returned info to get projects.xml of the User.
+			//var path:String = directory + "/projects.xml";
 			var path:String = "LyricsToGo/user/" + ID + "/projects.xml";
 			
 			// Point File to the path.
 			PROJECTS_FILE = STORAGE.resolvePath( path );
 			
+			
+			// Do the directories need to be created first, and then the XML file?
+			
+			//trace( PROJECTS_FILE.url );
+			//trace( PROJECTS_FILE.nativePath );
+			
 			// Read XML info.
-			STREAM.open( PROJECTS_FILE, FileMode.READ);
+			//STREAM.open( PROJECTS_FILE, FileMode.READ);
+			STREAM.open( PROJECTS_FILE, FileMode.UPDATE);
 			
 			// Get the XML from the File.
 			PROJECTS_XML = XML( STREAM.readUTFBytes( STREAM.bytesAvailable ) );
@@ -85,11 +99,11 @@ package model
 				// Set stuff in motion.
 				PROJECTS_XML = new XML( <projects></projects> );
 				
+				//saveAllProjectsXML( PROJECTS_XML );
+				
 			}
 			else
 			{
-				
-				
 				
 				
 				

@@ -14,7 +14,6 @@
 			import com.greensock.loading.LoaderMax;
 			
 			import mx.collections.ArrayCollection;
-			import mx.collections.IList;
 			import mx.collections.XMLListCollection;
 			import mx.managers.PopUpManager;
 			
@@ -27,7 +26,7 @@
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
 			
-			
+			/*
 			[Bindable]
 			public var dataProvider : ArrayCollection = 
 				new ArrayCollection([ 
@@ -37,7 +36,7 @@
 					{label:'Arkansas',data:4}, 
 					{label:'California',data:5}
 			]);
-			
+			*/
 			
 			[Bindable]
 			private var _xmlListCollection:XMLListCollection;
@@ -99,6 +98,19 @@
 					case AppEvent.NEW_PROJECT:
 						
 						
+						
+						
+						
+						
+						
+						// Need to add/delete shit to the combobox.
+						
+						
+						
+						
+						
+						
+						
 						trace("ProjectCreator - onEvent - NEW_PROJECT");
 						var d:Date = new Date;
 						AppModel.PID = String( d.time );
@@ -158,8 +170,8 @@
 						var path:String = AppModel.STORAGE.nativePath + "/LyricsToGo/user/" + AppModel.ID + "/projects/" + AppModel.PID + "/project.xml";
 						var f:File = AppModel.CURRENT_PROJECT_FILE = File.applicationStorageDirectory.resolvePath( path ); 
 						
-						trace("++++");
-						trace(path);
+						//trace("++++");
+						//trace(path);
 						
 						
 						// Pull XML from local file.
@@ -190,8 +202,21 @@
 						
 						// Add NEW VERSE to XML.
 						// Add special coloring for CREATE and EDIT items?
-						AppModel.CURRENT_XML.appendChild( <content name="CREATE NEW VERSE"></content> );
-						AppModel.CURRENT_XML.appendChild( <content name="EDIT NAMES"></content> );
+						
+						
+						
+						
+						
+						_addNonVerseItems();
+						
+						_removeNonVerseItems();
+						
+						
+						
+						
+						
+						/*AppModel.CURRENT_XML.appendChild( <content name="CREATE NEW VERSE"></content> );
+						AppModel.CURRENT_XML.appendChild( <content name="EDIT NAMES"></content> );*/
 						
 						// Add XML node.
 						_xmlListCollection = new XMLListCollection( AppModel.CURRENT_XML.content );
@@ -242,7 +267,7 @@
 			protected function onProjectChange(e:Event=null):void
 			{
 				
-				//trace("ProjectMaster - onProjectChange");
+				//trace("ProjectCreator - onProjectChange");
 				//saveButton.enabled = true;
 				_saved = true;
 				
@@ -252,7 +277,7 @@
 			protected function initCloseProject():void
 			{
 				
-				trace("ProjectMaster - initCloseProject");
+				trace("ProjectCreator - initCloseProject");
 				
 				if( _saved )
 				{
@@ -280,7 +305,7 @@
 			protected function closeProject(e:Event=null):void
 			{
 				
-				//trace("ProjectMaster - closeProject");
+				//trace("ProjectCreator - closeProject");
 				Dispatcher.dispatchEvent( new AppEvent( AppEvent.CLOSE_PROJECT, true ) );
 				
 			}
@@ -330,7 +355,7 @@
 			protected function _onFileLoaded(e:Event):void
 			{
 				
-				trace("ProjectMaster - _onFileLoaded");
+				trace("ProjectCreator - _onFileLoaded");
 				
 				trace( ( e.currentTarget as File ).nativePath );
 				trace( ( e.currentTarget as File ).data.length );
@@ -352,7 +377,7 @@
 			protected function _onSoundLoaded(e:Event):void
 			{
 				
-				trace("ProjectMaster - _onSoundLoaded");
+				trace("ProjectCreator - _onSoundLoaded");
 				
 			}
 			*/
@@ -361,7 +386,7 @@
 			protected function _loadMusic(e:Event=null):void
 			{
 				
-				trace("ProjectMaster - _loadMusic");
+				trace("ProjectCreator - _loadMusic");
 				
 				_audioFile = new File;
 				_audioFile.addEventListener( Event.SELECT, _onAudioFileSelected );
@@ -373,7 +398,7 @@
 			protected function toggleViewAudio(e:Event=null):void
 			{
 				
-				trace("ProjectMaster - toggleViewAudio");
+				trace("ProjectCreator - toggleViewAudio");
 				
 				if( page.contains( audioPlayer ) ) page.removeElement( audioPlayer );
 				else 
@@ -390,7 +415,7 @@
 			public function clear():void
 			{
 				
-				trace("ProjectMaster - clear");
+				trace("ProjectCreator - clear");
 				docTitle.text = "";
 				docContent.text = "";
 				audioPlayer.clear();
@@ -402,7 +427,7 @@
 			protected function buttons_clickHandler(event:MouseEvent):void
 			{
 				
-				trace("ProjectMaster - buttons_clickHandler");
+				trace("ProjectCreator - buttons_clickHandler");
 				switch( ( buttons.selectedItem as String ).toUpperCase() )
 				{
 					
@@ -430,14 +455,89 @@
 			}
 			
 			
+			private function _addNonVerseItems():void
+			{
+				
+				trace("ProjectCreator - _addNonVerseItems");
+				
+				AppModel.CURRENT_XML.appendChild( <content name="CREATE NEW VERSE"></content> );
+				AppModel.CURRENT_XML.appendChild( <content name="EDIT NAMES"></content> );
+				
+				
+				
+				trace(AppModel.CURRENT_XML);
+				
+				trace("ProjectCreator - _addNonVerseItems - END");
+				
+				
+				
+			}
+			
+			
+			private function _removeNonVerseItems():void
+			{
+				
+				trace("ProjectCreator - _removeNonVerseItems");
+				
+				
+				trace(AppModel.CURRENT_XML);
+				
+				delete AppModel.CURRENT_XML.content.(elements("@name") == "CREATE NEW VERSE")[0];
+				delete AppModel.CURRENT_XML.content.(elements("@name") == "EDIT NAMES")[0];
+				
+				// delete myXML.employee.(elements('Compare') == '1234')[0];
+				
+				trace(AppModel.CURRENT_XML);
+				
+				trace("ProjectCreator - _removeNonVerseItems - END");
+				
+				
+			}
+			
+			
+			
+			
+			
 			
 			private function _onDropDownEvent(e:Event):void
 			{
 				
 				
-				trace("ProjectMaster - _onDropDownEvent : " + e.type);
+				trace("ProjectCreator - _onDropDownEvent : " + e.type);
 				//trace( ( e.target as DropDownList ).selectedIndex);
 				trace( ( e.target as DropDownList ).selectedItem.@name);
+				
+				
+				
+				switch( ( e.target as DropDownList ).selectedItem.@name )
+				{
+					
+					
+					
+					case "CREATE NEW VERSE":
+						trace( "CREATE NEW VERSE" );
+								
+						alertCreateNewVerse.open( this, true );
+						alertCreateNewVerse.height = this.height
+						alertCreateNewVerse.width = this.width;
+						
+						// Center the pop-up in the parent container.
+						PopUpManager.centerPopUp(alertCreateNewVerse);
+						
+						break;
+					
+					case "EDIT NAMES":
+						trace( "EDIT NAMES" );
+						
+						
+						break;
+					
+					default: 
+						trace( "Nothing selected" );
+						
+				}
+				
+				
 				
 				
 				
