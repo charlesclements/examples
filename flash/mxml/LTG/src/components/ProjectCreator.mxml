@@ -19,6 +19,7 @@
 			import mx.managers.PopUpManager;
 			
 			import components.alerts.AlertPopUp_CloseProject;
+			import components.alerts.AlertPopUp_CreateNewVerse;
 			import components.media.AudioPlayer;
 			
 			import model.AppModel;
@@ -47,6 +48,7 @@
 			// Vars.
 			// Alert window.
 			private var alertClose:AlertPopUp_CloseProject = new AlertPopUp_CloseProject;
+			private var alertCreateNewVerse:AlertPopUp_CreateNewVerse = new AlertPopUp_CreateNewVerse;
 			private var _sound:Sound;
 			private var _audioFile:File;
 			private var _loader:LoaderMax;
