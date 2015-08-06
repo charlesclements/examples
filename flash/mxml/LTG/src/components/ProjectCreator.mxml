@@ -11,6 +11,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			
 			import com.greensock.loading.LoaderMax;
 			
 			import mx.collections.ArrayCollection;
@@ -25,35 +26,28 @@
 			
 			import net.fastindemand.dispatcher.Dispatcher;
 			import net.fastindemand.event.AppEvent;
-			
-			/*
-			[Bindable]
-			public var dataProvider : ArrayCollection = 
-				new ArrayCollection([ 
-					{label:'Alabama',data:1}, 
-					{label:'Alaska',data:2}, 
-					{label:'Arizona',data:3}, 
-					{label:'Arkansas',data:4}, 
-					{label:'California',data:5}
-			]);
-			*/
-			
-			[Bindable]
-			private var _xmlListCollection:XMLListCollection;
-			
-			
 
-		
+			
 			// Vars.
-			// Alert window.
+			// Alert windows.
 			private var alertClose:AlertPopUp_CloseProject = new AlertPopUp_CloseProject;
 			private var alertCreateNewVerse:AlertPopUp_CreateNewVerse = new AlertPopUp_CreateNewVerse;
+			
+			// Static const 
+			public static const CREATE_NEW_VERSE:String = "CREATE NEW VERSE";
+			public static const EDIT_NAMES:String = "EDIT NAMES";
+			
 			private var _sound:Sound;
 			private var _audioFile:File;
 			private var _loader:LoaderMax;
+			private var _verseIndex:uint = 0;
 			private static var _saved:Boolean = true;
+			
 			[Bindable]
 			private var xmllist:XMLList;
+			[Bindable]
+			private var _xmlListCollection:XMLListCollection;
+			
 			
 			// Initializes class.
 			public function init():void
@@ -72,6 +66,38 @@
 				
 				
 				//page.addElement( hgroupVerses );
+				
+			}
+			
+
+			// Event handling function.
+			protected function _sendXMLtoDropDown():void
+			{
+				
+				trace( "ProjectCreator - _sendXMLtoDropDown" );
+				
+				// Check to see if there are @name attributes
+				// If none, create the name attribute and define it.
+				if( AppModel.CURRENT_XML.content.@name.length() == 0 )
+				{
+					
+					// Need to go thru all index possibilities.
+					
+					var l:uint = AppModel.CURRENT_XML.content.length()
+					for( var i:uint = 0; i < l; i++ )
+					{
+						
+						AppModel.CURRENT_XML.content[ i ].@name = "Verse " + String( i + 1 );
+						
+						
+					}
+					
+					// Save single project.
+					AppModel.saveSingleProjectXML( AppModel.PID, new XMLList( AppModel.CURRENT_XML ) );
+					
+				}
+				else trace( "ProjectCreator - onEvent : Content name attribute already exists!!" );
+				
 				
 			}
 			
@@ -157,6 +183,9 @@
 					case AppEvent.OPEN_PROJECT:
 						
 						trace("ProjectCreator - onEvent - OPEN_PROJECT");
+						
+						_verseIndex = 0;
+						
 						var projectReferenceXml:XML = XML( AppModel.PROJECTS_XML.children()[ AppModel.PROJECT_INDEX ] );
 						
 						//AppModel.PID = xml.PID;
@@ -170,10 +199,6 @@
 						var path:String = AppModel.STORAGE.nativePath + "/LyricsToGo/user/" + AppModel.ID + "/projects/" + AppModel.PID + "/project.xml";
 						var f:File = AppModel.CURRENT_PROJECT_FILE = File.applicationStorageDirectory.resolvePath( path ); 
 						
-						//trace("++++");
-						//trace(path);
-						
-						
 						// Pull XML from local file.
 						var s:FileStream = AppModel.STREAM = new FileStream;
 						s.open( f, FileMode.READ ); 
@@ -181,45 +206,17 @@
 						s.close(); 
 						
 						// XML to DROPDOWN
-						
-						// Check to see if there are @name attributes
-						// If none, create the name attribute and define it.
-						if( AppModel.CURRENT_XML.content.@name.length() == 0 )
-						{
-							
-							if( AppModel.CURRENT_XML.content.length() == 1 )
-							{
-								
-								AppModel.CURRENT_XML.content.@name = "Verse 1";
-								
-								// Save single project.
-								AppModel.saveSingleProjectXML( AppModel.PID, new XMLList( AppModel.CURRENT_XML ) );
-								
-							}
-							
-						}
-						else trace( "ProjectCreator - onEvent : Content name attribute already exists!!" );
+						_sendXMLtoDropDown();
 						
 						// Add NEW VERSE to XML.
 						// Add special coloring for CREATE and EDIT items?
-						
-						
-						
-						
-						
 						_addNonVerseItems();
-						
-						_removeNonVerseItems();
-						
-						
-						
-						
-						
-						/*AppModel.CURRENT_XML.appendChild( <content name="CREATE NEW VERSE"></content> );
-						AppModel.CURRENT_XML.appendChild( <content name="EDIT NAMES"></content> );*/
 						
 						// Add XML node.
 						_xmlListCollection = new XMLListCollection( AppModel.CURRENT_XML.content );
+						
+						// Set what the first index that should be selected.
+						versesList.selectedIndex = 0;
 						
 						// Set text field content.
 						docContent.text = AppModel.CURRENT_XML[0].content[0];
@@ -236,6 +233,9 @@
 				}
 
 			}
+			
+			
+			
 			
 			
 			protected function saveText():void
@@ -297,7 +297,6 @@
 					closeProject();
 					
 				}
-				
 				
 			}
 			
@@ -455,48 +454,49 @@
 			}
 			
 			
+			// Add special selections to do other things than just switch between verses.
 			private function _addNonVerseItems():void
 			{
 				
 				trace("ProjectCreator - _addNonVerseItems");
 				
+				_removeNonVerseItems();
+				
 				AppModel.CURRENT_XML.appendChild( <content name="CREATE NEW VERSE"></content> );
 				AppModel.CURRENT_XML.appendChild( <content name="EDIT NAMES"></content> );
-				
-				
-				
-				trace(AppModel.CURRENT_XML);
-				
-				trace("ProjectCreator - _addNonVerseItems - END");
-				
-				
 				
 			}
 			
 			
+			
+			
+			
+			
+			// Remove special selections.
 			private function _removeNonVerseItems():void
 			{
 				
 				trace("ProjectCreator - _removeNonVerseItems");
 				
+				// // Delete CREATE NEW VERSE.
+				var l:int  = AppModel.CURRENT_XML..content.length() - 1;
+				for( var i:int = l; i > -1; i-- )
+				{
+					
+					if( AppModel.CURRENT_XML.content[ i ].@name == "CREATE NEW VERSE" ) delete AppModel.CURRENT_XML.content[ i ];
+					
+				}
 				
-				trace(AppModel.CURRENT_XML);
-				
-				delete AppModel.CURRENT_XML.content.(elements("@name") == "CREATE NEW VERSE")[0];
-				delete AppModel.CURRENT_XML.content.(elements("@name") == "EDIT NAMES")[0];
-				
-				// delete myXML.employee.(elements('Compare') == '1234')[0];
-				
-				trace(AppModel.CURRENT_XML);
-				
-				trace("ProjectCreator - _removeNonVerseItems - END");
-				
+				// Delete EDIT NAMES.
+				l = AppModel.CURRENT_XML..content.length() - 1;
+				for( i = l; i > -1; i-- )
+				{
+					
+					if( AppModel.CURRENT_XML.content[ i ].@name == "EDIT NAMES" ) delete AppModel.CURRENT_XML.content[ i ];
+					
+				}
 				
 			}
-			
-			
-			
-			
 			
 			
 			private function _onDropDownEvent(e:Event):void
@@ -515,8 +515,20 @@
 					
 					
 					case "CREATE NEW VERSE":
-						trace( "CREATE NEW VERSE" );
+						trace( "CREATE NEW VERSE ++++" );
+						
+						
+						
+						// Why isnt this firing?
+						
+						
+						
 								
+						// Remove the items not to be edited.
+						_removeNonVerseItems();
+						
+						
+						
 						alertCreateNewVerse.open( this, true );
 						alertCreateNewVerse.height = this.height
 						alertCreateNewVerse.width = this.width;
@@ -533,7 +545,15 @@
 						break;
 					
 					default: 
-						trace( "Nothing selected" );
+						trace( "Index selected" );
+						
+						_verseIndex = ( e.target as DropDownList ).selectedIndex;
+						docContent.text = AppModel.CURRENT_XML[ 0 ].content[ _verseIndex ];
+						
+						
+						
+						
+						
 						
 				}
 				

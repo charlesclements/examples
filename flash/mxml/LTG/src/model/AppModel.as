@@ -18,10 +18,10 @@ package model
 	public class AppModel extends Object
 	{
 		
-		//public static const SERVER_PATH:String = "http://localhost:8888/";
 		
 		// Get server php.
-		public static const SERVER_PATH:String = "http://www.charlesclements.net/apps/ltg/";
+		public static const SERVER_PATH:String = "http://localhost:8888/";
+		//public static const SERVER_PATH:String = "http://www.charlesclements.net/apps/ltg/";
 		
 		public static const STORAGE:File = File.applicationStorageDirectory;
 		public static var ID:String = "";

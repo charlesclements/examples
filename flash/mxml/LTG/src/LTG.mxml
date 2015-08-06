@@ -52,19 +52,6 @@
 			}
 			
 			
-			/*
-			protected function onLoginSuccess(e:AppEvent=null):void
-			{
-				
-				trace("LTG - onLoginSuccess");
-				
-				Dispatcher.removeEventListener( AppEvent.LOGIN_SUCCESS, onLoginSuccess );
-				AppModel.init();
-				
-				
-			}
-			
-			*/
 			protected function onEvent(e:AppEvent=null):void
 			{
 				
