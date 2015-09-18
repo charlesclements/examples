@@ -21,7 +21,7 @@
 				
 				
 				
-				projectMaster.visible = false;
+				projectCreator.visible = false;
 				
 			}
 			
@@ -40,14 +40,14 @@
 					
 					trace( this )
 					trace( width )
-					trace( projectMaster )
-					trace( projectMaster.width )
+					trace( projectCreator )
+					trace( projectCreator.width )
 					
 					isCreated = true
 					//this.removeEventListener( FlexEvent.CREATION_COMPLETE, init );
 					
 					projectsList.init();
-					projectMaster.init();
+					projectCreator.init();
 					
 					// Listen for events.
 					Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onEvent );
@@ -72,16 +72,16 @@
 					
 					case AppEvent.NEW_PROJECT:
 						projectsList.visible = false;
-						projectMaster.visible = true;
+						projectCreator.visible = true;
 						break;
 					
 					case AppEvent.OPEN_PROJECT:
 						projectsList.visible = false;
-						projectMaster.visible = true;
+						projectCreator.visible = true;
 						break;
 					
 					case AppEvent.CLOSE_PROJECT:
-						projectMaster.visible = false;
+						projectCreator.visible = false;
 						projectsList.visible = true;
 						break;
 					
@@ -123,7 +123,6 @@
 	
 	
 	<components:ProjectsList id="projectsList" width="100%" height="100%"/>
-	<!--<components:Projects id="project" width="100%" height="100%"/>-->
-	<components:ProjectCreator id="projectMaster" width="100%" height="100%"/>
+	<components:ProjectCreator id="projectCreator" width="100%" height="100%"/>
 	
 </s:View>

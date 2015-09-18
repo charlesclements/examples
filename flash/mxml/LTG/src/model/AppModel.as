@@ -15,6 +15,7 @@ package model
 	import net.fastindemand.dispatcher.Dispatcher;
 	import net.fastindemand.event.AppEvent;
 	
+	
 	public class AppModel extends Object
 	{
 		
@@ -71,6 +72,7 @@ package model
 			PROJECTS_FILE = STORAGE.resolvePath( path );
 			
 			
+			
 			// Do the directories need to be created first, and then the XML file?
 			
 			//trace( PROJECTS_FILE.url );
@@ -114,6 +116,47 @@ package model
 		}
 		
 		
+		public static function deleteAudio(id:String):void
+		{
+		
+			trace( "AppModel - deleteAudio() - " + id );
+			
+			
+			// Get audio URL from Model or XML.
+			var s:File = new File( CURRENT_AUDIO_FILE_URL );
+			
+			// Delete audio file saved on harddrive.
+			s.deleteFile();
+			
+			// Replace audio URL with a blank string.
+			trace(CURRENT_XML);
+			CURRENT_XML.audio.@name = "";
+			CURRENT_XML.audio.@url = "";
+
+			// Save updated XML.
+			saveSingleProjectXML( ID, new XMLList( CURRENT_XML ) );
+			
+			trace(CURRENT_XML);
+			
+			
+			
+			
+			
+			
+			/*
+			if( CURRENT_SOUNDCHANNEL ) CURRENT_SOUNDCHANNEL.stop();
+			var list:XMLList = new XMLList( AppModel.CURRENT_XML );
+			CURRENT_AUDIO_FILE_URL = list.audio.@url.toString();
+			
+			//
+			
+			trace(CURRENT_AUDIO_FILE_URL);
+			
+			CURRENT_SOUND = new Sound( new URLRequest( CURRENT_AUDIO_FILE_URL ) );
+			*/
+		}
+		
+		
 		public static function setupSound():void
 		{
 		
@@ -121,6 +164,11 @@ package model
 			if( CURRENT_SOUNDCHANNEL ) CURRENT_SOUNDCHANNEL.stop();
 			var list:XMLList = new XMLList( AppModel.CURRENT_XML );
 			CURRENT_AUDIO_FILE_URL = list.audio.@url.toString();
+			
+			//
+			
+			trace(CURRENT_AUDIO_FILE_URL);
+			
 			CURRENT_SOUND = new Sound( new URLRequest( CURRENT_AUDIO_FILE_URL ) );
 			
 		}

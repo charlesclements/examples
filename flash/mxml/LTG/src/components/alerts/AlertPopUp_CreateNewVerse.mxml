@@ -9,6 +9,9 @@
 		<![CDATA[
 			import model.AppModel;
 			
+			import net.fastindemand.dispatcher.Dispatcher;
+			import net.fastindemand.event.AppEvent;
+			
 			//import model.AppModel;
 			
 			
@@ -18,8 +21,26 @@
 				trace("AlertPopUp_CreateNewVerse - init");
 				
 				
+				
+				trace( AppModel.CURRENT_XML.content.length() )
+				
+				
+				//
+				creation.text = "Verse " + String( AppModel.CURRENT_XML.content.length() + 1 );
+				
+				
+				
+				
 			}
 			
+			
+			public function refresh():void
+			{
+				
+				trace("AlertPopUp_CreateNewVerse - refresh");
+				
+				
+			}
 			
 			protected function onCreate():void
 			{
@@ -32,7 +53,7 @@
 				AppModel.CURRENT_XML.appendChild( new XML( "<content name='" + creation.text + "' />" ) );
 				
 				
-				
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.NEW_VERSE_ADDED ) );
 				
 				// Save.
 				
@@ -50,14 +71,14 @@
 			</s:HGroup>
 			<s:HGroup>
 				<s:VGroup>
-					<s:Label text="What are we creating?"/>
+					<s:Label text="Name your new verse?"/>
 					<s:TextInput id="creation" width="100%"/>
 				</s:VGroup>
 			</s:HGroup>
 			<s:VGroup verticalAlign="bottom">
-				<s:HGroup verticalAlign="middle" width="100%" paddingLeft="10" paddingRight="10">
-					<s:Button id="btnNewUser" label="Create" height="50" width="100%" click="onCreate();"/>
-					<s:Button id="btnLogin" label="Close" height="50" width="100%" click="close();"/>
+				<s:HGroup verticalAlign="middle" width="100%" paddingLeft="10" paddingRight="10" >
+					<s:Button id="btnClose" label="Close" height="50" width="100" click="close();"/>
+					<s:Button id="btnCreate" label="Create" height="50" width="100" click="onCreate();"/>
 				</s:HGroup>
 			</s:VGroup>
 		</s:VGroup>

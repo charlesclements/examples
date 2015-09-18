@@ -11,8 +11,9 @@
 	
 	<fx:Script>
 		<![CDATA[
-			
 			import com.greensock.loading.LoaderMax;
+			
+			import flash.net.sendToURL;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.XMLListCollection;
@@ -20,6 +21,7 @@
 			
 			import components.alerts.AlertPopUp_CloseProject;
 			import components.alerts.AlertPopUp_CreateNewVerse;
+			import components.alerts.AlertPopUp_DeleteAudio;
 			import components.media.AudioPlayer;
 			
 			import model.AppModel;
@@ -32,15 +34,17 @@
 			// Alert windows.
 			private var alertClose:AlertPopUp_CloseProject = new AlertPopUp_CloseProject;
 			private var alertCreateNewVerse:AlertPopUp_CreateNewVerse = new AlertPopUp_CreateNewVerse;
+			private var alertDeleteAudio:AlertPopUp_DeleteAudio = new AlertPopUp_DeleteAudio;
 			
 			// Static const 
 			public static const CREATE_NEW_VERSE:String = "CREATE NEW VERSE";
 			public static const EDIT_NAMES:String = "EDIT NAMES";
+			//public static const CREATE_NEW_VERSE:String = "CREATE NEW VERSE";
 			
 			private var _sound:Sound;
 			private var _audioFile:File;
 			private var _loader:LoaderMax;
-			private var _verseIndex:uint = 0;
+			private var _selectedIndex:uint = 0;
 			private static var _saved:Boolean = true;
 			
 			[Bindable]
@@ -57,15 +61,14 @@
 				Dispatcher.addEventListener( AppEvent.NEW_PROJECT, onEvent );
 				Dispatcher.addEventListener( AppEvent.OPEN_PROJECT, onEvent );
 				alertClose.addEventListener( AppEvent.CLOSE_PROJECT, onEvent );
+				Dispatcher.addEventListener( AppEvent.NEW_VERSE_ADDED, onEvent );
+				Dispatcher.addEventListener( AppEvent.SHOW_DELETE_AUDIO, onEvent );
+				Dispatcher.addEventListener( AppEvent.DELETE_AUDIO, onEvent );
 				
 				// Audio player.
 				audioPlayer.update();
 				page.removeElement( audioPlayer );
 				showMediaButton.enabled = true;
-				//versesList
-				
-				
-				//page.addElement( hgroupVerses );
 				
 			}
 			
@@ -83,7 +86,7 @@
 					
 					// Need to go thru all index possibilities.
 					
-					var l:uint = AppModel.CURRENT_XML.content.length()
+					var l:uint = AppModel.CURRENT_XML.content.length();
 					for( var i:uint = 0; i < l; i++ )
 					{
 						
@@ -98,44 +101,81 @@
 				}
 				else trace( "ProjectCreator - onEvent : Content name attribute already exists!!" );
 				
+				// Set the selected before the non verse items get added.
+				_selectedIndex = AppModel.CURRENT_XML.content.length() - 3;
+				
+				// Add NEW VERSE to XML.
+				// Add special coloring for CREATE and EDIT items?
+				_addNonVerseItems();
+				
+				// Add XML node.
+				_xmlListCollection = new XMLListCollection( AppModel.CURRENT_XML.content );
+				
+				// Set what the first index that should be selected.
+				versesList.selectedIndex = _selectedIndex;
 				
 			}
 			
 
+			
+			
+			
+			
+			
+			
 			// Event handling function.
 			protected function onEvent(e:Event):void
 			{
 				
 				trace("ProjectCreator - onEvent");
-				//trace( buttons.activeEffects );
 				
-				
-				//trace( buttons.selectedIndex );
 				// Need to set this to -1 so that none of the buttons are selected.
 				// If left selected, by reselecting them, you'll potentially get an error. 
 				buttons.selectedIndex = -1;// May not work, apply changes to button state skins.
-				//trace( buttons.selectedIndex );
-				
-				
 				
 				switch( e.type )
 				{
 					
+					case AppEvent.SHOW_DELETE_AUDIO:
+						trace( "ProjectCreator - " + AppEvent.SHOW_DELETE_AUDIO );
+						
+						alertDeleteAudio.open( this, true );
+						alertDeleteAudio.height = this.height
+						alertDeleteAudio.width = this.width;
+						
+						// Center the pop-up in the parent container.
+						PopUpManager.centerPopUp( alertDeleteAudio );
+						
+						break;
+					
+					case AppEvent.DELETE_AUDIO:
+						trace( "ProjectCreator - " + AppEvent.DELETE_AUDIO );
+						audioPlayer.clear();
+						AppModel.deleteAudio( AppModel.PID );
+						break;
+					
+					case AppEvent.NEW_VERSE_ADDED:
+						trace( AppEvent.NEW_VERSE_ADDED + "++++++++++++++++++" );
+						
+						AppModel.saveSingleProjectXML( AppModel.ID, new XMLList( AppModel.CURRENT_XML ) );
+						
+						_selectedIndex = AppModel.CURRENT_XML[0].content.length() + 3;
+						
+						_sendXMLtoDropDown();
+						
+						AppModel.CURRENT_XML[0].content[ _selectedIndex ] = docContent.text;
+						
+						
+						trace(AppModel.CURRENT_XML[0].content[ _selectedIndex ]);
+						
+						
+						// Set text field content.
+						docContent.text = AppModel.CURRENT_XML[0].content[ AppModel.CURRENT_XML[0].content.length() - 3 ];
+						docTitle.text = AppModel.CURRENT_XML[0].title;
+						
+						break;
+						
 					case AppEvent.NEW_PROJECT:
-						
-						
-						
-						
-						
-						
-						
-						// Need to add/delete shit to the combobox.
-						
-						
-						
-						
-						
-						
 						
 						trace("ProjectCreator - onEvent - NEW_PROJECT");
 						var d:Date = new Date;
@@ -184,7 +224,7 @@
 						
 						trace("ProjectCreator - onEvent - OPEN_PROJECT");
 						
-						_verseIndex = 0;
+						_selectedIndex = 0;
 						
 						var projectReferenceXml:XML = XML( AppModel.PROJECTS_XML.children()[ AppModel.PROJECT_INDEX ] );
 						
@@ -208,19 +248,18 @@
 						// XML to DROPDOWN
 						_sendXMLtoDropDown();
 						
-						// Add NEW VERSE to XML.
-						// Add special coloring for CREATE and EDIT items?
-						_addNonVerseItems();
-						
-						// Add XML node.
-						_xmlListCollection = new XMLListCollection( AppModel.CURRENT_XML.content );
-						
-						// Set what the first index that should be selected.
-						versesList.selectedIndex = 0;
-						
 						// Set text field content.
 						docContent.text = AppModel.CURRENT_XML[0].content[0];
 						docTitle.text = AppModel.CURRENT_XML[0].title;
+						
+						// Set the dropdown.
+						_selectedIndex = 0;
+						
+						// Or save last index from before close.
+						
+						// Set the dropdown selected index.
+						versesList.selectedIndex = _selectedIndex;
+						
 						break;
 					
 					case AppEvent.CLOSE_PROJECT:
@@ -245,7 +284,25 @@
 				
 				var singleProjectXMLList:XMLList = new XMLList( AppModel.CURRENT_XML );
 				singleProjectXMLList.title = docTitle.text;
-				singleProjectXMLList.content = docContent.text;
+				
+				
+				
+				
+				
+				// geth this straight.
+				
+				singleProjectXMLList.content[ versesList.selectedIndex ] = docContent.text;
+				
+				
+				// May need to save content locally to xml without saving it locally/permenently.
+				
+				
+				
+				
+				
+				
+				
+				
 				AppModel.PROJECTS_XML..project[ AppModel.PROJECT_INDEX ].title = docTitle.text;
 				
 				// Save XML project file locally at this point.
@@ -288,6 +345,16 @@
 					
 					// Center the pop-up in the parent container.
 					PopUpManager.centerPopUp(alertClose);
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 					
 				}
 				else
@@ -462,8 +529,8 @@
 				
 				_removeNonVerseItems();
 				
-				AppModel.CURRENT_XML.appendChild( <content name="CREATE NEW VERSE"></content> );
-				AppModel.CURRENT_XML.appendChild( <content name="EDIT NAMES"></content> );
+				AppModel.CURRENT_XML.appendChild( new XML( '<content name="' + CREATE_NEW_VERSE + '"></content>' ) );
+				AppModel.CURRENT_XML.appendChild( new XML( '<content name="EDIT NAMES"></content>' ) );
 				
 			}
 			
@@ -483,7 +550,7 @@
 				for( var i:int = l; i > -1; i-- )
 				{
 					
-					if( AppModel.CURRENT_XML.content[ i ].@name == "CREATE NEW VERSE" ) delete AppModel.CURRENT_XML.content[ i ];
+					if( AppModel.CURRENT_XML.content[ i ].@name == CREATE_NEW_VERSE ) delete AppModel.CURRENT_XML.content[ i ];
 					
 				}
 				
@@ -502,32 +569,21 @@
 			private function _onDropDownEvent(e:Event):void
 			{
 				
-				
 				trace("ProjectCreator - _onDropDownEvent : " + e.type);
-				//trace( ( e.target as DropDownList ).selectedIndex);
-				trace( ( e.target as DropDownList ).selectedItem.@name);
+				var d:DropDownList = ( e.target as DropDownList );
+
+				// Set the XML to the content.
+				AppModel.CURRENT_XML.content[ _selectedIndex ] = docContent.text;
 				
-				
-				
-				switch( ( e.target as DropDownList ).selectedItem.@name )
+				switch( String( ( e.target as DropDownList ).selectedItem.@name ) )
 				{
 					
-					
-					
-					case "CREATE NEW VERSE":
-						trace( "CREATE NEW VERSE ++++" );
-						
-						
-						
-						// Why isnt this firing?
-						
-						
-						
+					//case CREATE_NEW_VERSE:
+					case CREATE_NEW_VERSE:
+						trace( CREATE_NEW_VERSE + "+++" );
 								
 						// Remove the items not to be edited.
 						_removeNonVerseItems();
-						
-						
 						
 						alertCreateNewVerse.open( this, true );
 						alertCreateNewVerse.height = this.height
@@ -535,92 +591,46 @@
 						
 						// Center the pop-up in the parent container.
 						PopUpManager.centerPopUp(alertCreateNewVerse);
-						
 						break;
 					
 					case "EDIT NAMES":
 						trace( "EDIT NAMES" );
 						
+						// ?
 						
 						break;
 					
 					default: 
 						trace( "Index selected" );
 						
-						_verseIndex = ( e.target as DropDownList ).selectedIndex;
-						docContent.text = AppModel.CURRENT_XML[ 0 ].content[ _verseIndex ];
-						
-						
-						
-						
-						
+						_selectedIndex = ( e.target as DropDownList ).selectedIndex;
+						docContent.text = AppModel.CURRENT_XML[ 0 ].content[ _selectedIndex ];
 						
 				}
 				
-				
-				
-				
-				
-				
-				
-				
 			}
-			
-			
 			
 		]]>
 	</fx:Script>
 	
-		<!--
-	<s:HGroup id="hControls" verticalAlign="middle" horizontalAlign="center" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%" color="#777">
-		<s:ToggleButton width="100%" height="30"
-						id="showMediaButton" label="SHOW MEDIA"
-						click="toggleViewAudio()"
-						/>
-		<s:ToggleButton width="100%" height="30"
-						id="loadAudioButton" label="LOAD MUSIC"
-						click="_loadMusic()"
-						/>
-	</s:HGroup>
-		-->
-	
-	
-	<s:VGroup id="page" width="100%" height="100%">
+	<s:VGroup id="page" width="100%" height="100%" paddingTop="2" paddingBottom="2" paddingLeft="2" paddingRight="2">
 		
-			
+		<!-- This gets taken out on init(), but gets shown when media button is selected.-->
 		<media:AudioPlayer id="audioPlayer" width="100%" />
 		
-		
-		
-		
-		<!-- Add mobile friendly DropDown here -->
-		<!-- Implement ADD button next to it to add items to the list -->
-		<s:HGroup id="hgroupVerses" verticalAlign="middle" horizontalAlign="right" paddingBottom="0" paddingLeft="5" paddingRight="5" paddingTop="0" width="100%">
+		<s:HGroup id="hgroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%">
 			
+			<s:TextInput id="docTitle" width="100%" height="36" needsSoftKeyboard="true" change="onProjectChange()" />
 			<s:ToggleButton width="100" height="30"
 							id="showMediaButton" label="MEDIA"
 							click="toggleViewAudio()"
 							/>
-			<!--<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%" dataProvider="{dataProvider}" />-->
-			<!--<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%" dataProvider="{_xmlListCollection}" change="_onDropDownEvent(event)" labelField="@name" />
-			-->
-			
-			
-			<!--<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%"  />-->
-			<s:Button id="newVerse" label="New"></s:Button>
 			
 		</s:HGroup>
 		
-		<s:HGroup id="hgroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="0" paddingLeft="5" paddingRight="5" paddingTop="0" width="100%">
-			
-			<s:TextInput id="docTitle" width="100%" height="36" needsSoftKeyboard="true" change="onProjectChange()" />
-			
-		</s:HGroup>
-		
-		<s:HGroup id="DropdaownGroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="0" paddingLeft="5" paddingRight="5" paddingTop="0" width="100%">
-			
+		<!-- Add mobile friendly DropDown here -->
+		<s:HGroup id="DropdaownGroup" verticalAlign="middle" horizontalAlign="right" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100%">
 			<ns:DropDownList id="versesList" contentBackgroundAlpha="1" width="100%" dataProvider="{_xmlListCollection}" change="_onDropDownEvent(event)" labelField="@name" />
-			
 		</s:HGroup>
 		
 		<s:TextArea id="docContent" width="100%" height="100%" skinClass="spark.skins.mobile.TextAreaSkin" needsSoftKeyboard="true" change="onProjectChange()" />
