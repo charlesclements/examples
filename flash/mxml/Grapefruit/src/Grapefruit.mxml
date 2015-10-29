@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   initialize="init()"
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.core.mx_internal;
+			
+			import spark.components.Application;
+			import spark.components.WindowedApplication;
+			
+			//private var c:CheckBox = new SparkClasses.//CheckBox();
+			
+			//c.label = "NEW STUFF";
+			//( sizes as VGroup ).addElement( c );
+			
+			//sizes.addChild( c );
+			//trace(Application.//.application.myLabel.content);
+			//trace(WindowedApplication.
+			
+			//trace( this.getChildByName( "sizes" ) );
+			
+			
+			
+			
+			private function init():void
+			{
+				
+				
+				trace(content);
+				
+				var c:CheckBox = new CheckBox;
+				c.label = "SOMETHING";
+				sizes.addElement( c );
+				
+				
+				trace(sizes);
+				trace(c);
+				
+			}
+			
+			//tester();
+			
+			
+			
+		]]>
+	</fx:Script>
+	
+	
+	
+	
+	<s:VGroup id="content">
+		<s:VGroup id="sizes">
+			<s:CheckBox width="100" label="Employee?"/> 
+		</s:VGroup>
+		
+		
+		
+		
+		
+		
+		
+	</s:VGroup>
+	
+	
+</s:WindowedApplication>
