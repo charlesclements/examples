@@ -10,10 +10,7 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import mx.core.mx_internal;
 			
-			import spark.components.Application;
-			import spark.components.WindowedApplication;
 			
 			//private var c:CheckBox = new SparkClasses.//CheckBox();
 			
@@ -26,7 +23,10 @@
 			
 			//trace( this.getChildByName( "sizes" ) );
 			
-			
+			private var sourceFolder:File;
+			private var sourceFolderSelected:Boolean = false;
+			private var destFolder:File;
+			private var destFolderSelected:Boolean = false;
 			
 			
 			private function init():void
@@ -45,9 +45,77 @@
 				
 			}
 			
-			//tester();
+
+			private function selectDestinationPath():void
+			{
+				
+				trace("selectDestinationPath");
+				
+				destFolder = new File;
+				destFolder.addEventListener( Event.SELECT, onSelectedDest );
+				destFolder.browseForDirectory( "Choose source folder" );
+				
+				
+				
+				
+			}
 			
 			
+			private function selectDirectoryToCopy():void
+			{
+				
+				trace("selectDirectoryToCopy");
+				
+				sourceFolder = new File;
+				sourceFolder.addEventListener( Event.SELECT, onSelectedSrc );
+				sourceFolder.browseForDirectory( "Choose source folder" );
+				
+				
+			}
+			
+			private function onSelectedSrc(e:Event):void
+			{
+				
+				trace("onSelectedSrc");
+				
+				srcDir.text = sourceFolder.nativePath;
+				
+				sourceFolderSelected = true;
+				
+			}
+			
+			private function onSelectedDest(e:Event):void
+			{
+				
+				trace("onSelectedDest");
+				
+				destDir.text = destFolder.nativePath;
+				destFolderSelected = true;
+				
+			}
+			
+			
+			private function copyDirectory():void
+			{
+				
+				trace("copyDirectory");
+				
+				if( sourceFolderSelected && destFolderSelected )
+				{
+					
+					trace("copyDirectory - Do copying.");
+					
+					// Create new folder.
+					var str:String = String( destFolder.nativePath + "/" + sourceFolder.name );
+					var newFolder:File = new File( str );
+					if( !newFolder.exists ) newFolder.createDirectory();
+					
+					// Copy files.
+					sourceFolder.copyTo( newFolder, true );
+					
+				}
+				
+			}
 			
 		]]>
 	</fx:Script>
@@ -61,10 +129,21 @@
 		</s:VGroup>
 		
 		
+		<s:Label text="Source"></s:Label>
+		<s:HGroup>
+			<s:TextInput id="srcDir" width="200" text="Use this directory."></s:TextInput>
+			<s:Button id="srcDirButton" width="70" label="Select" click="selectDirectoryToCopy();"></s:Button>
+		</s:HGroup>
 		
 		
+		<s:Label text="Destination"></s:Label>
+		<s:HGroup>
+			<s:TextInput id="destDir" width="200" text="Copy files to this directory."></s:TextInput>
+			<s:Button id="destDirButton" width="70" label="Select" click="selectDestinationPath();"></s:Button>
+		</s:HGroup>
+		<s:CheckBox label="Remember destination"/> 
 		
-		
+		<s:Button id="copyButton" width="120" label="Copy Files" click="copyDirectory();"></s:Button>
 		
 	</s:VGroup>
 	

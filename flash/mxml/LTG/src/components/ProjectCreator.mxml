@@ -84,6 +84,8 @@
 				if( AppModel.CURRENT_XML.content.@name.length() == 0 )
 				{
 					
+					trace( "ProjectCreator - onEvent : Content name attribute DOES NOT exists!!" );
+					
 					// Need to go thru all index possibilities.
 					
 					var l:uint = AppModel.CURRENT_XML.content.length();
@@ -214,6 +216,14 @@
 						
 						// Save main projects file.
 						AppModel.saveAllProjectsXML( AppModel.PROJECTS_XML );
+						
+						
+						// This creates a new verse in DropDown. 
+						// Can we get rid of the previous saves to optimize process?
+						_sendXMLtoDropDown();
+						
+						// Set class var and DD to 0.
+						_selectedIndex = versesList.selectedIndex = 0;
 						
 						// Temporarily kill Save button.
 						//saveButton.enabled = false;
@@ -570,10 +580,29 @@
 			{
 				
 				trace("ProjectCreator - _onDropDownEvent : " + e.type);
+				trace("ProjectCreator - _onDropDownEvent : selectedIndex : " + ( e.target as DropDownList ).selectedIndex);
+				trace("ProjectCreator - _onDropDownEvent : selectedItem : " + ( e.target as DropDownList ).selectedItem);
+				
+				
+				
+				
+				
+				
 				var d:DropDownList = ( e.target as DropDownList );
 
 				// Set the XML to the content.
-				AppModel.CURRENT_XML.content[ _selectedIndex ] = docContent.text;
+				AppModel.CURRENT_XML[ 0 ].content[ _selectedIndex ] = docContent.text;
+				
+				//AppModel.CURRENT_XML[ 0 ].content[ _selectedIndex ];
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				
 				switch( String( ( e.target as DropDownList ).selectedItem.@name ) )
 				{
