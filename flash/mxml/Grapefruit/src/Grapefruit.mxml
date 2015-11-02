@@ -12,37 +12,27 @@
 		<![CDATA[
 			
 			
-			//private var c:CheckBox = new SparkClasses.//CheckBox();
-			
-			//c.label = "NEW STUFF";
-			//( sizes as VGroup ).addElement( c );
-			
-			//sizes.addChild( c );
-			//trace(Application.//.application.myLabel.content);
-			//trace(WindowedApplication.
-			
-			//trace( this.getChildByName( "sizes" ) );
-			
+			// Vars
 			private var sourceFolder:File;
 			private var sourceFolderSelected:Boolean = false;
 			private var destFolder:File;
 			private var destFolderSelected:Boolean = false;
 			private var SO:SharedObject;
+			private var dict:Dictionary;
 			
+			
+			// Start it off.
 			private function init():void
 			{
 				
+				// Crate Dictionay for ComboBoxes.
+				dict = new Dictionary;
 				
-				trace(content);
+				// Grab the SharedObject.
+				SO = SharedObject.getLocal("GRAPEFRUIT");
 				
-				var c:CheckBox = new CheckBox;
-				c.label = "SOMETHING";
-				sizes.addElement( c );
-				
-				SO = SharedObject.getLocal( "GRAPEFRUIT", "/net/fastindemand/apps" );
-				
-				trace(sizes);
-				trace(c);
+				// Create those boxes.
+				createCheckBoxes();
 				
 			}
 			
@@ -56,9 +46,6 @@
 				destFolder.addEventListener( Event.SELECT, onSelectedDest );
 				destFolder.browseForDirectory( "Choose source folder" );
 				
-				
-				
-				
 			}
 			
 			
@@ -71,8 +58,8 @@
 				sourceFolder.addEventListener( Event.SELECT, onSelectedSrc );
 				sourceFolder.browseForDirectory( "Choose source folder" );
 				
-				
 			}
+			
 			
 			private function onSelectedSrc(e:Event):void
 			{
@@ -84,6 +71,7 @@
 				sourceFolderSelected = true;
 				
 			}
+			
 			
 			private function onSelectedDest(e:Event):void
 			{
@@ -106,38 +94,29 @@
 					
 					trace("copyDirectory - Do copying.");
 					
-					// Create new folder.
-					var str:String = String( destFolder.nativePath + "/" + sourceFolder.name );
-					var newFolder:File = new File( str );
-					if( !newFolder.exists ) newFolder.createDirectory();
 					
-					// Copy files.
-					sourceFolder.copyTo( newFolder, true );
 					
-				}
-				
-			}
-			
-			private function submitNewSize():void
-			{
-				
-				trace("submitNewSize");
-				
-				
-				
-				if( widthTxt.text.length > 0 && heightTxt.text.length > 0 )
-				{
 					
-					trace("submitNewSize - Creating new size.");
-					
-					var key:String = widthTxt.text + "x" + heightTxt.text;
-					
-					if( !SO[ "sizes" ][ key ]  )
-					{
+					for ( var i:String in SO.data.sizes ) 
+					{ 
 						
-						SO[ "sizes" ][ key ].id = key;
-						SO[ "sizes" ][ key ].width = widthTxt.text;
-						SO[ "sizes" ][ key ].heightTxt = heightTxt.text;
+						
+						
+						if( SO.data.sizes[ i ].selected )
+						{
+							
+							// Create new folder.
+							var str:String = String( destFolder.nativePath + "/" + i );
+							var newFolder:File = new File( str );
+							if( !newFolder.exists ) newFolder.createDirectory();
+							
+							// Copy files.
+							sourceFolder.copyTo( newFolder, true );
+							
+							
+							
+							
+						}
 						
 						
 						
@@ -148,37 +127,168 @@
 					
 					
 					
-				}
-				
-				
-				for ( var i:* in SO[ "sizes" ] )
-				{
-					
-					
-					trace(i)
 					
 					
 					
 					
 				}
-				
-				
-				
-				
 				
 			}
 			
-			private function removeSizes():void
+			private function submitNewSize():void
 			{
 				
-				trace("removeSizes");
+				trace("submitNewSize");
 				
-				// Loop thru sizes available.
+				if( widthTxt.text.length > 0 && heightTxt.text.length > 0 )
+				{
+					
+					trace("submitNewSize - Creating new size.");
+					
+					var key:String = String( widthTxt.text + "x" + heightTxt.text );
+					
+					// Check first to see if sizes exists.
+					if( SO.data.sizes == undefined || !SO.data.sizes )
+					{
+						
+						SO.data.sizes = {};
+						
+					}
+					
+					// Save new size in SharedObject.
+					if( SO.data.sizes[ key ] == undefined || !SO.data.sizes[ key ] )
+					{
+						
+						SO.data.sizes[ key ] = { id:key, height:heightTxt.text, width:widthTxt.text, selected:true };
+						
+					}
+					
+				}
+				else return;
 				
+				// Create those boxes.
+				createCheckBoxes();
 				
-				
+				// Reset textfields.
+				widthTxt.text = "";
+				heightTxt.text = "";
 				
 			}
+			
+			
+			private function createCheckBoxes():void
+			{
+				
+				trace("createCheckBoxes");
+				
+				// Clear/delete current checkboxes.
+				sizes.removeAllElements();
+				
+				// Add check boxes.
+				for ( var i:String in SO.data.sizes ) 
+				{ 
+					
+					if( SO.data.sizes[i] == null )
+					{
+						
+						delete SO.data.sizes[i];
+						continue;
+						
+					}
+					
+					if( dict[ i ] == undefined )
+					{
+						
+						dict[ i ] = { checkbox:new CheckBox, selected:true };
+						
+					}
+					
+					// Set vars.
+					var c:CheckBox = dict[ i ].checkbox as CheckBox;
+					//return;
+					c.selected = SO.data.sizes[i].selected;
+					c.label = i;
+					c.addEventListener( MouseEvent.CLICK, checkboxClick );
+					
+					// Add to container.
+					sizes.addElement( c );
+					
+				}
+				
+			}
+			
+			
+			private function selectAll(e:Event=null):void
+			{
+
+				trace("selectAll");
+				
+				// Add check boxes.
+				for ( var i:String in SO.data.sizes ) 
+				{ 
+					
+					var c:CheckBox = dict[ i ].checkbox as CheckBox;
+					SO.data.sizes[ i ].selected = c.selected = true;
+
+				}
+				
+			}
+
+			
+			private function selectNone(e:Event=null):void
+			{
+
+				trace("selectNone");
+				
+				// Add check boxes.
+				for ( var i:String in SO.data.sizes ) 
+				{ 
+					
+					var c:CheckBox = dict[ i ].checkbox as CheckBox;
+					SO.data.sizes[ i ].selected = c.selected = false;
+
+				}
+				
+			}
+
+
+			private function removeSelected(e:Event=null):void
+			{
+
+				trace("removeSelected");
+				
+				// Add check boxes.
+				for ( var i:String in SO.data.sizes ) 
+				{ 
+					
+					if( SO.data.sizes[ i ].selected )
+					{
+						
+						SO.data.sizes[ i ] = undefined;
+						SO.data.sizes[ i ] = null;
+						delete SO.data.sizes[ i ];
+						dict[ i ] = null;
+						
+					}
+					
+				}
+				
+				createCheckBoxes();
+				
+			}
+
+
+			private function checkboxClick(e:Event):void
+			{
+				
+				trace("checkboxClick " + ( e.currentTarget as CheckBox ).label);
+				
+				var i:String = ( e.currentTarget as CheckBox ).label;
+				SO.data.sizes[i].selected = ( e.currentTarget as CheckBox ).selected;
+				SO.flush( 10000 );
+				
+			}
+			
 			
 		]]>
 	</fx:Script>
@@ -188,13 +298,21 @@
 	
 	<s:VGroup id="content">
 		
-		<s:BorderContainer>
-			
-		<s:VGroup id="sizes">
-			<s:CheckBox width="100" label="Employee?"/> 
-		</s:VGroup>
+		<s:HGroup>
+			<s:BorderContainer>
+				
+				<s:VGroup id="sizes">
+					<s:CheckBox width="100" label="Employee?"/> 
+				</s:VGroup>
+				
+			</s:BorderContainer>
+			<s:VGroup>
+				<s:Button id="selectAllButton" width="150" label="Select all" click="selectAll();"></s:Button>
+				<s:Button id="selectNoneButton" width="150" label="Select none" click="selectNone();"></s:Button>
+				<s:Button id="removeSelectedButton" width="150" label="Remove selected" click="removeSelected();"></s:Button>
+			</s:VGroup>
+		</s:HGroup>
 		
-		</s:BorderContainer>
 		
 		<s:HGroup>
 			<s:Label text="Width"></s:Label>
@@ -203,8 +321,8 @@
 			<s:TextInput id="heightTxt" width="100" restrict="0-9"></s:TextInput>
 		</s:HGroup>
 		<s:HGroup>
-			<s:Button id="sizeButton" width="120" label="Submit new size" click="submitNewSize();"></s:Button>
-			<s:Button id="removeSizesButton" width="120" label="Remove selected sizes" click="removeSizes();"></s:Button>
+			<s:Button id="sizeButton" width="150" label="Submit new size" click="submitNewSize();"></s:Button>
+			<!--<s:Button id="removeSizesButton" width="150" label="Remove selected sizes" click="removeSizes();"></s:Button>-->
 		</s:HGroup>
 		
 		<s:Label text="Source"></s:Label>
