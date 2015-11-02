@@ -117,6 +117,32 @@
 				
 			}
 			
+			private function submitNewSize():void
+			{
+				
+				trace("submitNewSize");
+				
+				if( widthTxt.text.length > -1 && heightTxt.text.length > -1 )
+				{
+					
+					trace("submitNewSize - Do copying.");
+					
+				}
+				
+			}
+			
+			private function removeSizes():void
+			{
+				
+				trace("removeSizes");
+				
+				// Loop thru sizes available.
+				
+				
+				
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -124,10 +150,25 @@
 	
 	
 	<s:VGroup id="content">
+		
+		<s:BorderContainer>
+			
 		<s:VGroup id="sizes">
 			<s:CheckBox width="100" label="Employee?"/> 
 		</s:VGroup>
 		
+		</s:BorderContainer>
+		
+		<s:HGroup>
+			<s:Label text="Width"></s:Label>
+			<s:TextInput id="widthTxt" width="100" restrict="0-9"></s:TextInput>
+			<s:Label text="Height"></s:Label>
+			<s:TextInput id="heightTxt" width="100" restrict="0-9"></s:TextInput>
+		</s:HGroup>
+		<s:HGroup>
+			<s:Button id="sizeButton" width="120" label="Submit new size" click="submitNewSize();"></s:Button>
+			<s:Button id="removeSizesButton" width="120" label="Remove selected sizes" click="removeSizes();"></s:Button>
+		</s:HGroup>
 		
 		<s:Label text="Source"></s:Label>
 		<s:HGroup>
