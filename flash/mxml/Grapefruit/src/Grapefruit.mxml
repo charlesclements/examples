@@ -27,7 +27,7 @@
 			private var sourceFolderSelected:Boolean = false;
 			private var destFolder:File;
 			private var destFolderSelected:Boolean = false;
-			
+			private var SO:SharedObject;
 			
 			private function init():void
 			{
@@ -39,6 +39,7 @@
 				c.label = "SOMETHING";
 				sizes.addElement( c );
 				
+				SO = SharedObject.getLocal( "GRAPEFRUIT", "/net/fastindemand/apps" );
 				
 				trace(sizes);
 				trace(c);
@@ -122,12 +123,48 @@
 				
 				trace("submitNewSize");
 				
-				if( widthTxt.text.length > -1 && heightTxt.text.length > -1 )
+				
+				
+				if( widthTxt.text.length > 0 && heightTxt.text.length > 0 )
 				{
 					
-					trace("submitNewSize - Do copying.");
+					trace("submitNewSize - Creating new size.");
+					
+					var key:String = widthTxt.text + "x" + heightTxt.text;
+					
+					if( !SO[ "sizes" ][ key ]  )
+					{
+						
+						SO[ "sizes" ][ key ].id = key;
+						SO[ "sizes" ][ key ].width = widthTxt.text;
+						SO[ "sizes" ][ key ].heightTxt = heightTxt.text;
+						
+						
+						
+					}
+					
+					
+					
+					
+					
 					
 				}
+				
+				
+				for ( var i:* in SO[ "sizes" ] )
+				{
+					
+					
+					trace(i)
+					
+					
+					
+					
+				}
+				
+				
+				
+				
 				
 			}
 			
