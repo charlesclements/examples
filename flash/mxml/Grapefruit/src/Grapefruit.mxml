@@ -5,11 +5,13 @@
 					   xmlns:mx="library://ns.adobe.com/flex/mx">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:RadioButtonGroup id="drivingType" itemClick="handleDrivingType(event); "/>
 	</fx:Declarations>
 	
 	
 	<fx:Script>
 		<![CDATA[
+			import utils.Resizer;
 			
 			
 			// Vars
@@ -113,7 +115,8 @@
 							// Copy files.
 							sourceFolder.copyTo( newFolder, true );
 							
-							
+							// run Resizer
+							Resizer.run( i, SO.data.sizes[ i ].width, SO.data.sizes[ i ].height, newFolder );
 							
 							
 						}
@@ -289,6 +292,15 @@
 				
 			}
 			
+
+
+			private function handleDrivingType(e:Event):void
+			{
+				
+				trace("handleDrivingType " + e.currentTarget.selectedValue);
+				
+			}
+			
 			
 		]]>
 	</fx:Script>
@@ -338,6 +350,21 @@
 			<s:Button id="destDirButton" width="70" label="Select" click="selectDestinationPath();"></s:Button>
 		</s:HGroup>
 		<s:CheckBox label="Remember destination"/> 
+		
+		<!-- AUTO PILOT / MANUAL -->
+		<s:HGroup>
+			<s:RadioButton groupName="drivingType" 
+						   id="autopilot" 
+						   label="Autopilot" 
+						   value="autopilot"
+						   selected="true"
+						   width="150"/>
+			<s:RadioButton groupName="drivingType" 
+						   id="manual" 
+						   label="Manual" 
+						   value="manual"
+						   width="150"/>
+		</s:HGroup>
 		
 		<s:Button id="copyButton" width="120" label="Copy Files" click="copyDirectory();"></s:Button>
 		
