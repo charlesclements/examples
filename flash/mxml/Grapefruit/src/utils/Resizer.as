@@ -50,7 +50,7 @@ package utils
 				if( String( f.extension ).toLocaleLowerCase() == "css" )
 				{
 					
-					trace( f.extension );
+					//trace( f.extension );
 					
 					// Open file.
 					fs = new FileStream;
@@ -64,24 +64,31 @@ package utils
 					// No numbers on either side.
 					// More than likely followed by "px".
 					
+					var pattern:RegExp = new RegExp( String( srcWidth ) + "px/g" );
+					trace(pattern);
+						
+					var s:String = content.replace( String( srcWidth ) + "px/g", String( destWidth ) + "px" );
+					//var s:String = content.replace( pattern, String( destWidth ) + "px" );
+						
+						
+						
+					//trace(s);
 					
 					
 					
 					
 					
 					
-					
-					/*
 					// Write content string back into file.
-					fs = new Filefs;
+					fs = new FileStream;
 					fs.open( f, FileMode.WRITE );
-					fs.writeUTFBytes( content );
+					fs.writeUTFBytes( s );
 					fs.close();
-					*/
 					
 					
 					
-					trace(content);
+					
+					//trace(content);
 					
 					
 					
