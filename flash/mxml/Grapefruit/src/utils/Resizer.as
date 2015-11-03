@@ -1,10 +1,18 @@
 package utils
 {
+
 	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
+	
 	
 	
 	public class Resizer
 	{
+		
+		
+		private static var fs:FileStream;
+		private static var content:String;
 		
 		
 		public function Resizer()
@@ -17,12 +25,78 @@ package utils
 		}
 		
 		
-		public static function run(id:String, width:Number, height:Number, folder:File):void
+		
+		public static function run(id:String, srcWidth:Number, srcHeight:Number, destWidth:Number, destHeight:Number, folder:File):void
 		{
 			
 			
-			trace( "run : " + width + " : " + height + " : " + folder.nativePath );
+			trace( "Resizer - run : " + destWidth + " : " + destHeight + " : " + folder.nativePath );
+			
+			
+			
 			// Start running recursive function
+			
+			
+			// Check directory for Array of files.
+			var arr:Array = folder.getDirectoryListing();
+			var l:uint = arr.length;
+			var f:File;
+			
+			for( var i:uint = 0; i < l; i++ )
+			{
+				
+				f = ( arr[ i ] as File );
+				
+				if( String( f.extension ).toLocaleLowerCase() == "css" )
+				{
+					
+					trace( f.extension );
+					
+					// Open file.
+					fs = new FileStream;
+					fs.open( f, FileMode.READ ); 
+					content = fs.readUTFBytes( fs.bytesAvailable )
+					fs.close(); 
+					
+					
+					// Need to run REGEX
+					// Find Height and Width numbers in file.
+					// No numbers on either side.
+					// More than likely followed by "px".
+					
+					
+					
+					
+					
+					
+					
+					
+					/*
+					// Write content string back into file.
+					fs = new Filefs;
+					fs.open( f, FileMode.WRITE );
+					fs.writeUTFBytes( content );
+					fs.close();
+					*/
+					
+					
+					
+					trace(content);
+					
+					
+					
+				}
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			}
+			
 			
 			
 			// Check for HMTL, CSS, JS.

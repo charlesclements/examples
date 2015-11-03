@@ -21,6 +21,8 @@
 			private var destFolderSelected:Boolean = false;
 			private var SO:SharedObject;
 			private var dict:Dictionary;
+			private var sourceWidth:Number = 0;
+			private var sourceHeight:Number = 0;
 			
 			
 			// Start it off.
@@ -36,6 +38,29 @@
 				// Create those boxes.
 				createCheckBoxes();
 				
+				/*
+				// Should the destination location be remembered?
+				if( SO.data.rememberDestination == undefined )
+				{
+					
+					SO.data.rememberDestination = false;
+					
+					
+					
+					
+				}
+				else
+				{
+					
+					
+					destDir.text = SO.data.destination;
+					
+					destFolderSelected = true;
+					
+				}
+				
+				rememberDestinationCheckBox.selected = SO.data.rememberDestination;
+				*/
 			}
 			
 
@@ -80,8 +105,11 @@
 				
 				trace("onSelectedDest");
 				
-				destDir.text = destFolder.nativePath;
 				destFolderSelected = true;
+				
+				destDir.text = destFolder.nativePath;
+				
+				//SO.data.destination = ( rememberDestinationCheckBox.selected ) ? destFolder.nativePath : undefined;
 				
 			}
 			
@@ -91,12 +119,14 @@
 				
 				trace("copyDirectory");
 				
-				if( sourceFolderSelected && destFolderSelected )
+				
+				if( sourceFolderSelected && destFolderSelected && srcWidthTxt.text.length > 0 && srcHeightTxt.text.length > 0 )
 				{
 					
 					trace("copyDirectory - Do copying.");
 					
-					
+					sourceWidth = Number( srcWidthTxt.text );
+					sourceHeight = Number( srcHeightTxt.text );
 					
 					
 					for ( var i:String in SO.data.sizes ) 
@@ -116,7 +146,7 @@
 							sourceFolder.copyTo( newFolder, true );
 							
 							// run Resizer
-							Resizer.run( i, SO.data.sizes[ i ].width, SO.data.sizes[ i ].height, newFolder );
+							Resizer.run( i, sourceWidth, sourceHeight, SO.data.sizes[ i ].width, SO.data.sizes[ i ].height, newFolder );
 							
 							
 						}
@@ -125,14 +155,8 @@
 						
 					}
 					
-					
-					
-					
-					
-					
-					
-					
-					
+					srcWidthTxt.text = "";
+					srcHeightTxt.text = "";
 					
 				}
 				
@@ -301,7 +325,21 @@
 				
 			}
 			
-			
+			/*
+			protected function onRememberDestinationClick(event:MouseEvent):void
+			{
+				
+				trace( onRememberDestinationClick + " : " + rememberDestinationCheckBox.selected );
+				
+				SO.data.rememberDestination = rememberDestinationCheckBox.selected;
+				
+				
+				
+				SO.data.destination = ( rememberDestinationCheckBox.selected ) ? SO.data.destination = destDir.text : undefined;
+				
+				
+			}
+			*/
 		]]>
 	</fx:Script>
 	
@@ -349,9 +387,10 @@
 			<s:TextInput id="destDir" width="200" text="Copy files to this directory."></s:TextInput>
 			<s:Button id="destDirButton" width="70" label="Select" click="selectDestinationPath();"></s:Button>
 		</s:HGroup>
-		<s:CheckBox label="Remember destination"/> 
-		
-		<!-- AUTO PILOT / MANUAL -->
+		<!--
+		<s:CheckBox id="rememberDestinationCheckBox" label="Remember destination" selected="false" click="onRememberDestinationClick(event)"/> 
+		-->
+		<!-- AUTO PILOT / MANUAL 
 		<s:HGroup>
 			<s:RadioButton groupName="drivingType" 
 						   id="autopilot" 
@@ -365,8 +404,18 @@
 						   value="manual"
 						   width="150"/>
 		</s:HGroup>
+		-->
 		
-		<s:Button id="copyButton" width="120" label="Copy Files" click="copyDirectory();"></s:Button>
+		<mx:VBox>
+			<s:Label text="Define the size of the source banner."/>
+			<s:HGroup>
+				<s:Label text="Width"></s:Label>
+				<s:TextInput id="srcWidthTxt" width="100" restrict="0-9"></s:TextInput>
+				<s:Label text="Height"></s:Label>
+				<s:TextInput id="srcHeightTxt" width="100" restrict="0-9"></s:TextInput>
+			</s:HGroup>
+			<s:Button id="copyButton" width="120" label="Copy Files" click="copyDirectory();"></s:Button>
+		</mx:VBox>
 		
 	</s:VGroup>
 	
