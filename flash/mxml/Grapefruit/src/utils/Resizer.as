@@ -41,16 +41,17 @@ package utils
 			var arr:Array = folder.getDirectoryListing();
 			var l:uint = arr.length;
 			var f:File;
+			var ext:String;
 			
 			for( var i:uint = 0; i < l; i++ )
 			{
 				
 				f = ( arr[ i ] as File );
-				
-				if( String( f.extension ).toLocaleLowerCase() == "css" )
+				ext = String( f.extension ).toLocaleLowerCase();
+				if( ext == "css" || ext == "html" || ext == "htm" )
 				{
 					
-					//trace( f.extension );
+					trace(ext);
 					
 					// Open file.
 					fs = new FileStream;
@@ -58,26 +59,19 @@ package utils
 					content = fs.readUTFBytes( fs.bytesAvailable )
 					fs.close(); 
 					
+					// Replace height and width.
+					var s:String = content;
+					s = replace( s, String( srcWidth ) + "px", String( destWidth ) + "px" );
+					s = replace( s, String( srcHeight ) + "px", String( destHeight ) + "px" );
+					s = replace( s, "width=" + String( srcWidth ), "width=" + String( destWidth ) );
+					s = replace( s, "height=" + String( srcWidth ), "height=" + String( destHeight ) );
 					
-					// Need to run REGEX
-					// Find Height and Width numbers in file.
-					// No numbers on either side.
-					// More than likely followed by "px".
+					// Special case managing if the content is 2 pixels smaller in order to center within html border.
+					s = replace( s, String( srcWidth - 2 ) + "px", String( destWidth - 2 ) + "px" );
+					s = replace( s, String( srcHeight - 2 ) + "px", String( destHeight - 2 ) + "px" );
 					
-					var pattern:RegExp = new RegExp( String( srcWidth ) + "px/g" );
-					trace(pattern);
-						
-					var s:String = content.replace( String( srcWidth ) + "px/g", String( destWidth ) + "px" );
-					//var s:String = content.replace( pattern, String( destWidth ) + "px" );
-						
-						
-						
-					//trace(s);
-					
-					
-					
-					
-					
+					// Replace key.
+					s = replace( s, String( srcWidth ) + "x" + String( srcHeight ), id );
 					
 					// Write content string back into file.
 					fs = new FileStream;
@@ -85,21 +79,7 @@ package utils
 					fs.writeUTFBytes( s );
 					fs.close();
 					
-					
-					
-					
-					//trace(content);
-					
-					
-					
 				}
-				
-				
-				
-				
-				
-				
-				
 				
 				
 			}
@@ -121,7 +101,15 @@ package utils
 		}
 		
 		
-		
+		public static function replace($raw:String,$tag:String,$content:String):String
+		{
+			var strRaw:String = $raw;
+			var objRegExp:RegExp = new RegExp( $tag, "g" );
+			//
+			strRaw = strRaw.replace(objRegExp, $content)
+			//
+			return strRaw;
+		}
 		
 	}
 	
