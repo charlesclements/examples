@@ -20,6 +20,7 @@ package
 		
 		
 		private static var TEMP:File;
+		private static var savedDirectory:File;
 		private static var currentDirectory:File;
 		private static var fs:FileStream;
 		private static var content:String;
@@ -55,6 +56,8 @@ package
 				cleanup();
 				
 			}
+			
+			if( $saveOriginals ) moveOriginals();
 			
 			//trace( dictionary );
 			trace("DeepAssetRename - process : ENDED" )
@@ -167,9 +170,25 @@ package
 			
 			trace("DeepAssetRename - saveOriginals : " + arguments );
 			
+			// Save in TEMP?
 			var f:File = File.desktopDirectory;
 			f = f.resolvePath( "ORIGINAL-" + String( new Date ) );
 			copyInto( $folder, f, true );
+			
+			savedDirectory = f;
+			trace("DeepAssetRename - saveOriginals - savedDirectory : " + savedDirectory.nativePath );
+			
+		}
+		
+		
+		
+		private static function moveOriginals():void
+		{
+			
+			trace("DeepAssetRename - moveOriginals" );
+			var f:File = currentDirectory;
+			f = f.resolvePath( savedDirectory.name );
+			savedDirectory.copyTo( f, true );
 			
 		}
 		

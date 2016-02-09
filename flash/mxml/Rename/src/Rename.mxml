@@ -57,7 +57,7 @@
 				
 				trace("doIt()");
 				
-				DeepAssetRename.process( sourceDirectory, ( ( renameAssetsCheckbox as CheckBox ).selected ) ? txtPrefix.text : "", ( deleteHidden as CheckBox ).selected, true, ( removeUnusedCheckbox as CheckBox ).selected );
+				DeepAssetRename.process( sourceDirectory, ( ( renameAssetsCheckbox as CheckBox ).selected ) ? txtPrefix.text : "", ( deleteHidden as CheckBox ).selected, ( saveOriginalFilesCheckbox as CheckBox ).selected, ( removeUnusedAssetsCheckbox as CheckBox ).selected );
 				
 				
 				
@@ -121,7 +121,7 @@
 			</s:HGroup>
 			
 			<s:HGroup width="100%" >
-				<s:CheckBox id="removeUnusedCheckbox" selected="true" change="checkbox2_changeHandler(event)"/>
+				<s:CheckBox id="removeUnusedAssetsCheckbox" selected="true" change="checkbox2_changeHandler(event)"/>
 				<s:Label paddingTop="5" text="Remove unused assets."/>
 			</s:HGroup>
 			<s:HGroup width="100%" >
