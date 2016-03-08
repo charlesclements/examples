@@ -18,9 +18,9 @@ package
 	{
 		
 		
-		
+		public static var appName:String = "";
 		private static var TEMP:File;
-		private static var savedDirectory:File;
+		private static var savedDirectory:File = File.documentsDirectory;
 		private static var currentDirectory:File;
 		private static var fs:FileStream;
 		private static var content:String;
@@ -142,15 +142,39 @@ package
 		private static function saveOriginals($folder:File):void
 		{
 			
-			//trace("DeepAssetRename - saveOriginals : " + arguments );
+			trace("DeepAssetRename - saveOriginals : " + arguments );
 			
 			// Save in TEMP?
-			var f:File = File.desktopDirectory;
-			f = f.resolvePath( "ORIGINAL-" + String( new Date ) );
+			//var f:File = File.desktopDirectory;
+			var f:File = savedDirectory;
+			var a:String = ( appName.length > 0 ) ? appName + "/" : "";
+			
+			f = f.resolvePath( a + "ORIGINAL-" + String( new Date ) );
 			copyInto( $folder, f, true );
 			
-			savedDirectory = f;
+			//savedDirectory = f;
 			//trace("DeepAssetRename - saveOriginals - savedDirectory : " + savedDirectory.nativePath );
+			
+		}
+		
+		
+		
+		public static function setSaveDirectory($folder:File):void
+		{
+			
+			trace("setSaveDirectory : " + $folder.nativePath);
+			
+			savedDirectory = $folder;
+			
+			
+		}
+		
+		
+		public static function getSaveDirectory():File
+		{
+			
+			trace("getSaveDirectory : " + savedDirectory);
+			return savedDirectory;
 			
 		}
 		

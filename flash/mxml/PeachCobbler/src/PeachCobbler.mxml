@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   initialize="init()">
+	
+	
+	
+	
+	<fx:Script>
+		<![CDATA[
+			
+			
+			protected var sourceDirectory:File = null;
+			protected var saveDirectory:File = null;
+			
+			
+			protected function init():void
+			{
+				
+				trace("init()");
+				setup();
+				
+			}
+			
+			
+			private function setup():void
+			{
+				
+				// Define app name.
+				DeepAssetRename.appName = "PeaceCobbler";
+				
+				DeepAssetRename.setSaveDirectory( File.documentsDirectory );
+				saveToDitrectory.text = DeepAssetRename.getSaveDirectory().nativePath;
+				
+				// Set availability of generateButton.
+				generateButtonStatus();
+				
+				// Set saved directory here.
+				
+				
+				
+			}
+			
+			
+			
+			protected function defineSource():void
+			{
+				
+				//trace("defineSource()");
+				
+				// Define directory.
+				sourceDirectory = new File;
+				sourceDirectory.addEventListener( Event.SELECT, folderSelected );
+				sourceDirectory.browseForDirectory( "Define the Source Directory" );
+				
+			}
+			
+			
+			protected function clearSource():void
+			{
+				
+				trace("clearSource()");
+				
+				// Clear source.
+				sourceDirectory = null;
+				selectedDitrectory.text = "";
+				
+				// Check if generate button should be enabled/disabled.
+				generateButtonStatus();
+				
+			}
+			
+			
+			protected function changeSaveDirectory():void
+			{
+				
+				trace("changeSaveDirectory()");
+				
+				// Define directory.
+				saveDirectory = new File;
+				saveDirectory.addEventListener( Event.SELECT, saveFolderSelected );
+				saveDirectory.addEventListener( Event.CANCEL, saveFolderCancelled );
+				saveDirectory.browseForDirectory( "Define the Save Directory" );
+				
+				
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+			protected function saveFolderSelected(e:Event):void
+			{
+				
+				
+				DeepAssetRename.setSaveDirectory( saveDirectory );
+				saveToDitrectory.text = DeepAssetRename.getSaveDirectory().nativePath;
+				
+			}
+			
+			
+			protected function saveFolderCancelled(e:Event):void
+			{
+				
+				saveDirectory = DeepAssetRename.getSaveDirectory();
+				saveToDitrectory.text = DeepAssetRename.getSaveDirectory().nativePath;
+				
+			}
+			
+			
+			protected function folderSelected(e:Event):void
+			{
+				
+				//trace("folderSelected()");
+				//trace(e.currentTarget);
+				selectedDitrectory.text = sourceDirectory.nativePath;
+				generateButtonStatus();
+				
+			}
+			
+			
+			protected function generateButtonStatus():void
+			{
+				
+				trace("generateButtonStatus()");
+				//trace(e.currentTarget);
+				
+				if( sourceDirectory != null )
+				{
+					
+					generateButton.enabled = true;
+					
+				}
+				else
+				{
+					
+					generateButton.enabled = false;
+					
+				}
+				
+			}
+			
+			
+			
+			protected function doIt():void
+			{
+				
+				trace("doIt()");
+				
+				DeepAssetRename.process( sourceDirectory, ( ( renameAssetsCheckbox as CheckBox ).selected ) ? txtPrefix.text : "", ( deleteHidden as CheckBox ).selected, ( saveOriginalFilesCheckbox as CheckBox ).selected, ( removeUnusedAssetsCheckbox as CheckBox ).selected );
+				
+				// Clears the source if it is defined.
+				clearSource();
+				
+			}
+			
+			
+			protected function checkbox1_changeHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				
+				var b:Boolean = ( event.currentTarget as CheckBox ).selected;
+				//trace("checkbox1_changeHandler() : " + b);
+				txtPrefix.enabled = b;
+				
+			}
+			
+			protected function checkbox2_changeHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				
+				var b:Boolean = ( event.currentTarget as CheckBox ).selected;
+				//trace("checkbox2_changeHandler() : " + b);
+				txtPrefix.enabled = b;
+				
+			}
+			
+			protected function checkbox3_changeHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				
+				var b:Boolean = ( event.currentTarget as CheckBox ).selected;
+				//trace("checkbox3_changeHandler() : " + b);
+				txtPrefix.enabled = b;
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+	</fx:Declarations>
+	
+	
+	<s:Panel width="100%" height="100%" title="Deep Clean">
+		<s:VGroup  width="100%" height="100%" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+			<s:HGroup width="100%" >
+				<s:CheckBox id="renameAssetsCheckbox" selected="true" change="checkbox1_changeHandler(event)"/>
+				<s:Label paddingTop="5" text="Rename assets with prefix:"/>
+				<s:TextInput id="txtPrefix" width="100%"/>
+			</s:HGroup>
+			<s:HGroup width="100%" >
+				<s:CheckBox id="saveOriginalFilesCheckbox" selected="true"/>
+				<s:Label paddingTop="5" text="Save original files here:"/>
+				<s:TextInput id="saveToDitrectory" enabled="false" width="70%"/>
+				<s:Button label="Change" width="30%" click="changeSaveDirectory()"/>
+			</s:HGroup>
+			<s:HGroup width="100%" >
+				<s:CheckBox id="removeUnusedAssetsCheckbox" selected="true" change="checkbox2_changeHandler(event)"/>
+				<s:Label paddingTop="5" text="Remove unused assets."/>
+			</s:HGroup>
+			<s:HGroup width="100%" >
+				<s:CheckBox id="deleteHidden" selected="false"/>
+				<s:Label paddingTop="5" text="Delete hidden files."/>
+			</s:HGroup>
+			<s:Label paddingTop="10" text="Select the Source folder to use."/>
+			<s:TextInput id="selectedDitrectory" enabled="false" width="100%"/>
+			<s:HGroup width="100%" >
+				<s:Button label="Source Directory" height="40" width="100%" click="defineSource()"/>
+				<s:Button label="Clear Source" height="40" width="100%" click="clearSource()"/>
+				</s:HGroup>
+			<s:Button id="generateButton" label="GENERATE" top="10" width="100%" height="100%" click="doIt()"/>
+		</s:VGroup>
+	</s:Panel>
+	
+</s:WindowedApplication>
