@@ -9,6 +9,8 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import model.FloxModel;
+			
 			import tools.DeepAssetRename;
 			
 			
@@ -27,6 +29,9 @@
 			
 			private function setup():void
 			{
+				
+				// Initialize Flox.
+				FloxModel.initialize();
 				
 				// Define app name.
 				DeepAssetRename.appName = "PeaceCobbler";
