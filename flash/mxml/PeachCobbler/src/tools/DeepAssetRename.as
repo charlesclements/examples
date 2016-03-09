@@ -1,4 +1,4 @@
-package
+package tools
 {
 	
 	
@@ -20,7 +20,7 @@ package
 		
 		public static var appName:String = "";
 		private static var TEMP:File;
-		private static var savedDirectory:File = File.documentsDirectory;
+		private static var savedDirectory:File = File.desktopDirectory;//File.documentsDirectory;
 		private static var currentDirectory:File;
 		private static var fs:FileStream;
 		private static var content:String;
@@ -32,8 +32,18 @@ package
 		public function DeepAssetRename(target:IEventDispatcher=null)
 		{
 			super(target);
+			
+			
+			
 		}
 		
+		
+		public static function init():void
+		{
+			
+			trace("DeepAssetRename init");
+			
+		}
 		
 		public static function process($folder:File, $prefix:String="", $deleteHiddenFiles:Boolean=false, $saveOriginals:Boolean=true, $removeUnused:Boolean=false):void
 		{
@@ -57,7 +67,7 @@ package
 				
 			}
 			
-			if( $saveOriginals ) moveOriginals();
+			//if( $saveOriginals ) moveOriginals();
 			
 			//trace( dictionary );
 			trace("DeepAssetRename - process : ENDED" )
@@ -147,9 +157,14 @@ package
 			// Save in TEMP?
 			//var f:File = File.desktopDirectory;
 			var f:File = savedDirectory;
-			var a:String = ( appName.length > 0 ) ? appName + "/" : "";
+			//var a:String = ( appName.length > 0 ) ? f.nativePath + appName : "";
 			
-			f = f.resolvePath( a + "ORIGINAL-" + String( new Date ) );
+			f = f.resolvePath( "ORIGINAL-" + String( new Date ) );
+			
+			trace(f.nativePath);
+			
+			// copyInto(directoryToCopy:File, locationCopyingTo:File, copyEmptyFolders:Boolean=true):void
+			//copyInto( $folder, f, true );
 			copyInto( $folder, f, true );
 			
 			//savedDirectory = f;
@@ -164,8 +179,11 @@ package
 			
 			trace("setSaveDirectory : " + $folder.nativePath);
 			
-			savedDirectory = $folder;
+			trace($folder.nativePath);
 			
+			savedDirectory = new File( );
+			savedDirectory = savedDirectory.resolvePath( $folder.nativePath + "/" + appName );
+			trace(savedDirectory.nativePath);
 			
 		}
 		
@@ -216,34 +234,6 @@ package
 			}
 			
 		}
-		
-		/*
-		//Recursivley copies directory.
-		private static function renameFile(fileToCopy:File, locationCopyingTo:File, copyEmptyFolders:Boolean=true):void
-		{
-			
-			var directory:Array = fileToCopy.getDirectoryListing();
-			
-			for each (var f:File in directory)
-			{
-				if (f.isDirectory)
-				{
-					
-					// Copies a folder whether it is empty or not.
-					if( copyEmptyFolders ) f.copyTo(locationCopyingTo.resolvePath(f.name), true);
-					
-					// Recurse thru folder.
-					//copyInto(f, locationCopyingTo.resolvePath(f.name));
-					
-				}
-				else
-					f.copyTo(locationCopyingTo.resolvePath(f.name), true);
-					
-				
-			}
-			
-		}
-		*/
 		
 		
 		private static function doProcess($folder:File, $prefix:String="", $deleteHiddenFiles:Boolean=false):void

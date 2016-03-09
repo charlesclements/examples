@@ -9,6 +9,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import tools.DeepAssetRename;
 			
 			
 			protected var sourceDirectory:File = null;
@@ -151,7 +152,7 @@
 				
 				trace("doIt()");
 				
-				DeepAssetRename.process( sourceDirectory, ( ( renameAssetsCheckbox as CheckBox ).selected ) ? txtPrefix.text : "", ( deleteHidden as CheckBox ).selected, ( saveOriginalFilesCheckbox as CheckBox ).selected, ( removeUnusedAssetsCheckbox as CheckBox ).selected );
+				DeepAssetRename.process( sourceDirectory, ( ( renameAssetsCheckbox as CheckBox ).selected ) ? txtPrefix.text + txtDivide.text : "", ( deleteHidden as CheckBox ).selected, ( saveOriginalFilesCheckbox as CheckBox ).selected, ( removeUnusedAssetsCheckbox as CheckBox ).selected );
 				
 				// Clears the source if it is defined.
 				clearSource();
@@ -199,10 +200,12 @@
 	
 	<s:Panel width="100%" height="100%" title="Deep Clean">
 		<s:VGroup  width="100%" height="100%" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
-			<s:HGroup width="100%" >
+			<s:HGroup width="100%" verticalAlign="middle" >
 				<s:CheckBox id="renameAssetsCheckbox" selected="true" change="checkbox1_changeHandler(event)"/>
 				<s:Label paddingTop="5" text="Rename assets with prefix:"/>
 				<s:TextInput id="txtPrefix" width="100%"/>
+				<s:Label text="+" />
+				<s:TextInput id="txtDivide" text="_" textAlign="center" width="8%"/>
 			</s:HGroup>
 			<s:HGroup width="100%" >
 				<s:CheckBox id="saveOriginalFilesCheckbox" selected="true"/>
@@ -221,8 +224,8 @@
 			<s:Label paddingTop="10" text="Select the Source folder to use."/>
 			<s:TextInput id="selectedDitrectory" enabled="false" width="100%"/>
 			<s:HGroup width="100%" >
-				<s:Button label="Source Directory" height="40" width="100%" click="defineSource()"/>
-				<s:Button label="Clear Source" height="40" width="100%" click="clearSource()"/>
+				<s:Button label="Select Source Folder" height="40" width="100%" click="defineSource()"/>
+				<s:Button label="Clear Source Folder" height="40" width="100%" click="clearSource()"/>
 				</s:HGroup>
 			<s:Button id="generateButton" label="GENERATE" top="10" width="100%" height="100%" click="doIt()"/>
 		</s:VGroup>
