@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- containers\spark\myComponents\MyAlertPopUp.mxml -->
+<s:SkinnablePopUpContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+						   xmlns:s="library://ns.adobe.com/flex/spark" 
+						   xmlns:mx="library://ns.adobe.com/flex/mx" >
+	
+	<fx:Script>
+		<![CDATA[
+			import net.fastindemand.dispatcher.Dispatcher;
+			import net.fastindemand.event.AppEvent;
+			
+			
+			protected function onOK():void
+			{
+				
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.DELETE_AUDIO, {}, true ) );
+				close();
+				
+			}
+			
+			
+			protected function onCancel():void
+			{
+				
+				//dispatchEvent( new AppEvent( AppEvent.CANCEL_CLOSE_PROJECT, {}, true ) );
+				close();
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+	<s:Panel title="Warning" width="100%" height="100%">
+		<s:VGroup width="100%" horizontalAlign="center"
+				  paddingTop="20" gap="20">
+			<s:Label text="Are you sure you want to delete this audio track?"/>
+			<s:Button label="Delete" click="onOK();"/>
+			<s:Button label="Cancel" click="onCancel();"/>
+		</s:VGroup>
+	</s:Panel>
+	
+</s:SkinnablePopUpContainer>

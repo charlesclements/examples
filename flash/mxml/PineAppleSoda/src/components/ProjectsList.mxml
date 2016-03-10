@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" width="100%" height="100%"
+					  backgroundColor="#ffffff">
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	<fx:Script>
+		<![CDATA[
+			
+			
+			import mx.collections.XMLListCollection;
+			import mx.events.CollectionEvent;
+			import mx.managers.PopUpManager;
+			
+			import components.alerts.AlertPopUp_CreateFirstProject;
+			import components.alerts.AlertPopUp_RemoveProject;
+			
+			import model.AppModel;
+			
+			import net.fastindemand.dispatcher.Dispatcher;
+			import net.fastindemand.event.AppEvent;
+			
+			// Alert window.
+			private var alertRemove:AlertPopUp_RemoveProject = new AlertPopUp_RemoveProject;
+			private var alertCreateFirst:AlertPopUp_CreateFirstProject = new AlertPopUp_CreateFirstProject;
+			
+			private var _isInitialized:Boolean = false;
+			
+			
+			
+			public function init():void
+			{
+				
+				
+				
+				if( !_isInitialized )
+				{
+					
+					trace("ProjectsList - init() - _isInitialized : " + _isInitialized);
+					
+					// If it does not exist.
+					//if( !AppModel.PROJECTS_FILE.exists ) 
+					
+					
+					
+					
+					
+					//if( AppModel.PROJECTS_XML.text().length() <= 0 ) 
+					if( AppModel.PROJECTS_XML.toXMLString().length <= 0 ) 
+					{
+							
+							
+						trace("ProjectsList - init() +++");
+						AppModel.PROJECTS_FILE = AppModel.STORAGE;
+						AppModel.PROJECTS_FILE = AppModel.STORAGE.resolvePath("LyricsToGo/projects.xml");
+							
+						trace("File needs to be created.");
+						
+						return;
+						
+						
+						
+						
+						
+						
+						// This is where you create your XML File structure.
+						
+						// Create XML.
+						var xml:XML = new XML(<projects><project id=""/></projects>);
+						xml.project.title = "Untitled Project";
+						xml.project.PID = String( ( new Date ).time );
+						//xml.project.@id = String( ( new Date ).time );
+						
+						trace( xml );
+						
+						// Set last updated?
+						
+						
+						
+						// Create string for saving.
+						var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
+						outputString += xml;
+						outputString = outputString.replace( /\n/g, File.lineEnding );
+						trace(outputString);
+						
+						// Write to file.
+						AppModel.STREAM = new FileStream();
+						AppModel.STREAM.open( AppModel.PROJECTS_FILE, FileMode.UPDATE );
+						AppModel.STREAM.writeUTFBytes( outputString );
+						AppModel.STREAM.close();
+						
+						// XML has now been added.
+							
+						// Create new project popup?
+						alertCreateFirst.open( this, true );
+						alertCreateFirst.height = this.height;
+						alertCreateFirst.width = this.width;
+						
+						// Center the pop-up in the parent container.
+						PopUpManager.centerPopUp( alertCreateFirst );
+						
+					}
+					else 
+					{
+						
+						trace("File exists");
+						
+					}
+					
+					// Read XML info.
+					AppModel.STREAM.open( AppModel.PROJECTS_FILE, FileMode.READ);
+					AppModel.PROJECTS_XML = XML( AppModel.STREAM.readUTFBytes( AppModel.STREAM.bytesAvailable ) );
+					AppModel.STREAM.close();
+					
+					
+					
+					
+					var xmllist:XMLList = AppModel.PROJECTS_XML..title;
+					
+					/*
+					trace( "+" );
+					trace( "+" );
+					
+					trace( xmllist );
+					*/
+					
+					
+					
+					
+					AppModel.PROJECTS_LIST = new XMLListCollection( xmllist );
+					/*
+					trace( AppModel.PROJECTS_LIST );
+					
+					trace( "-" );
+					*/
+					
+					
+					// Event listeners
+					dataList.addEventListener( CollectionEvent.COLLECTION_CHANGE, onCollectionEvent );
+					Dispatcher.addEventListener( AppEvent.UPDATE_PROJECTS, onUpdateProjects );
+					alertRemove.addEventListener( AppEvent.REMOVE_PROJECT, onRemoveProject );
+					//alertCreateFirst.addEventListener( AppEvent.OPEN_PROJECT, onOpenProject );
+					
+					
+					
+					
+					_isInitialized = true;
+				
+				}
+				
+				else trace("Already initialized");
+				
+			}
+			
+			protected function onUpdateProjects(e:Event):void
+			{
+				
+				trace("ProjectsList - onUpdateProjects");
+				
+				var xmllist:XMLList = AppModel.PROJECTS_XML..title;
+				AppModel.PROJECTS_LIST = new XMLListCollection( xmllist );
+				
+				//dataList.dataProvider = AppModel.PROJECTS_LIST;
+				
+			}
+			
+			protected function onCollectionEvent(e:mx.events.CollectionEvent):void
+			{
+				
+				trace("onCollectionEvent");
+				trace(dataList.selectedIndex);
+				
+				
+			}
+			
+			
+			protected function selectionChangedHandler(e:Event):void
+			{
+				
+				trace("selectionChangedHandler");
+				AppModel.PROJECT_INDEX = dataList.selectedIndex;
+				
+				trace(AppModel.PROJECT_INDEX);
+				
+				
+				
+				
+				/*
+				trace(AppModel.PROJECTS_XML);
+				trace("+");
+				*/
+				//trace(AppModel.PROJECTS_XML[ 0 ][ 0 ][ 0 ]);
+				//trace(AppModel.PROJECTS_XML..project[ 0 ]);
+				//trace("+");
+				//trace(AppModel.PROJECTS_XML[ AppModel.PROJECT_INDEX ]);
+				//AppModel.PID = AppModel.PROJECTS_XML
+				
+				
+			}
+			
+			
+			protected function createNewProject():void
+			{
+				trace("ProjectsList : createNewProject");
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.NEW_PROJECT, true ) );
+				
+			}
+
+			
+			protected function onRemoveProject(e:Event=null):void
+			{
+				
+				trace("ProjectsList : onRemoveProject");
+				
+				// Remove XML child node.
+				delete AppModel.PROJECTS_XML.children()[ AppModel.PROJECT_INDEX ];
+				
+				// This is the Strign that will get saved to the File.
+				var outputString:String = '<?xml version="1.0" encoding="utf-8"?>\n';
+				outputString += AppModel.PROJECTS_XML.toXMLString();
+				outputString = outputString.replace( /\n/g, File.lineEnding );
+				
+				// Saving the actual file.
+				AppModel.STREAM = new FileStream();
+				AppModel.STREAM.open( AppModel.PROJECTS_FILE, FileMode.WRITE );
+				AppModel.STREAM.writeUTFBytes( outputString );
+				AppModel.STREAM.close();
+				
+				// Alert everyone else that the XML has been saved and changed.
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.UPDATE_PROJECTS ) );
+				
+				// Need to set this to -1 so that none of the buttons are selected.
+				// If left selected, by reselecting them, you'll potentially get an error. 
+				buttons.selectedIndex = -1;
+				
+			}
+			
+			
+			protected function initRemoveProject():void
+			{
+				
+				trace("ProjectsList : initRemoveProject");
+				
+				alertRemove.open( this, true );
+				alertRemove.height = this.height
+				alertRemove.width = this.width;
+				
+				// Center the pop-up in the parent container.
+				PopUpManager.centerPopUp( alertRemove );
+				
+			}
+			
+			
+			protected function onOpenProject(e:Event=null):void
+			{
+				
+				trace("ProjectsList : openProject - Let others know you are opening a new project.");
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.OPEN_PROJECT, true ) );
+				
+			}
+			
+			
+			
+			
+			protected function buttons_clickHandler(event:MouseEvent):void
+			{
+				
+				trace("ProjectsList - buttons_clickHandler");
+				
+				
+				var s:String = ( buttons.selectedItem as String ).toUpperCase();
+				
+				
+				//trace( buttons.selectedIndex );
+				// Need to set this to -1 so that none of the buttons are selected.
+				// If left selected, by reselecting them, you'll potentially get an error. 
+				buttons.selectedIndex = -1;
+				//trace( buttons.selectedIndex );
+				
+				
+				switch( s )
+				{
+					
+					
+					
+					case "NEW":
+						trace( "ProjectsList - NEW" );
+						createNewProject();
+						break;
+					
+					case "OPEN":
+						trace( "ProjectsList - OPEN" );
+						onOpenProject();
+						break;
+					
+					case "REMOVE":
+						trace( "ProjectsList - REMOVE" );
+						initRemoveProject();
+						break;
+					
+					default: 
+						trace( "Nothing selected" );
+						
+				}
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%">
+		<s:HGroup width="100%">
+			
+			
+			<!--itemRenderer="components.ProjectListItem"-->
+			<s:List dataProvider="{AppModel.PROJECTS_LIST}" doubleClick="onOpenProject(event)" requireSelection="true" id="dataList" labelField="title" width="300" height="100%" change="selectionChangedHandler(event)" >
+				<s:layout>
+					<s:VerticalLayout  />
+				</s:layout>
+			</s:List>
+		</s:HGroup>
+	</s:VGroup>
+	
+	
+	<s:ButtonBar id="buttons" click="buttons_clickHandler(event)" width="100%" >  
+		<s:ArrayCollection>
+			<fx:String>Open</fx:String> 
+			<fx:String>New</fx:String> 
+			<fx:String>Remove</fx:String> 
+		</s:ArrayCollection>
+	</s:ButtonBar>
+	
+	
+</s:SkinnableContainer>

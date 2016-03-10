@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 initialize="init()" xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import com.greensock.loading.LoaderMax;
+			import com.greensock.loading.MP3Loader;
+			
+			import mx.core.IVisualElement;
+			
+			import model.AppModel;
+			
+			import net.fastindemand.dispatcher.Dispatcher;
+			import net.fastindemand.event.AppEvent;
+			
+			// Vars.
+			public static var isCreated:Boolean = false;
+			private var _audioFile:File;
+			private var _loader:LoaderMax;
+			private var _musicPlaying:Boolean = false;
+			private var _mediaStateIndex:uint = 0;
+			private var _loop:Boolean = false;
+			
+			
+			// Called on Initialize.
+			public function init():void
+			{
+				
+				if( !isCreated )
+				{
+					
+					trace("AudioPlayer - init");
+					update();
+				}
+				
+			}
+			
+			
+			private function _doRemoveChildren():void
+			{
+				
+				trace("AudioPlayer : doRemoveChildren");
+				if( contains( loaderGroup ) ) remove( loaderGroup );
+				if( contains( playerGroup ) ) remove( playerGroup );
+				trace("AudioPlayer : doRemoveChildren END");
+				
+			}
+			
+			
+			private function add(element:IVisualElement):void
+			{
+				
+				if( !container.containsElement( element ) ) container.addElement( element );
+				
+			}
+			
+			private function remove(element:IVisualElement):void
+			{
+				
+				if( container.containsElement( element ) ) container.removeElement( element );
+				
+			}
+			
+			
+			public function clear():void
+			{
+				
+				trace("AudioPlayer : clear");
+				
+				if( AppModel.CURRENT_SOUNDCHANNEL ) AppModel.CURRENT_SOUNDCHANNEL.stop();
+				AppModel.CURRENT_SOUNDCHANNEL = null;
+				AppModel.CURRENT_SOUND = null;
+				_doRemoveChildren();
+				playButton.label = "PLAY";
+				_musicPlaying = false;
+				
+				// Reset scrubber.
+				
+			}
+			
+			
+			public function update():void
+			{
+				
+				trace("AudioPlayer : update");
+				
+				
+				// Run condition for what to place here.
+				
+				var list:XMLList = new XMLList( AppModel.CURRENT_XML );
+				//trace( list.audio.@url.toString() );
+				trace( list.audio.@url.toString().length );
+				
+				_doRemoveChildren();
+				
+				if( list.audio.@url.toString().length == 0 )
+				{
+					
+					add( loaderGroup );
+					
+				}
+				else
+				{
+					
+					AppModel.setupSound();
+					add( playerGroup );
+					
+				}
+				
+			}
+			
+			
+			protected function _loadMusic(e:Event=null):void
+			{
+				
+				trace("AudioPlayer - _loadMusic");
+				
+				_audioFile = new File;
+				_audioFile.addEventListener( Event.SELECT, _onAudioFileSelected );
+				_audioFile.browse(  );//[ ".mp3" ]
+				
+			}
+			
+			
+			protected function _onAudioFileSelected(e:Event=null):void
+			{
+				
+				trace( "AudioPlayer - _onAudioFileSelected()" );
+				
+				// Copies audio file to directory.
+				AppModel.copyMusic( AppModel.PID, e.currentTarget as File );
+				
+				// Update the class.
+				update();
+				
+			}
+			
+			
+			protected function _playMusic(e:MouseEvent=null):void
+			{
+				
+				trace("AudioPlayer - _playMusic");
+				
+				
+				trace(AppModel.CURRENT_SOUND.bytesTotal);
+				
+				
+				
+				if( AppModel.CURRENT_SOUND.bytesTotal > 0 && _mediaStateIndex == 0 )
+				{
+					
+					trace("PLAY");
+					_loop = false;
+					AppModel.CURRENT_SOUNDCHANNEL = AppModel.CURRENT_SOUND.play( 0 );
+					playButton.label = "LOOP";
+					//playButton.label = "STOP";
+					_musicPlaying = true;
+					_mediaStateIndex = 1;
+					
+				}
+				else if( AppModel.CURRENT_SOUND.bytesTotal > 0 && _mediaStateIndex == 1 )
+				{
+					
+					trace("LOOP");
+					_loop = true;
+					//AppModel.CURRENT_SOUNDCHANNEL.stop();
+					playButton.label = "STOP";
+					_musicPlaying = true;
+					_mediaStateIndex = 2;
+				
+				}
+				else if( AppModel.CURRENT_SOUND.bytesTotal > 0 && _mediaStateIndex == 2 )
+				{
+					
+					trace("STOP");
+					_stopAudio();
+					
+				}
+				
+			}
+			
+			
+			protected function _stopAudio():void
+			{
+				
+				trace("AudioPlayer : _stopAudio");
+				_loop = false;
+				if( _musicPlaying ) AppModel.CURRENT_SOUNDCHANNEL.stop();
+				playButton.label = "PLAY";
+				_musicPlaying = false;
+				_mediaStateIndex = 0;
+				
+			}
+			
+			/*
+			protected function options_clickHandler(event:MouseEvent):void
+			{
+				
+				// TODO Auto-generated method stub
+				trace("AudioPlayer : options");
+				
+			}
+			*/
+			
+			protected function _deleteAudio(event:MouseEvent):void
+			{
+
+				trace("AudioPlayer : _deleteAudio");
+				_stopAudio();
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.SHOW_DELETE_AUDIO ) );
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup id="container" verticalAlign="middle" horizontalAlign="center" width="100%" >
+		
+		<s:HGroup id="loaderGroup" verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" width="100%">
+			<s:Button id="loader" label="LOAD MUSIC" click="_loadMusic()" height="50" width="100%"/>
+		</s:HGroup>
+		
+		<s:HGroup id="playerGroup" verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5" width="100%">
+			<s:Button id="playButton" label="PLAY" click="_playMusic();" height="30" width="70"/>
+			<s:HSlider id="musicSlider" maximum="100" width="100%"/>
+			<s:Label id="timePosition" fontSize="10" width="30" text="00:00"/>
+			<!--<s:Button id="options" label="*" height="30" width="30" click="options_clickHandler(event)"/>-->
+			<s:Button id="removeButton" label="X" height="30" width="30" click="_deleteAudio(event)" />
+		</s:HGroup>
+	</s:VGroup>
+	
+</s:Group>
