@@ -12,7 +12,7 @@ package model
 	
 	import entities.UserTokens;
 	
-	import event.SiteEvent;
+	import events.AppEvent;
 	
 	public class FloxModel extends EventDispatcher
 	{
@@ -122,7 +122,7 @@ package model
 			if( userTokens.tokens <= 0 )
 			{
 				
-				Dispatcher.dispatchEvent( new SiteEvent( SiteEvent.NO_MORE_TOKENS, {} ) );
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.NO_MORE_TOKENS, {} ) );
 				
 				
 				

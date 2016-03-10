@@ -9,9 +9,13 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			import alerts.AlertPopUp_BuyTokens;
+			
 			import dispatcher.Dispatcher;
 			
-			import event.SiteEvent;
+			import events.AppEvent;
 			
 			import model.FloxModel;
 			
@@ -20,17 +24,20 @@
 			
 			protected var sourceDirectory:File = null;
 			protected var saveDirectory:File = null;
+			private var alertBuyMoreTokens:AlertPopUp_BuyTokens = new AlertPopUp_BuyTokens;
 			
 			
 			protected function init():void
 			{
 				
-				trace("init()");
+				trace("PeachCobbler - init()");
 				setup();
+				
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.NO_MORE_TOKENS, {} ) );
 				
 			}
 			
-			
+			/*
 			private function onNoMoreTokens(e:SiteEvent):void
 			{
 				
@@ -40,29 +47,89 @@
 				trace("You have no more Tokens to wash your HTML. Would you like to purchase more tokes?");
 				
 			}
+			*/
+			
+			private function onSiteEvent(e:Event):void
+			{
+				
+				trace("PeachCobbler - onSiteEvent()" + ":" + e.type);
+				
+				
+				
+				
+				switch(e.type)
+				{
+					
+					case AppEvent.NO_MORE_TOKENS:
+						
+						trace("PeachCobbler - onNoMoreTokens");
+						
+						// Show popup CTA panel here.
+						trace("PeachCobbler - You have no more Tokens to wash your HTML. Would you like to purchase more tokes?");
+						
+						
+						// Login stuff.
+						alertBuyMoreTokens.open( this, true );
+						//alertBuyMoreTokens.width = this.width;
+						//alertBuyMoreTokens.height = this.height;
+						//alertBuyMoreTokens.x = alertBuyMoreTokens.y = 0;
+						
+						
+						trace(this.height);
+						
+						
+						
+						
+						
+						alertBuyMoreTokens.percentWidth = 100;
+						alertBuyMoreTokens.percentHeight = 100;
+						
+						// Center the pop-up in the parent container.
+						PopUpManager.centerPopUp( alertBuyMoreTokens );
+						
+						
+						break;
+					
+					case AppEvent.READY:
+						
+						trace(AppEvent.READY);
+						
+						// Show popup CTA panel here.
+						trace("PeachCobbler - You have enough coins to wash your HTML.");
+						
+						
+						break;
+					
+					
+				}
+					
+			}
+			
+			
 			
 			
 			private function setup():void
 			{
 				
-				trace("setup()");
+				trace("PeachCobbler - setup()");
+				
+				// Listen for events.
+				Dispatcher.addEventListener( AppEvent.NO_MORE_TOKENS, onSiteEvent );
 				
 				// Initialize Flox.
 				FloxModel.initialize();
 				
-				// Listen for events.
-				Dispatcher.addEventListener( SiteEvent.NO_MORE_TOKENS, onNoMoreTokens );
-				
 				// Define app name.
 				DeepAssetRename.appName = "PeachCobbler";
 				
+				// Set saved directory here.
 				DeepAssetRename.setSaveDirectory( File.documentsDirectory );
 				saveToDitrectory.text = DeepAssetRename.getSaveDirectory().nativePath;
 				
 				// Set availability of generateButton.
 				generateButtonStatus();
 				
-				// Set saved directory here.
+				//
 				
 				
 				
@@ -86,7 +153,7 @@
 			protected function clearSource():void
 			{
 				
-				trace("clearSource()");
+				trace("PeachCobbler - clearSource()");
 				
 				// Clear source.
 				sourceDirectory = null;
@@ -101,7 +168,7 @@
 			protected function changeSaveDirectory():void
 			{
 				
-				trace("changeSaveDirectory()");
+				trace("PeachCobbler - changeSaveDirectory()");
 				
 				// Define directory.
 				saveDirectory = new File;
@@ -152,7 +219,7 @@
 			protected function generateButtonStatus():void
 			{
 				
-				trace("generateButtonStatus()");
+				trace("PeachCobbler - generateButtonStatus()");
 				//trace(e.currentTarget);
 				
 				if( sourceDirectory != null )
@@ -175,7 +242,7 @@
 			protected function doIt():void
 			{
 				
-				trace("doIt()");
+				trace("PeachCobbler - doIt()");
 				
 				DeepAssetRename.process( sourceDirectory, ( ( renameAssetsCheckbox as CheckBox ).selected ) ? txtPrefix.text + txtDivide.text : "", ( deleteHidden as CheckBox ).selected, ( saveOriginalFilesCheckbox as CheckBox ).selected, ( removeUnusedAssetsCheckbox as CheckBox ).selected );
 				
