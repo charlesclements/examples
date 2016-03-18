@@ -52,6 +52,11 @@ package tools
 			currentDirectory = $folder;
 			files = [];
 			if( $saveOriginals ) saveOriginals( $folder );
+			
+			
+			if( $prefix != "" ) $prefix = polishNewName( $prefix );
+			
+			
 			doProcess( $folder, $prefix, $deleteHiddenFiles );
 			deepRename();
 			
@@ -266,7 +271,16 @@ package tools
 					}
 					else if( f.isHidden ) continue;
 					
-					files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name, updatedName:$prefix + f.name, occurs:0 } );
+					
+					
+					
+					// Need to make sure that the name being replaced is the full doc name including extension.
+					
+					
+					
+					
+					//files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name, updatedName:$prefix + f.name, occurs:0 } );
+					files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name + "." + f.extension, updatedName:$prefix + f.name + "." + f.extension, occurs:0 } );
 					
 					// Recurse
 					doProcess( f, $prefix, $deleteHiddenFiles );
@@ -292,7 +306,8 @@ package tools
 				
 				//trace("file : " + $folder.nativePath + " : " + ext + "file : " + f.name + ( ( f.isHidden )?" - HIDDEN":"" ));
 				
-				files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name, updatedName:$prefix + f.name, occurs:0 } );
+				//files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name, updatedName:$prefix + f.name, occurs:0 } );
+				files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name + "." + f.extension, updatedName:$prefix + f.name + "." + f.extension, occurs:0 } );
 			
 			}
 			
@@ -326,11 +341,21 @@ package tools
 		
 		
 		// This function searches within a file and replaces a string.
+		public static function polishNewName(newString:String):String
+		{
+			
+			trace("DeepAssetRename - polishNewName");
+			return replace( newString, " ", "_" );
+			
+			
+		}
+		
+		// This function searches within a file and replaces a string.
 		public static function renameWithinFile(file:File, originalString:String, newString:String):void
 		{
 			
 			var ext:String = String( file.extension ).toLocaleLowerCase();
-			if( ext == "css" || ext == "html" || ext == "htm" )
+			if( ext == "css" || ext == "html" || ext == "htm" || ext == "json" || ext == "js" )
 			{
 				
 				//trace( "DeepAssetRename - renameInFile : " + "FILE: " + file.name + " | ORIG:" + originalString + " | UPDATE:" + newString );
