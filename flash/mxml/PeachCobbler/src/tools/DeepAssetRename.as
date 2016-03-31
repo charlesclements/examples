@@ -53,6 +53,7 @@ package tools
 			files = [];
 			if( $saveOriginals ) saveOriginals( $folder );
 			
+			trace("KEEP MOVING");
 			
 			if( $prefix != "" ) $prefix = polishNewName( $prefix );
 			
@@ -262,6 +263,8 @@ package tools
 				if( f.isDirectory )
 				{
 					
+					trace("IS_DIRECTORY");
+						
 					if( $deleteHiddenFiles && f.isHidden ) 
 					{
 						
@@ -279,8 +282,8 @@ package tools
 					
 					
 					
-					//files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name, updatedName:$prefix + f.name, occurs:0 } );
-					files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name + "." + f.extension, updatedName:$prefix + f.name + "." + f.extension, occurs:0 } );
+					files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name, updatedName:$prefix + f.name, occurs:0 } );
+					//files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name + "." + f.extension, updatedName:$prefix + f.name + "." + f.extension, occurs:0 } );
 					
 					// Recurse
 					doProcess( f, $prefix, $deleteHiddenFiles );
@@ -299,16 +302,28 @@ package tools
 				}
 				else if( f.isHidden ) continue;
 				
-				
+				trace("IS_FILE");
 				
 				
 				ext = String( f.extension ).toLocaleLowerCase();
 				
 				//trace("file : " + $folder.nativePath + " : " + ext + "file : " + f.name + ( ( f.isHidden )?" - HIDDEN":"" ));
 				
+				
+				
+				trace(f.name);
+				
+				
 				//files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name, updatedName:$prefix + f.name, occurs:0 } );
-				files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name + "." + f.extension, updatedName:$prefix + f.name + "." + f.extension, occurs:0 } );
+				files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name, updatedName:$prefix + f.name, occurs:0 } );
 			
+				
+				
+				
+				
+				
+				
+				
 			}
 			
 		}
@@ -331,7 +346,10 @@ package tools
 				{
 					
 					targetObj = files[ b ];
-					renameWithinFile( files[ a ].file, files[ b ].originalName, files[ b ].updatedName );
+					//renameWithinFile( files[ a ].file, files[ b ].originalName, files[ b ].updatedName );
+					renameWithinFile( files[ a ].file, String( '"'+files[ b ].originalName+'"' ), String( '"'+files[ b ].updatedName+'"' ) );
+					renameWithinFile( files[ a ].file, String( '"./'+files[ b ].originalName+'"' ), String( '"./'+files[ b ].updatedName+'"' ) );
+					renameWithinFile( files[ a ].file, String( '"./'+files[ b ].originalName+'?' ), String( '"./'+files[ b ].updatedName+'?' ) );
 					
 				}
 				
@@ -353,6 +371,7 @@ package tools
 		// This function searches within a file and replaces a string.
 		public static function renameWithinFile(file:File, originalString:String, newString:String):void
 		{
+			trace("DeepAssetRename - renameWithinFile - " + originalString + " : " + newString);
 			
 			var ext:String = String( file.extension ).toLocaleLowerCase();
 			if( ext == "css" || ext == "html" || ext == "htm" || ext == "json" || ext == "js" )

@@ -114,6 +114,9 @@ package model
 		public static function useToken():void
 		{
 			
+			
+			trace( "FloxModel - useToken()" );
+			
 			/*
 			userTokens.tokens -= 1; 
 			userTokens.saveQueued();
