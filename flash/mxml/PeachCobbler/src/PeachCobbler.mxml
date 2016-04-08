@@ -221,6 +221,7 @@
 				
 				trace("PeachCobbler - generateButtonStatus()");
 				//trace(e.currentTarget);
+				trace(sourceDirectory);
 				
 				if( sourceDirectory != null )
 				{

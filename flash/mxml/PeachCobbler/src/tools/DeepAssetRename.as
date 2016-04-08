@@ -350,6 +350,7 @@ package tools
 					renameWithinFile( files[ a ].file, String( '"'+files[ b ].originalName+'"' ), String( '"'+files[ b ].updatedName+'"' ) );
 					renameWithinFile( files[ a ].file, String( '"./'+files[ b ].originalName+'"' ), String( '"./'+files[ b ].updatedName+'"' ) );
 					renameWithinFile( files[ a ].file, String( '"./'+files[ b ].originalName+'?' ), String( '"./'+files[ b ].updatedName+'?' ) );
+					renameWithinFile( files[ a ].file, String( '('+files[ b ].originalName+')' ), String( files[ b ].updatedName ) );
 					
 				}
 				
@@ -371,7 +372,7 @@ package tools
 		// This function searches within a file and replaces a string.
 		public static function renameWithinFile(file:File, originalString:String, newString:String):void
 		{
-			trace("DeepAssetRename - renameWithinFile - " + originalString + " : " + newString);
+			//trace("DeepAssetRename - renameWithinFile - " + originalString + " : " + newString);
 			
 			var ext:String = String( file.extension ).toLocaleLowerCase();
 			if( ext == "css" || ext == "html" || ext == "htm" || ext == "json" || ext == "js" )
