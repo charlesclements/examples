@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	
+
+	
+	
+	
+	
+	<fx:Script>
+		<![CDATA[
+			
+			import StringUtil;
+			
+			import flash.events.Event;
+			import flash.system.System;
+			/*
+			Variables
+			*/
+			private var _objSourceFile:File;
+			private var _bolError:Boolean;
+			private var _strFiles:String;
+			/*
+			Initiaize app.
+			*/
+			private var StringUtil:Object;
+			private function init():void
+			{
+				this._strFiles = "";
+			}
+			
+			/*
+			Selects a directory to be used.
+			*/
+			private function openFile():void
+			{
+				txtSource.text = "";
+				this._bolError = false;
+				objCanvas.selectedIndex = 0;
+				this._objSourceFile = new File;
+				this._objSourceFile.browseForDirectory("Source directory:");
+				this._objSourceFile.addEventListener(Event.SELECT, sourceFileSelected);
+			}
+			private function sourceFileSelected($e:Event):void
+			{
+				//txtBatch.text = "";
+				this._objSourceFile = $e.target as File;
+				txtSource.text = this._objSourceFile.nativePath;
+			}
+			
+			/* 
+			Called when the strip button is pressed.
+			*/
+			private function collectLinks():void
+			{
+				trace("collectLinks");
+				//txtSource.text = "";
+				trace("collectLinks - txtBatch.text " + txtBatch.text);
+				trace("collectLinks - txtParent.text " + txtParent.text);
+				
+				//txtBatch
+				
+				
+				
+				txtBatch.text = "";
+				recursiveSearch(this._objSourceFile);
+			}
+			
+			/* 
+			Recurse into folders and reemove all .svn files.
+			*/
+			private function recursiveSearch($file:File):void
+			{
+				trace("recursiveSearch");
+				var arr:Array = $file.getDirectoryListing();
+				for (var i:uint = 0; i < arr.length; i++)
+				{
+					
+					var value:File = arr[i];
+					if(value.extension == "html" || value.extension == "htm")
+					{
+						
+						trace("recursiveSearch - should have created");
+						
+						
+						
+						
+						trace(_objSourceFile);
+						
+						
+						
+						// Its breaking here.
+						
+						
+						try
+						{
+							var strNewDirectoryURL:String = "";
+							if ( StringUtil.endsWith(txtParent.text, "/") )
+							{
+								strNewDirectoryURL = StringUtil.beforeLast( txtParent.text, "/" );
+								trace("recursiveSearch - strNewDirectoryURL : " + strNewDirectoryURL);
+							}
+							else
+							{
+								strNewDirectoryURL = txtParent.text;
+								trace("recursiveSearch - strNewDirectoryURL : " + strNewDirectoryURL);
+							}
+							var strNewUrl:String = StringUtil.replace(value.url, this._objSourceFile.url, this._objSourceFile.name);
+							
+							trace("recursiveSearch - strNewUrl : " + strNewUrl);
+							
+							
+							txtBatch.text += String( strNewDirectoryURL + "/" + strNewUrl + "\n" )
+						}
+						catch($e:Error)
+						{
+							this._bolError = true;
+							break;
+						}
+					}
+					else
+					{
+						if (value.isDirectory)
+						{
+							recursiveSearch(value);
+						}
+					}
+				}
+				this.selectText();
+			}
+			
+			/* 
+			Recurse into folders and reemove all .svn files.
+			*/
+			private function selectText():void
+			{
+				
+				trace("selectText")
+				txtBatch.setSelection( 0, txtBatch.length  );
+				txtBatch.setFocus();
+				
+			}
+			
+			/* 
+			Recurse into folders and reemove all .svn files.
+			*/
+			private function copyToClipboard():void
+			{
+				
+				System.setClipboard(txtBatch.text);
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	<mx:Text x="38" y="10" text="Batch URL Generator" fontWeight="bold" fontSize="20"/>
+	<mx:ViewStack x="5.8" y="51" id="objCanvas" width="300" height="600" selectedIndex="0">
+		<mx:Canvas label="stkStart" width="100%" height="100%">
+			<mx:Button x="10" y="130" label="SELECT" id="btnOpen" click="openFile()" />
+			<mx:TextInput x="10" y="105" width="258" id="txtSource" editable="true" enabled="true"/>
+			<mx:TextInput x="10" y="43" width="258" id="txtParent" editable="true" enabled="true"/>
+			<mx:Text x="10" y="12" text="URL web directory to prepend:&#xd;&#xd;" fontWeight="bold" height="19"/>
+			<mx:Text x="10" y="25" text="(ex: www.someserver.com/banners)&#xd;&#xd;" fontWeight="bold" height="19"/>
+			<mx:Text x="10" y="87" text="(folder on your computer with HTML files)" fontWeight="bold"/>
+			<mx:Text x="10" y="75" text="Local source directory:" fontWeight="bold"/>
+			<mx:Text x="10" y="191" text="Batch result:" fontWeight="bold"/>
+			<mx:Button x="10" y="370" label="CREATE BATCH" id="btnCrunch" click="collectLinks()" />
+			<mx:Button x="126.65" y="369.65" label="COPY" id="btnCopyStuff" click="copyToClipboard()"  width="78"/>
+			<mx:TextArea x="10" y="209" width="260" height="153" id="txtBatch" wordWrap="false" text="Yoooooooo"/>
+		</mx:Canvas>
+	</mx:ViewStack>
+	
+	
+	
+	
+</s:WindowedApplication>
