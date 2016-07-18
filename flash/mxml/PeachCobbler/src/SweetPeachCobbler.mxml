@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   initialize="init()">
+	
+	
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			import alerts.AlertPopUp_BuyTokens;
+			
+			import dispatcher.Dispatcher;
+			
+			import events.AppEvent;
+			
+			import model.FloxModel;
+			
+			import tools.DeepAssetRename;
+			
+			
+			protected var sourceDirectory:File = null;
+			protected var saveDirectory:File = null;
+			private var alertBuyMoreTokens:AlertPopUp_BuyTokens = new AlertPopUp_BuyTokens;
+			
+			
+			protected function init():void
+			{
+				
+				trace("SweetPeachCobbler - init()");
+				setup();
+				
+				Dispatcher.dispatchEvent( new AppEvent( AppEvent.NO_MORE_TOKENS, {} ) );
+				
+			}
+			
+			/*
+			private function onNoMoreTokens(e:SiteEvent):void
+			{
+				
+				trace("onNoMoreTokens()");
+				
+				// Show popup CTA panel here.
+				trace("You have no more Tokens to wash your HTML. Would you like to purchase more tokes?");
+				
+			}
+			*/
+			
+			private function onSiteEvent(e:Event):void
+			{
+				
+				trace("SweetPeachCobbler - onSiteEvent()" + ":" + e.type);
+				
+				
+				
+				
+				switch(e.type)
+				{
+					
+					case AppEvent.NO_MORE_TOKENS:
+						
+						trace("SweetPeachCobbler - onNoMoreTokens");
+						
+						// Show popup CTA panel here.
+						trace("SweetPeachCobbler - You have no more Tokens to wash your HTML. Would you like to purchase more tokens?");
+						
+						
+						// Login stuff.
+						alertBuyMoreTokens.open( this, true );
+						//alertBuyMoreTokens.width = this.width;
+						//alertBuyMoreTokens.height = this.height;
+						//alertBuyMoreTokens.x = alertBuyMoreTokens.y = 0;
+						
+						
+						trace(this.height);
+						
+						
+						
+						
+						
+						alertBuyMoreTokens.percentWidth = 100;
+						alertBuyMoreTokens.percentHeight = 100;
+						
+						// Center the pop-up in the parent container.
+						PopUpManager.centerPopUp( alertBuyMoreTokens );
+						
+						
+						break;
+					
+					case AppEvent.READY:
+						
+						trace(AppEvent.READY);
+						
+						// Show popup CTA panel here.
+						trace("SweetPeachCobbler - You have enough coins to wash your HTML.");
+						
+						
+						break;
+					
+					
+				}
+					
+			}
+			
+			
+			
+			
+			private function setup():void
+			{
+				
+				trace("SweetPeachCobbler - setup()");
+				
+				// Listen for events.
+				Dispatcher.addEventListener( AppEvent.NO_MORE_TOKENS, onSiteEvent );
+				
+				// Initialize Flox.
+				FloxModel.initialize();
+				
+				// Define app name.
+				DeepAssetRename.appName = "SweetPeachCobbler";
+				
+				// Set saved directory here.
+				DeepAssetRename.setSaveDirectory( File.documentsDirectory );
+				saveToDitrectory.text = DeepAssetRename.getSaveDirectory().nativePath;
+				
+				// Set availability of generateButton.
+				generateButtonStatus();
+				
+				//
+				
+				
+				
+			}
+			
+			
+			
+			protected function defineSource():void
+			{
+				
+				trace("defineSource()");
+				
+				// Define directory.
+				sourceDirectory = new File;
+				sourceDirectory.addEventListener( Event.SELECT, folderSelected );
+				sourceDirectory.browseForDirectory( "Define the Source Directory" );
+				//sourceDirectory.browseForOpenMultiple( "Select the folders you want to process." );
+				
+				
+				/*
+				try
+				{
+					sourceDirectory.browseForOpenMultiple( "Select the folders you want to process." );
+					sourceDirectory.addEventListener(FileListEvent.SELECT_MULTIPLE, filesSelected);
+				}
+				catch (error:Error)
+				{
+					trace("Failed:", error.message);
+				}
+				*/
+				
+				
+				
+			}
+			
+			
+			
+			protected function filesSelected(event:FileListEvent):void 
+			{
+				
+				trace("filesSelected");
+				
+				for (var i:uint = 0; i < event.files.length; i++) 
+				{
+					trace(event.files[i].nativePath);
+					
+					
+					// Call folder selected here.
+					
+					
+					
+				}
+			}
+			
+			
+			
+			
+			protected function clearSource():void
+			{
+				
+				trace("SweetPeachCobbler - clearSource()");
+				
+				// Clear source.
+				sourceDirectory = null;
+				selectedDitrectory.text = "";
+				
+				// Check if generate button should be enabled/disabled.
+				generateButtonStatus();
+				
+			}
+			
+			
+			protected function changeSaveDirectory():void
+			{
+				
+				trace("SweetPeachCobbler - changeSaveDirectory()");
+				
+				// Define directory.
+				saveDirectory = new File;
+				saveDirectory.addEventListener( Event.SELECT, saveFolderSelected );
+				saveDirectory.addEventListener( Event.CANCEL, saveFolderCancelled );
+				saveDirectory.browseForDirectory( "Define the Save Directory" );
+				
+				
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+			protected function saveFolderSelected(e:Event):void
+			{
+				
+				
+				DeepAssetRename.setSaveDirectory( saveDirectory );
+				saveToDitrectory.text = DeepAssetRename.getSaveDirectory().nativePath;
+				
+			}
+			
+			
+			protected function saveFolderCancelled(e:Event):void
+			{
+				
+				saveDirectory = DeepAssetRename.getSaveDirectory();
+				saveToDitrectory.text = DeepAssetRename.getSaveDirectory().nativePath;
+				
+			}
+			
+			
+			protected function folderSelected(e:Event):void
+			{
+				
+				//trace("folderSelected()");
+				//trace(e.currentTarget);
+				
+				
+				
+				
+				
+				// Save Array of folders here.
+				
+				
+				
+				
+				
+				selectedDitrectory.text = sourceDirectory.nativePath;
+				generateButtonStatus();
+				
+			}
+			
+			
+			protected function generateButtonStatus():void
+			{
+				
+				trace("SweetPeachCobbler - generateButtonStatus()");
+				//trace(e.currentTarget);
+				trace(sourceDirectory);
+				
+				if( sourceDirectory != null )
+				{
+					
+					generateButton.enabled = true;
+					
+				}
+				else
+				{
+					
+					generateButton.enabled = false;
+					
+				}
+				
+			}
+			
+			
+			
+			protected function doIt():void
+			{
+				
+				trace("SweetPeachCobbler - doIt()");
+				
+				
+				
+				// Start running loop here.
+				
+				
+				
+				var foldername:String = sourceDirectory.name;
+				
+				//DeepAssetRename.process( sourceDirectory, ( ( renameAssetsCheckbox as CheckBox ).selected ) ? txtPrefix.text + txtDivide.text : "", ( deleteHidden as CheckBox ).selected, ( saveOriginalFilesCheckbox as CheckBox ).selected, ( removeUnusedAssetsCheckbox as CheckBox ).selected );
+				//DeepAssetRename.process( sourceDirectory, ( ( renameAssetsCheckbox as CheckBox ).selected ) ? foldername + txtDivide.text : "", ( deleteHidden as CheckBox ).selected, ( saveOriginalFilesCheckbox as CheckBox ).selected, ( removeUnusedAssetsCheckbox as CheckBox ).selected );
+				doStoreFolders( sourceDirectory, ( ( renameAssetsCheckbox as CheckBox ).selected ) ? foldername + txtDivide.text : "", ( deleteHidden as CheckBox ).selected, ( saveOriginalFilesCheckbox as CheckBox ).selected, ( removeUnusedAssetsCheckbox as CheckBox ).selected );
+				
+				// Clears the source if it is defined.
+				clearSource();
+				
+				// Use a token.
+				FloxModel.useToken();
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			//($folder:File, $prefix:String="", $deleteHiddenFiles:Boolean=false, $saveOriginals:Boolean=true, $removeUnused:Boolean=false):void
+			//private static function doStoreFolders($folder:File, $prefix:String="", $deleteHiddenFiles:Boolean=false, $removeUnused:Boolean=false):void
+			protected function doStoreFolders ($folder:File, $prefix:String="", $deleteHiddenFiles:Boolean=false, $saveOriginals:Boolean=true, $removeUnused:Boolean=false):void
+			{
+				
+				trace("SweetPeachCobbler - doStoreFolders : " + arguments );
+				
+				//trace("Directory: " + $folder.nativePath);
+				
+				// Check directory for Array of files.
+				var arr:Array = $folder.getDirectoryListing();
+				var l:uint = arr.length;
+				var f:File;
+				var ext:String;
+				var currentDirectory:File;
+				
+				var numFolders:uint = 0;
+				
+				
+				
+				for( var i:uint = 0; i < l; i++ )
+				{
+					
+					f = ( arr[ i ] as File );
+					
+					if( f.isDirectory && !f.isHidden )
+					{
+						
+						trace("DIRECTORY IS VISIBLE");
+						
+						numFolders++;
+						
+						
+						
+						
+						currentDirectory = f;
+						
+						
+						
+						
+						if( $prefix != "" ) $prefix = String( currentDirectory.name + txtDivide.text );
+						
+						
+						
+						
+						DeepAssetRename.process( currentDirectory, $prefix, $deleteHiddenFiles, $saveOriginals, $removeUnused );
+						
+						
+						
+					}
+					
+				}
+				
+				
+				trace( numFolders );
+				
+				if( numFolders == 0 )
+				{
+					
+					currentDirectory = $folder;
+					
+					DeepAssetRename.process( currentDirectory, $prefix, $deleteHiddenFiles, $saveOriginals, $removeUnused );
+					
+					
+				}
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			protected function checkbox1_changeHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				
+				var b:Boolean = ( event.currentTarget as CheckBox ).selected;
+				//trace("checkbox1_changeHandler() : " + b);
+				/*txtPrefix.enabled = b;*/
+				
+			}
+			
+			protected function checkbox2_changeHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				
+				var b:Boolean = ( event.currentTarget as CheckBox ).selected;
+				//trace("checkbox2_changeHandler() : " + b);
+				/*txtPrefix.enabled = b;*/
+				
+			}
+			
+			protected function checkbox3_changeHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				
+				var b:Boolean = ( event.currentTarget as CheckBox ).selected;
+				//trace("checkbox3_changeHandler() : " + b);
+				/*txtPrefix.enabled = b;*/
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+	</fx:Declarations>
+	
+	
+	<s:Panel width="100%" height="100%" title="Deep Clean">
+		<s:VGroup  width="100%" height="100%" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+			<s:HGroup width="100%" verticalAlign="middle" >
+				<s:CheckBox id="renameAssetsCheckbox" selected="true" change="checkbox1_changeHandler(event)"/>
+				<s:Label paddingTop="5" text="Rename assets with folder name as prefix "/>
+				<!--<s:TextInput id="txtPrefix" width="100%"/>-->
+				<s:Label text="+" />
+				<s:TextInput id="txtDivide" text="_" textAlign="center" width="8%"/>
+			</s:HGroup>
+			<!--<s:HGroup width="100%" verticalAlign="middle" >
+				<s:CheckBox id="renameAssetsByFolderNameCheckbox" selected="true" change="checkbox1_changeHandler(event)"/>
+				<s:Label paddingTop="5" text="Rename assets with folder name as prefix:"/>
+				<s:Label text="+" />
+				<s:TextInput id="txtFolderNameDivide" text="_" textAlign="center" width="8%"/>
+			</s:HGroup>-->
+			<s:HGroup width="100%" >
+				<s:CheckBox id="saveOriginalFilesCheckbox" selected="true"/>
+				<s:Label paddingTop="5" text="Save original files here:"/>
+				<s:TextInput id="saveToDitrectory" enabled="false" width="70%"/>
+				<s:Button label="Change" width="30%" click="changeSaveDirectory()"/>
+			</s:HGroup>
+			<s:HGroup width="100%" >
+				<s:CheckBox id="removeUnusedAssetsCheckbox" selected="true" change="checkbox2_changeHandler(event)"/>
+				<s:Label paddingTop="5" text="Remove unused assets."/>
+			</s:HGroup>
+			<s:HGroup width="100%" >
+				<s:CheckBox id="deleteHidden" selected="false"/>
+				<s:Label paddingTop="5" text="Delete hidden files."/>
+			</s:HGroup>
+			<s:Label paddingTop="10" text="Select the Source folder to use."/>
+			<s:TextInput id="selectedDitrectory" enabled="false" width="100%"/>
+			<s:HGroup width="100%" >
+				<s:Button label="Select Source Folder" height="40" width="100%" click="defineSource()"/>
+				<s:Button label="Clear Source Folder" height="40" width="100%" click="clearSource()"/>
+				</s:HGroup>
+			<s:Button id="generateButton" label="GENERATE" top="10" width="100%" height="100%" click="doIt()"/>
+		</s:VGroup>
+	</s:Panel>
+	
+</s:WindowedApplication>

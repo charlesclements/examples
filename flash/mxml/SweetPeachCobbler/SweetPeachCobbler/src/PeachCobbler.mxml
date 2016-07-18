@@ -65,7 +65,7 @@
 						trace("PeachCobbler - onNoMoreTokens");
 						
 						// Show popup CTA panel here.
-						trace("PeachCobbler - You have no more Tokens to wash your HTML. Would you like to purchase more tokes?");
+						trace("PeachCobbler - You have no more Tokens to wash your HTML. Would you like to purchase more tokens?");
 						
 						
 						// Login stuff.
@@ -302,6 +302,12 @@
 				<s:TextInput id="txtPrefix" width="100%"/>
 				<s:Label text="+" />
 				<s:TextInput id="txtDivide" text="_" textAlign="center" width="8%"/>
+			</s:HGroup>
+			<s:HGroup width="100%" verticalAlign="middle" >
+				<s:CheckBox id="renameAssetsByFolderNameCheckbox" selected="true" change="checkbox1_changeHandler(event)"/>
+				<s:Label paddingTop="5" text="Rename assets with folder name as prefix:"/>
+				<s:Label text="+" />
+				<s:TextInput id="txtFolderNameDivide" text="_" textAlign="center" width="8%"/>
 			</s:HGroup>
 			<s:HGroup width="100%" >
 				<s:CheckBox id="saveOriginalFilesCheckbox" selected="true"/>

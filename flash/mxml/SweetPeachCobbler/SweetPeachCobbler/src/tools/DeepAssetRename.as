@@ -58,12 +58,6 @@ package tools
 			if( $prefix != "" ) $prefix = polishNewName( $prefix );
 			
 			
-			//doStoreFolders( $folder, $prefix, $deleteHiddenFiles, $removeUnused );
-			
-			
-			
-			
-			
 			doProcess( $folder, $prefix, $deleteHiddenFiles );
 			deepRename();
 			
@@ -78,8 +72,6 @@ package tools
 				cleanup();
 				
 			}
-			
-			files = [];
 			
 			//if( $saveOriginals ) moveOriginals();
 			
@@ -250,103 +242,6 @@ package tools
 		}
 		
 		
-		
-		
-		
-		
-		
-		
-		private static function doStoreFolders($folder:File, $prefix:String="", $deleteHiddenFiles:Boolean=false, $removeUnused:Boolean=false):void
-		{
-			
-			//trace("DeepAssetRename - doProcess : " + arguments );
-			
-			//trace("Directory: " + $folder.nativePath);
-			
-			// Check directory for Array of files.
-			var arr:Array = $folder.getDirectoryListing();
-			var l:uint = arr.length;
-			var f:File;
-			var ext:String;
-			
-			for( var i:uint = 0; i < l; i++ )
-			{
-				
-				f = ( arr[ i ] as File );
-				
-				if( f.isDirectory && !f.isHidden )
-				{
-					
-					trace("DIRECTORY IS VISIBLE");
-					
-					
-					
-					currentDirectory = f;
-					
-					
-					
-					
-					doProcess( $folder, $prefix, $deleteHiddenFiles );
-					deepRename();
-					
-					// Check to see what needs to be removed.
-					if( $removeUnused ) checkForWhatNeedsToBeRemoved();
-					
-					// Do renaming.
-					if( $prefix != "" )
-					{
-					
-					doFilesRename();
-					cleanup();
-					
-					}
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					/*
-					
-					
-						
-					if( $deleteHiddenFiles && f.isHidden ) 
-					{
-						
-						f.deleteDirectory( true );
-						continue;
-						
-					}
-					else if( f.isHidden ) continue;
-					
-					
-					
-					
-					// Need to make sure that the name being replaced is the full doc name including extension.
-					
-					
-					
-					
-					files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name, updatedName:$prefix + f.name, occurs:0 } );
-					//files.unshift( { file:f, isDirectory:f.isDirectory, parentDirectory:$folder, originalName:f.name + "." + f.extension, updatedName:$prefix + f.name + "." + f.extension, occurs:0 } );
-					
-					// Recurse
-					doProcess( f, $prefix, $deleteHiddenFiles );
-					
-					continue;
-					*/
-				}
-				
-			}
-			
-		}
-		
-		
-		
 		private static function doProcess($folder:File, $prefix:String="", $deleteHiddenFiles:Boolean=false):void
 		{
 			
@@ -438,7 +333,7 @@ package tools
 		{
 			
 			//trace("" )
-			trace("DeepAssetRename - deepRename()" );
+			//trace("DeepAssetRename - deepRename()" )
 			
 			for ( var a:uint=0; a < files.length; a++ )
 			{
@@ -460,8 +355,6 @@ package tools
 				}
 				
 			}
-			
-			trace("DeepAssetRename - deepRename() - nuber of files left : " + files.length);
 			
 		}
 		
