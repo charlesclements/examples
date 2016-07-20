@@ -86,7 +86,8 @@
 						
 						
 						
-						trace(_objSourceFile);
+						//trace(_objSourceFile);
+						trace(_objSourceFile.nativePath);
 						
 						
 						
