@@ -1,4 +1,4 @@
-﻿package 
+﻿package com.util
 {
 	
 	public class StringUtil
