@@ -2,6 +2,7 @@
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   initialize="init();"
 					   height="500"
 					   width="500">
 	
@@ -29,6 +30,7 @@
 			private function init():void
 			{
 				this._strFiles = "";
+				btnCopyStuff.enabled = false;
 			}
 			
 			/*
@@ -45,9 +47,10 @@
 			}
 			private function sourceFileSelected($e:Event):void
 			{
-				//txtBatch.text = "";
+				txtBatch.text = "";
 				this._objSourceFile = $e.target as File;
 				txtSource.text = this._objSourceFile.nativePath;
+				btnCopyStuff.enabled = false;
 			}
 			
 			/* 
@@ -57,11 +60,9 @@
 			{
 				
 				//trace("collectLinks");
-				//txtSource.text = "";
-				//trace("collectLinks - txtBatch.text " + txtBatch.text);
-				//trace("collectLinks - txtParent.text " + txtParent.text);
 				txtBatch.text = "";
 				recursiveSearch(this._objSourceFile);
+				btnCopyStuff.enabled = true;
 				
 			}
 			
