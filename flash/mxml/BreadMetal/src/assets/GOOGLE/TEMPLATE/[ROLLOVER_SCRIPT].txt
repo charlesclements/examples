@@ -1,0 +1,25 @@
+<script src="https://s0.2mdn.net/ads/studio/cached_libs/tweenmax_1.18.0_499ba64a23378545748ff12d372e59e9_min.js"></script>
+<script>
+    var legal = document.getElementById('rolltext');
+    legal.addEventListener("mouseover", legalHover);
+
+    function legalHover() {
+        console.log("legalHover");
+        //tl.pause();
+        TweenMax.to("#legal", .5, {
+            top: 0,
+            ease: Power1.easeOut
+        })
+    }
+
+    legal.addEventListener("mouseout", legalOut);
+
+    function legalOut() {
+        //tl.play();
+        TweenMax.to("#legal", .5, {
+            top: -400,
+            ease: Power1.easeIn
+        })
+    }
+
+</script>

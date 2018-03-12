@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   initialize="init()"
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:RadioButtonGroup id="drivingType" itemClick="handleDrivingType(event); "/>
+	</fx:Declarations>
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import utils.Resizer;
+			
+			
+			// Vars
+			private var sourceFolder:File;
+			private var sourceFolderSelected:Boolean = false;
+			private var destFolder:File;
+			private var destFolderSelected:Boolean = false;
+			private var SO:SharedObject;
+			private var dict:Dictionary;
+			private var sourceWidth:Number = 0;
+			private var sourceHeight:Number = 0;
+			
+			
+			// Start it off.
+			private function init():void
+			{
+				
+				// Crate Dictionay for ComboBoxes.
+				dict = new Dictionary;
+				
+				// Grab the SharedObject.
+				SO = SharedObject.getLocal("BREADMETAL");
+				
+				trace( SO );
+				
+				
+				// Create those boxes.
+				//createCheckBoxes();
+				
+				
+				
+				/*
+				trace( accordion );
+				trace( accordion.getElementAt( 0 ) );//.vBox1 );
+				trace( accordion.getChildByName( "testerButton" ) );//.vBox1 );
+				trace( ( accordion.getChildByName( "vBox1" ) as VBox ).getChildByName( "testerButton" ) );//.vBox1 );
+				trace( ( accordion.getChildByName( "vBox1" ) as VBox ).getElementAt( 0 ) );
+				//trace( accordion.testerButton );
+				*/
+				
+				/*
+				// Should the destination location be remembered?
+				if( SO.data.rememberDestination == undefined )
+				{
+				
+				SO.data.rememberDestination = false;
+				
+				
+				
+				
+				}
+				else
+				{
+				
+				
+				destDir.text = SO.data.destination;
+				
+				destFolderSelected = true;
+				
+				}
+				
+				rememberDestinationCheckBox.selected = SO.data.rememberDestination;
+				*/
+			}
+			
+			
+			private function selectDestinationPath():void
+			{
+				
+				trace("selectDestinationPath");
+				
+				destFolder = new File;
+				destFolder.addEventListener( Event.SELECT, onSelectedDest );
+				destFolder.browseForDirectory( "Choose source folder" );
+				
+			}
+			
+			
+			private function selectDirectoryToCopy():void
+			{
+				
+				trace("selectDirectoryToCopy");
+				
+				sourceFolder = new File;
+				sourceFolder.addEventListener( Event.SELECT, onSelectedSrc );
+				sourceFolder.browseForDirectory( "Choose source folder" );
+				
+			}
+			
+			
+			private function onSelectedSrc(e:Event):void
+			{
+				
+				trace("onSelectedSrc");
+				
+				srcDir.text = sourceFolder.nativePath;
+				
+				sourceFolderSelected = true;
+				
+			}
+			
+			
+			private function onSelectedDest(e:Event):void
+			{
+				
+				trace("onSelectedDest");
+				
+				destFolderSelected = true;
+				
+				destDir.text = destFolder.nativePath;
+				
+				//SO.data.destination = ( rememberDestinationCheckBox.selected ) ? destFolder.nativePath : undefined;
+				
+			}
+			
+			
+			private function copyFiles():void
+			{
+				
+				trace("copyFiles");
+				
+				
+				//if( sourceFolderSelected && destFolderSelected && srcWidthTxt.text.length > 0 && srcHeightTxt.text.length > 0 )
+				if( sourceFolderSelected && destFolderSelected && srcWidthTxt.text.length > 0 && srcHeightTxt.text.length > 0 )
+				{
+					
+					trace("copyFiles - Do copying.");
+					
+					sourceWidth = Number( srcWidthTxt.text );
+					sourceHeight = Number( srcHeightTxt.text );
+					
+					
+					for ( var i:String in SO.data.sizes ) 
+					{ 
+						
+						
+						
+						if( SO.data.sizes[ i ].selected )
+						{
+							
+							// Create new folder.
+							var str:String = String( destFolder.nativePath + "/" + i );
+							var newFolder:File = new File( str );
+							if( !newFolder.exists ) newFolder.createDirectory();
+							
+							// Copy files.
+							sourceFolder.copyTo( newFolder, true );
+							
+							// run Resizer
+							Resizer.run( i, sourceWidth, sourceHeight, SO.data.sizes[ i ].width, SO.data.sizes[ i ].height, newFolder );
+							
+							
+						}
+						
+						
+						
+					}
+					
+					srcWidthTxt.text = "";
+					srcHeightTxt.text = "";
+					
+				}
+				
+			}
+			
+			
+			/*
+			private function submitNewSize():void
+			{
+				
+				trace("submitNewSize");
+				
+				if( widthTxt.text.length > 0 && heightTxt.text.length > 0 )
+				{
+					
+					trace("submitNewSize - Creating new size.");
+					
+					var key:String = String( widthTxt.text + "x" + heightTxt.text );
+					
+					// Check first to see if sizes exists.
+					if( SO.data.sizes == undefined || !SO.data.sizes )
+					{
+						
+						SO.data.sizes = {};
+						
+					}
+					
+					// Save new size in SharedObject.
+					if( SO.data.sizes[ key ] == undefined || !SO.data.sizes[ key ] )
+					{
+						
+						SO.data.sizes[ key ] = { id:key, height:heightTxt.text, width:widthTxt.text, selected:true };
+						
+					}
+					
+				}
+				else return;
+				
+				// Create those boxes.
+				//createCheckBoxes();
+				
+				// Reset textfields.
+				widthTxt.text = "";
+				heightTxt.text = "";
+				
+			}
+			
+			
+			
+			private function createCheckBoxes():void
+			{
+				
+				trace("createCheckBoxes");
+				
+				// Clear/delete current checkboxes.
+				sizes.removeAllElements();
+				
+				// Add check boxes.
+				for ( var i:String in SO.data.sizes ) 
+				{ 
+					
+					if( SO.data.sizes[i] == null )
+					{
+						
+						delete SO.data.sizes[i];
+						continue;
+						
+					}
+					
+					if( dict[ i ] == undefined )
+					{
+						
+						dict[ i ] = { checkbox:new CheckBox, selected:true };
+						
+					}
+					
+					// Set vars.
+					var c:CheckBox = dict[ i ].checkbox as CheckBox;
+					//return;
+					c.selected = SO.data.sizes[i].selected;
+					c.label = i;
+					c.addEventListener( MouseEvent.CLICK, checkboxClick );
+					
+					// Add to container.
+					sizes.addElement( c );
+					
+				}
+				
+			}
+			*/
+			
+			/*
+			private function selectAll(e:Event=null):void
+			{
+				
+				trace("selectAll");
+				
+				// Add check boxes.
+				for ( var i:String in SO.data.sizes ) 
+				{ 
+					
+					var c:CheckBox = dict[ i ].checkbox as CheckBox;
+					SO.data.sizes[ i ].selected = c.selected = true;
+					
+				}
+				
+			}
+			
+			
+			private function selectNone(e:Event=null):void
+			{
+				
+				trace("selectNone");
+				
+				// Add check boxes.
+				for ( var i:String in SO.data.sizes ) 
+				{ 
+					
+					var c:CheckBox = dict[ i ].checkbox as CheckBox;
+					SO.data.sizes[ i ].selected = c.selected = false;
+					
+				}
+				
+			}
+			
+			
+			private function removeSelected(e:Event=null):void
+			{
+				
+				trace("removeSelected");
+				
+				// Add check boxes.
+				for ( var i:String in SO.data.sizes ) 
+				{ 
+					
+					if( SO.data.sizes[ i ].selected )
+					{
+						
+						SO.data.sizes[ i ] = undefined;
+						SO.data.sizes[ i ] = null;
+						delete SO.data.sizes[ i ];
+						dict[ i ] = null;
+						
+					}
+					
+				}
+				
+				createCheckBoxes();
+				
+			}
+			
+			
+			private function checkboxClick(e:Event):void
+			{
+				
+				trace("checkboxClick " + ( e.currentTarget as CheckBox ).label);
+				
+				var i:String = ( e.currentTarget as CheckBox ).label;
+				SO.data.sizes[i].selected = ( e.currentTarget as CheckBox ).selected;
+				SO.flush( 10000 );
+				
+			}
+			*/
+			
+			
+			private function handleDrivingType(e:Event):void
+			{
+				
+				trace("handleDrivingType " + e.currentTarget.selectedValue);
+				
+			}
+			
+			/*
+			protected function onRememberDestinationClick(event:MouseEvent):void
+			{
+			
+			trace( onRememberDestinationClick + " : " + rememberDestinationCheckBox.selected );
+			
+			SO.data.rememberDestination = rememberDestinationCheckBox.selected;
+			
+			
+			
+			SO.data.destination = ( rememberDestinationCheckBox.selected ) ? SO.data.destination = destDir.text : undefined;
+			
+			
+			}
+			*/
+		]]>
+	</fx:Script>
+	
+	
+	
+	
+	<s:VGroup id="content">
+		
+		
+		<!--
+		<s:HGroup>
+			<s:BorderContainer>
+				
+				<s:VGroup id="sizes">
+					<s:CheckBox width="100" label="Employee?"/> 
+				</s:VGroup>
+				
+			</s:BorderContainer>
+			<s:VGroup>
+				<s:Button id="selectAllButton" width="150" label="Select all" click="selectAll();"></s:Button>
+				<s:Button id="selectNoneButton" width="150" label="Select none" click="selectNone();"></s:Button>
+				<s:Button id="removeSelectedButton" width="150" label="Remove selected" click="removeSelected();"></s:Button>
+			</s:VGroup>
+		</s:HGroup>
+		
+		
+		<s:HGroup>
+			<s:Label text="Width"></s:Label>
+			<s:TextInput id="widthTxt" width="100" restrict="0-9"></s:TextInput>
+			<s:Label text="Height"></s:Label>
+			<s:TextInput id="heightTxt" width="100" restrict="0-9"></s:TextInput>
+		</s:HGroup>
+		<s:HGroup>
+			<s:Button id="sizeButton" width="150" label="Submit new size" click="submitNewSize();"></s:Button>
+		</s:HGroup>
+		-->
+		
+		
+		<s:Label text="Source"></s:Label>
+		<s:HGroup>
+			<s:TextInput id="srcDir" width="200" text="Use this directory."></s:TextInput>
+			<s:Button id="srcDirButton" width="70" label="Select" click="selectDirectoryToCopy();"></s:Button>
+		</s:HGroup>
+		
+		
+		<s:Label text="Destination"></s:Label>
+		<s:HGroup>
+			<s:TextInput id="destDir" width="200" text="Copy files to this directory."></s:TextInput>
+			<s:Button id="destDirButton" width="70" label="Select" click="selectDestinationPath();"></s:Button>
+			<s:CheckBox id="rememberDestination" width="100" label="Remember"/> 
+		</s:HGroup>
+		<!--
+		<s:CheckBox id="rememberDestinationCheckBox" label="Remember destination" selected="false" click="onRememberDestinationClick(event)"/> 
+		-->
+		<!-- AUTO PILOT / MANUAL 
+		<s:HGroup>
+		<s:RadioButton groupName="drivingType" 
+		id="autopilot" 
+		label="Autopilot" 
+		value="autopilot"
+		selected="true"
+		width="150"/>
+		<s:RadioButton groupName="drivingType" 
+		id="manual" 
+		label="Manual" 
+		value="manual"
+		width="150"/>
+		</s:HGroup>
+		-->
+		
+		<mx:VBox>
+			<s:Label text="Define the size of the source banner."/>
+			<s:HGroup>
+				<s:Label text="Width"></s:Label>
+				<s:TextInput id="srcWidthTxt" width="100" restrict="0-9"></s:TextInput>
+				<s:Label text="Height"></s:Label>
+				<s:TextInput id="srcHeightTxt" width="100" restrict="0-9"></s:TextInput>
+			</s:HGroup>
+			<s:Button id="copyButton" width="120" label="Copy Files" click="copyFiles();"></s:Button>
+		</mx:VBox>
+		
+		
+		
+	</s:VGroup>
+	
+</s:WindowedApplication>

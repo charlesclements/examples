@@ -1,0 +1,44 @@
+<style>
+    
+    #roll-cta {
+        position: absolute;
+        color: #444;
+        right: 3px;
+        top: 3px;
+        z-index: 99999;
+        width: 20px;
+        height: 15px;
+    }
+    
+    #legal {
+        position: absolute;
+        width: 300px;
+        height: 250px;
+        background: #000;
+        top: -1000px;
+        z-index: 999;
+    }
+    
+    #legal-text {
+        position: absolute;
+        color: #fff;
+        width: 250px;
+        height: 250px;
+        font-size: 12px;
+        line-height: 12px;
+        padding: 10px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    #rolltext {
+        position: relative;
+        font-size: 10px;
+        width: 40px;
+        z-index: 1000;
+        left: 265px;
+        top: 3px;
+        color: #fff;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    
+</style>

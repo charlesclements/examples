@@ -1,0 +1,9 @@
+<div id="roll-cta"></div>
+<div id="rolltext">LEGAL</div>
+<div id="cta-handler">
+    <div id="legal">
+        <div id="legal-text">
+            Smart City Brake Support opera bajo ciertas condiciones de baja velocidad entre aproximadamente 2 y 18 mph. No es un sustituto para una conducción segura y atenta. Todos los factores, incluyendo el movimiento y la forma del objeto que está delante del vehículo, el clima y las condiciones de la carretera, pueden afectar el control de frenado automático y la advertencia de colisión. Favor de consultar su Manual del propietario para más detalles.
+        </div>
+    </div>
+</div>
